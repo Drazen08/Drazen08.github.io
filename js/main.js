@@ -1,28 +1,63 @@
-$(document).ready(function() {
+(function($){
+    var toTop = ($('#sidebar').height() - $(window).height()) + 60;
+    // Caption
+    $('.article-entry').each(function(i) {
+        $(this).find('img').each(function() {
+            if (this.alt && !(!!$.prototype.justifiedGallery && $(this).parent('.justified-gallery').length)) {
+                $(this).after('<span class="caption">' + this.alt + '</span>');
+            }
 
-  $('a.blog-button').click(function() {
-    if ($('.panel-cover').hasClass('panel-cover--collapsed')) return;
-    currentWidth = $('.panel-cover').width();
-    $('.panel-cover').addClass('animated panel-cover--collapsed slideInLeft');
-    $('.content-wrapper').addClass('animated slideInLeft');
-  });
+            // 对于已经包含在链接内的图片不适用lightGallery
+            if ($(this).parent().prop("tagName") !== 'A') {
+                $(this).wrap('<a href="' + this.src + '" title="' + this.alt + '" class="gallery-item"></a>');
+            }
+        });
+    });
+    if (typeof lightGallery != 'undefined') {
+        var options = {
+            selector: '.gallery-item',
+        };
+        $('.article-entry').each(function(i, entry) {
+            lightGallery(entry, options);
+        });
+        lightGallery($('.article-gallery')[0], options);
+    }
+    if (!!$.prototype.justifiedGallery) {  // if justifiedGallery method is defined
+        var options = {
+            rowHeight: 140,
+            margins: 4,
+            lastRow: 'justify'
+        };
+        $('.justified-gallery').justifiedGallery(options);
+    }
 
-  if (window.location.hash && window.location.hash == "#blog") {
-    $('.panel-cover').addClass('panel-cover--collapsed');
-  }
+    // Profile card
+    $(document).on('click', function () {
+        $('#profile').removeClass('card');
+    }).on('click', '#profile-anchor', function (e) {
+        e.stopPropagation();
+        $('#profile').toggleClass('card');
+    }).on('click', '.profile-inner', function (e) {
+        e.stopPropagation();
+    });
 
-  if (window.location.pathname != "/") {       // if hexo in subdir of site, should change this line
-    $('.panel-cover').addClass('panel-cover--collapsed');
-  }
+    // To Top
+    if ($('#sidebar').length) {
+        $(document).on('scroll', function () {
+            if ($(document).width() >= 800) {
+                if(($(this).scrollTop() > toTop) && ($(this).scrollTop() > 0)) {
+                    $('#toTop').fadeIn();
+                    $('#toTop').css('left', $('#sidebar').offset().left);
+                } else {
+                    $('#toTop').fadeOut();
+                }
+            } else {
+                $('#toTop').fadeIn();
+                $('#toTop').css('right', 20);
+            }
+        }).on('click', '#toTop', function () {
+            $('body, html').animate({ scrollTop: 0 }, 600);
+        });
+    }
 
-  $('.btn-mobile-menu').click(function() {
-    $('.navigation-wrapper').toggleClass('visible animated bounceInDown');
-    $('.btn-mobile-menu__icon').toggleClass('icon-list icon-x-circle animated fadeIn');
-  });
-
-  $('.navigation-wrapper .blog-button').click(function() {
-    // $('.navigation-wrapper').toggleClass('visible');
-    $('.btn-mobile-menu__icon').toggleClass('icon-list icon-x-circle animated fadeIn');
-  });
-
-});
+})(jQuery);

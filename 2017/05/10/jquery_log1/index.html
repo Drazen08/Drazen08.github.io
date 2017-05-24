@@ -1,182 +1,249 @@
 <!DOCTYPE html>
-<html>
+<html lang=zh>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
     
-
-    <title>
-      Jquery 的一些林林总总 | Drazen 
-    </title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    
-      <meta name="author" content="JFuncnovic">
-    
-    
-
+    <title>Jquery 的一些林林总总 | Drazen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助  首先 - - 最近面试的时候问到的：  123$(document).ready 与JavaScript里onload方法的区别：$(document).ready(function()&amp;#123;&amp;#125;) 代表的是在DOM加载之前">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Jquery 的一些林林总总 | Drazen">
+<meta property="og:title" content="Jquery 的一些林林总总">
 <meta property="og:url" content="http://sunjx93.com/2017/05/10/jquery_log1/index.html">
 <meta property="og:site_name" content="Drazen">
 <meta property="og:description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助  首先 - - 最近面试的时候问到的：  123$(document).ready 与JavaScript里onload方法的区别：$(document).ready(function()&amp;#123;&amp;#125;) 代表的是在DOM加载之前">
-<meta property="og:updated_time" content="2017-05-09T16:38:46.638Z">
+<meta property="og:updated_time" content="2017-05-09T16:38:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jquery 的一些林林总总 | Drazen">
+<meta name="twitter:title" content="Jquery 的一些林林总总">
 <meta name="twitter:description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助  首先 - - 最近面试的时候问到的：  123$(document).ready 与JavaScript里onload方法的区别：$(document).ready(function()&amp;#123;&amp;#125;) 代表的是在DOM加载之前">
     
+
+    
+        <link rel="alternate" href="/" title="Drazen" type="application/atom+xml" />
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
     
     
-      <link rel="icon" type="image/x-icon" href="/favicon.png">
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
     
-    <link rel="stylesheet" href="/css/uno.css">
-    <link rel="stylesheet" href="/css/highlight.css">
-    <link rel="stylesheet" href="/css/archive.css">
-    <link rel="stylesheet" href="/css/china-social-icon.css">
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
 
 </head>
+
 <body>
-
-    <span class="mobile btn-mobile-menu">
-        <i class="icon icon-list btn-mobile-menu__icon"></i>
-        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
-    </span>
-
-    
-
-<header class="panel-cover panel-cover--collapsed">
-
-
-  <div class="panel-main">
-
-  
-    <div class="panel-main__inner panel-inverted">
-    <div class="panel-main__content">
-
-        
-
-        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Drazen</a></h1>
-        <hr class="panel-cover__divider" />
-
-        
-        <p class="panel-cover__description">
-          the stack of it nerds
-        </p>
-        <hr class="panel-cover__divider panel-cover__divider--secondary" />
-        
-
-        <div class="navigation-wrapper">
-
-          <nav class="cover-navigation cover-navigation--primary">
-            <ul class="navigation">
-
-              
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Drazen</span>
+            </a>
+            <nav id="main-nav">
                 
-                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
-              
+                    <a class="main-nav-link" href="/#blog">首页</a>
                 
-                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
-              
+                    <a class="main-nav-link" href="/archives">归档</a>
                 
-                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
-              
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/1.jpg" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
 
-            </ul>
-          </nav>
-
-          <!-- ----------------------------
-To add a new social icon simply duplicate one of the list items from below
-and change the class in the <i> tag to match the desired social network
-and then add your link to the <a>. Here is a full list of social network
-classes that you can use:
-
-    icon-social-500px
-    icon-social-behance
-    icon-social-delicious
-    icon-social-designer-news
-    icon-social-deviant-art
-    icon-social-digg
-    icon-social-dribbble
-    icon-social-facebook
-    icon-social-flickr
-    icon-social-forrst
-    icon-social-foursquare
-    icon-social-github
-    icon-social-google-plus
-    icon-social-hi5
-    icon-social-instagram
-    icon-social-lastfm
-    icon-social-linkedin
-    icon-social-medium
-    icon-social-myspace
-    icon-social-path
-    icon-social-pinterest
-    icon-social-rdio
-    icon-social-reddit
-    icon-social-skype
-    icon-social-spotify
-    icon-social-stack-overflow
-    icon-social-steam
-    icon-social-stumbleupon
-    icon-social-treehouse
-    icon-social-tumblr
-    icon-social-twitter
-    icon-social-vimeo
-    icon-social-xbox
-    icon-social-yelp
-    icon-social-youtube
-    icon-social-zerply
-    icon-mail
-
--------------------------------->
-
-<!-- add social info here -->
-
-
-
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
 
-      </div>
-
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/#blog">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
     </div>
 
-    <div class="panel-cover--overlay"></div>
-  </div>
+                </td>
+            </tr>
+        </table>
+    </div>
 </header>
 
-    <div class="content-wrapper">
-        <div class="content-wrapper__inner entry">
+        <div class="outer">
             
+                
 
-<article class="post-container post-container--single">
-
-  <header class="post-header">
-    
-    <h1 class="post-title">Jquery 的一些林林总总</h1>
-
-    
-
-    <div class="post-meta">
-      <time datetime="2017-05-10" class="post-meta__date date">2017-05-10</time> 
-
-      <span class="post-meta__tags tags">
-
-          
-
-          
-
-      </span>
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/1.jpg" />
+            <h2 id="name">Drazen</h2>
+            <h3 id="title">Web Developer &amp; Designer</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>JiNan, China</span>
+            <a id="follow" target="_blank" href="https://github.com/Drazen08">FOLLOW</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                3
+                <span>posts</span>
+            </div>
+            <div class="article-info-block">
+                0
+                <span>tag</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class=tooltip>
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class=tooltip>
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class=tooltip>
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class=tooltip>
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
     </div>
+</aside>
+
+            
+            <section id="main"><article id="post-jquery_log1" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
     
+        <h1 class="article-title" itemprop="name">
+            Jquery 的一些林林总总
+        </h1>
     
 
-  </header>
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/05/10/jquery_log1/">
+            <time datetime="2017-05-10T08:52:09.000Z" itemprop="datePublished">2017-05-10</time>
+        </a>
+    </div>
 
-  <section id="post-content" class="article-content post">
-    <h1 id="Jquery-的一些林林总总"><a href="#Jquery-的一些林林总总" class="headerlink" title="Jquery 的一些林林总总"></a>Jquery 的一些林林总总</h1><blockquote>
+
+                        
+                        
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="Jquery-的一些林林总总"><a href="#Jquery-的一些林林总总" class="headerlink" title="Jquery 的一些林林总总"></a>Jquery 的一些林林总总</h1><blockquote>
 <p>最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助</p>
 </blockquote>
 <h4 id="首先-最近面试的时候问到的："><a href="#首先-最近面试的时候问到的：" class="headerlink" title="首先 - - 最近面试的时候问到的："></a>首先 - - 最近面试的时候问到的：</h4>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(document).ready 与JavaScript里onload方法的区别：</div><div class="line">$(document).ready(function()&#123;&#125;) 代表的是在DOM加载之前完成代码内加载</div><div class="line">onload 事件会在页面或图像加载完成后立即发生。</div></pre></td></tr></table></figure>
@@ -236,58 +303,281 @@ classes that you can use:
 </table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">  2.载入过程的动画</div><div class="line"></div><div class="line">  在.load() 之前 $(&apos;#content&apos;).html(&apos;&lt;img...&gt;&apos;);</div><div class="line"></div><div class="line"></div><div class="line">  3.载入部分内容</div><div class="line">  $(&apos;#content&apos;).load(URL class or id or tag name )</div><div class="line">  如：	$(&apos;#content&apos;).load(&apos;class1.html.specal&apos;)------意味着该html里只有class=&quot;specal&quot; 的标签才可以被加载</div><div class="line"></div><div class="line"></div><div class="line">  4.get/post 提交表单</div><div class="line"></div><div class="line">  Get:服务器在URL中拾取键值对</div><div class="line"></div><div class="line">  Post:</div><div class="line">    $.ajax(&#123;</div><div class="line">    type:&apos;post&apos;,</div><div class="line">    url:url,</div><div class="line">    data:data,</div><div class="line">    success:success,</div><div class="line">    dataType:dataType</div><div class="line">    &#125;);</div><div class="line"></div><div class="line"></div><div class="line">  post 请求提交数据：</div><div class="line">      两种方式：标准\快捷</div><div class="line"></div><div class="line">        标准：$.post(url,[data],[success],dataType);</div><div class="line"></div><div class="line">        快捷：$.ajax(&#123;</div><div class="line">        url:url,</div><div class="line">        data:data,</div><div class="line">        success:success,</div><div class="line">        dataType:dataType</div><div class="line">        &#125;);</div><div class="line"></div><div class="line"></div><div class="line">  5.操作XML数据</div><div class="line"></div><div class="line">  a.XML是跨平台的标准</div><div class="line">    如何得到xml并解读，展示在html上</div><div class="line">      $.ajax(&#123;</div><div class="line">    type:&apos;GET&apos;,</div><div class="line">    url:&quot;xx.xml&quot;,</div><div class="line">    dataType:&quot;XML&quot;,</div><div class="line">    success:parseXML ---回调函数</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">生成html</div><div class="line">  function parseXML(xml)&#123;</div><div class="line">    $(xml).find(&quot;Book&quot;).each(function()&#123;</div><div class="line">    var author = $(this).attr(&apos;author&apos;);</div><div class="line">    $(&apos;&lt;li&gt;&lt;/li&gt;&apos;).html(&apos;&lt;b&gt;Author&lt;/b&gt;:&apos;+author).appendTo(&apos;#books&apos;);;</div><div class="line">    &#125;;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">6.操作JSon数据</div><div class="line"></div><div class="line">  json是JavaScript的表示法，它允许以键值对的形式创建自己的数据结构</div><div class="line"></div><div class="line">  a.获取json并生成html</div><div class="line"></div><div class="line">    $.getJSON();或$.ajax</div><div class="line"></div><div class="line"></div><div class="line">    function processJson(data)&#123;</div><div class="line">    $.each(data.books,function(i,item));</div><div class="line">    &#125;</div><div class="line">    接下来要做的跟xml类似，你只需要获取item中的键值来生成html</div></pre></td></tr></table></figure>
 
-  </section>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
-  
-  
+
+
+</div>
+
+    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cj32pc4rs0000ucow3b0evgpl" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://sunjx93.com/2017/05/10/jquery_log1/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/10/jquery_log1/">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/04/18/终于搞定了/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    终于搞定了
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/05/22/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">Hello World</div>
+        </a>
+    
+</nav>
+
+
+    
 </article>
 
 
-            <footer class="footer">
-
-    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
     
-</footer>
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">recent</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/22/hello-world/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/05/22/hello-world/" class="title">Hello World</a></p>
+                            <p class="item-date"><time datetime="2017-05-22T01:42:30.448Z" itemprop="datePublished">2017-05-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/10/jquery_log1/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/05/10/jquery_log1/" class="title">Jquery 的一些林林总总</a></p>
+                            <p class="item-date"><time datetime="2017-05-10T08:52:09.000Z" itemprop="datePublished">2017-05-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/04/18/终于搞定了/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/04/18/终于搞定了/" class="title">终于搞定了</a></p>
+                            <p class="item-date"><time datetime="2017-04-18T08:52:09.000Z" itemprop="datePublished">2017-04-18</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
         </div>
     </div>
 
-    <!-- js files -->
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/main.js"></script>
-    <script src="/js/scale.fix.js"></script>
     
-
+        
     
-
-    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript"> 
-        $(document).ready(function(){
-            MathJax.Hub.Config({ 
-                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
-            });
-        });
-    </script>
-
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
 
     
+        
+    
+        
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
 
-    <script src="/js/awesome-toc.min.js"></script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 JFuncnovic<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+    
     <script>
-        $(document).ready(function(){
-            $.awesome_toc({
-                overlay: true,
-                contentId: "post-content",
-            });
-        });
-    </script>
+    var disqus_config = function () {
+        
+            this.page.url = 'http://sunjx93.com/2017/05/10/jquery_log1/';
+        
+        this.page.identifier = 'jquery_log1';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
 
 
     
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
     
-    <!--kill ie6 -->
-<!--[if IE 6]>
-  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
-<![endif]-->
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
 
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
 </body>
 </html>
