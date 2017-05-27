@@ -5,17 +5,17 @@
     
     <title>Jquery 的一些林林总总 | Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助  首先 - - 最近面试的时候问到的：  123$(document).ready 与JavaScript里onload方法的区别：$(document).ready(function()&amp;#123;&amp;#125;) 代表的是在DOM加载之前">
+    <meta name="description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助">
 <meta name="keywords" content="Jquery">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jquery 的一些林林总总">
 <meta property="og:url" content="http://sunjx93.com/2017/05/10/jquery_log1/index.html">
 <meta property="og:site_name" content="Drazen">
-<meta property="og:description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助  首先 - - 最近面试的时候问到的：  123$(document).ready 与JavaScript里onload方法的区别：$(document).ready(function()&amp;#123;&amp;#125;) 代表的是在DOM加载之前">
-<meta property="og:updated_time" content="2017-05-24T09:13:54.802Z">
+<meta property="og:description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助">
+<meta property="og:updated_time" content="2017-05-27T08:16:23.245Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jquery 的一些林林总总">
-<meta name="twitter:description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助  首先 - - 最近面试的时候问到的：  123$(document).ready 与JavaScript里onload方法的区别：$(document).ready(function()&amp;#123;&amp;#125;) 代表的是在DOM加载之前">
+<meta name="twitter:description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助">
     
 
     
@@ -83,7 +83,7 @@
             <div id="search-form-wrap">
 
     <form class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Rechercher" />
         <button type="submit" class="search-form-submit"></button>
     </form>
     <div class="ins-search">
@@ -102,9 +102,9 @@
 (function (window) {
     var INSIGHT_CONFIG = {
         TRANSLATION: {
-            POSTS: 'Posts',
+            POSTS: 'Articles',
             PAGES: 'Pages',
-            CATEGORIES: 'Categories',
+            CATEGORIES: 'Catégories',
             TAGS: 'Tags',
             UNTITLED: '(Untitled)',
         },
@@ -136,7 +136,7 @@
                 <td>
                     
     <div class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Rechercher" />
     </div>
 
                 </td>
@@ -156,16 +156,16 @@
             <h2 id="name">Drazen&#39;</h2>
             <h3 id="title">Java Developer &amp; HandSome</h3>
             <span id="location"><i class="fa fa-map-marker"></i>JiNan, China</span>
-            <a id="follow" target="_blank" href="https://github.com/Drazen08">FOLLOW</a>
+            <a id="follow" target="_blank" href="https://github.com/Drazen08">SUIVRE</a>
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
                 3
-                <span>posts</span>
+                <span>Articles</span>
             </div>
             <div class="article-info-block">
                 3
-                <span>tags</span>
+                <span>Tags</span>
             </div>
         </div>
         
@@ -247,6 +247,7 @@
             <h1 id="Jquery-的一些林林总总"><a href="#Jquery-的一些林林总总" class="headerlink" title="Jquery 的一些林林总总"></a>Jquery 的一些林林总总</h1><blockquote>
 <p>最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助</p>
 </blockquote>
+<a id="more"></a>
 <h4 id="首先-最近面试的时候问到的："><a href="#首先-最近面试的时候问到的：" class="headerlink" title="首先 - - 最近面试的时候问到的："></a>首先 - - 最近面试的时候问到的：</h4>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(document).ready 与JavaScript里onload方法的区别：</div><div class="line">$(document).ready(function()&#123;&#125;) 代表的是在DOM加载之前完成代码内加载</div><div class="line">onload 事件会在页面或图像加载完成后立即发生。</div></pre></td></tr></table></figure>
 <p><strong>这是jQuery的一些常用方法</strong><br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">1.			.load()	预加载图片</div><div class="line">2.			.ready()	事件监测DOM是否完全加载</div><div class="line">3.			.unload()	在离开页面时或用户单机一个新连接是触发</div><div class="line">4.			.resize()	改变浏览器大小时触发</div><div class="line">5.			.scroll()	用户滚动窗口时触发</div><div class="line">6.			.error()	当http请求遇到错误是触发	可以用来显示备用图片，也就是</div><div class="line">      网页上的图挂了之后，可以用别的图替代图挂了- - 表达不能2333</div><div class="line"></div><div class="line"></div><div class="line">7.		.bind()	绑定事件函数</div><div class="line"></div><div class="line">8.		.live()	提供一个灵活的捕获事件的方式</div><div class="line">    	.live(event type,event handler);</div><div class="line"></div><div class="line">9.		.delegate()	三个参数：1.选择器		2.事件类型		3.响应函数</div></pre></td></tr></table></figure></p>
 <p><strong>捕获鼠标事件</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">click	单击鼠标并释放</div><div class="line">dbclick	双击触发</div><div class="line">mousedown	鼠标被按下触发</div><div class="line">mouseup		鼠标松开后触发</div><div class="line">mouseenter	鼠标进入某易元素区域时触发</div><div class="line">mouseleave	..离开时触发</div><div class="line">mousemove	鼠标在区域内移动时触发</div><div class="line">mouseout	离开该区域及父元素时触发</div><div class="line">mouseover	鼠标进入某一元素及父元素时触发</div></pre></td></tr></table></figure></p>
@@ -313,7 +314,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cj36zb2ig0000toowvs7lhzgj" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cj36zxwy90001x0ow8oe3ydjx" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -381,7 +382,7 @@
 
             
     
-        <a href="http://sunjx93.com/2017/05/10/jquery_log1/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/10/jquery_log1/">Comments</a>
+        <a href="http://sunjx93.com/2017/05/10/jquery_log1/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/10/jquery_log1/">Commentaires</a>
     
 
         </footer>
@@ -391,7 +392,7 @@
 <nav id="article-nav">
     
         <a href="/2017/04/18/终于搞定了/" id="article-nav-newer" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Newer</strong>
+            <strong class="article-nav-caption">Plus récent</strong>
             <div class="article-nav-title">
                 
                     终于搞定了
@@ -401,7 +402,7 @@
     
     
         <a href="/2017/05/27/sd/" id="article-nav-older" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Older</strong>
+            <strong class="article-nav-caption">Plus ancien</strong>
             <div class="article-nav-title">SpringData相关</div>
         </a>
     
@@ -429,7 +430,7 @@
    
         
     <div class="widget-wrap">
-        <h3 class="widget-title">recent</h3>
+        <h3 class="widget-title">Récents</h3>
         <div class="widget">
             <ul id="recent-post" class="">
                 
@@ -499,7 +500,7 @@
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">archives</h3>
+        <h3 class="widget-title">Archives</h3>
         <div class="widget">
             <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
         </div>
@@ -508,7 +509,7 @@
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tags</h3>
+        <h3 class="widget-title">Tags</h3>
         <div class="widget">
             <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li></ul>
         </div>
@@ -517,7 +518,7 @@
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tag cloud</h3>
+        <h3 class="widget-title">Nuage de tags</h3>
         <div class="widget tagcloud">
             <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a>
         </div>
@@ -526,7 +527,7 @@
     
         
     <div class="widget-wrap widget-list">
-        <h3 class="widget-title">links</h3>
+        <h3 class="widget-title">Liens</h3>
         <div class="widget">
             <ul>
                 
