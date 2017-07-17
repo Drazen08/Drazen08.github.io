@@ -81,7 +81,7 @@
             <div id="search-form-wrap">
 
     <form class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
         <button type="submit" class="search-form-submit"></button>
     </form>
     <div class="ins-search">
@@ -100,10 +100,10 @@
 (function (window) {
     var INSIGHT_CONFIG = {
         TRANSLATION: {
-            POSTS: 'Posts',
+            POSTS: 'Entradas',
             PAGES: 'Pages',
-            CATEGORIES: 'Categories',
-            TAGS: 'Tags',
+            CATEGORIES: 'Categorias',
+            TAGS: 'Etiquetas',
             UNTITLED: '(Untitled)',
         },
         ROOT_URL: '/',
@@ -134,7 +134,7 @@
                 <td>
                     
     <div class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
     </div>
 
                 </td>
@@ -154,16 +154,16 @@
             <h2 id="name">Drazen&#39;</h2>
             <h3 id="title">Java Developer &amp; HandSome</h3>
             <span id="location"><i class="fa fa-map-marker"></i>JiNan, China</span>
-            <a id="follow" target="_blank" href="https://github.com/Drazen08">FOLLOW</a>
+            <a id="follow" target="_blank" href="https://github.com/Drazen08">SEGUIR</a>
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                3
-                <span>posts</span>
+                4
+                <span>Entradas</span>
             </div>
             <div class="article-info-block">
-                4
-                <span>tags</span>
+                5
+                <span>Etiquetas</span>
             </div>
         </div>
         
@@ -205,7 +205,7 @@
 
             
             <section id="main">
-    <article id="post-sd" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Quartz" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -213,7 +213,7 @@
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/05/27/sd/">SpringData相关</a>
+            <a class="article-title" href="/2017/07/07/Quartz/">Quartz实现定时任务</a>
         </h1>
     
 
@@ -222,8 +222,8 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/05/27/sd/">
-            <time datetime="2017-05-27T08:52:09.000Z" itemprop="datePublished">2017-05-27</time>
+        <a href="/2017/07/07/Quartz/">
+            <time datetime="2017-07-07T08:52:09.000Z" itemprop="datePublished">2017-07-07</time>
         </a>
     </div>
 
@@ -232,7 +232,7 @@
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Java/">Java</a>, <a class="tag-link" href="/tags/SpringData/">SpringData</a>
+        <a class="tag-link" href="/tags/Quartz-Timer/">Quartz - Timer</a>
     </div>
 
                     </div>
@@ -242,12 +242,152 @@
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><blockquote>
-<p>SpringData是原先工作用到了的东西，提供一个一致性的，基于spring的项目，用来访问数据（访问数据库），现在来半预习半复习一下</p>
-</blockquote></p>
-            <p class="article-more-link">
-                <a href="/2017/05/27/sd/#more">Read More</a>
-            </p>
+            
+            <h1 id="Quartz"><a href="#Quartz" class="headerlink" title="Quartz"></a>Quartz</h1><blockquote>
+<p>最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz</p>
+<h2 id="Quartz-的生命周期"><a href="#Quartz-的生命周期" class="headerlink" title="Quartz 的生命周期"></a>Quartz 的生命周期</h2><ul>
+<li>Job接口<br>在execute（JobExecation…）{}中编写逻辑</li>
+</ul>
+</blockquote>
+<ul>
+<li>调用器<blockquote>
+<p>执行Job时创建的Job实例，调用完成时，job实例会被释放并回收</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="JobDetail"><a href="#JobDetail" class="headerlink" title="JobDetail"></a>JobDetail</h2><p><strong>属性</strong></p>
+<pre><code>name          任务名称
+group         任务组 默认DEFAULT
+jobclass      
+jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
+......
+</code></pre><p><strong>JobDataMap&amp;TriggerDataMap:</strong><br>  强力的map型参数，由quzrtz封装，同时实现了map接口</p>
+<h2 id="关于Quzrtz的Trigger"><a href="#关于Quzrtz的Trigger" class="headerlink" title="关于Quzrtz的Trigger"></a>关于Quzrtz的Trigger</h2><ul>
+<li>作为Quartz的触发器来执行Job<h3 id="Trigger的通用属性"><a href="#Trigger的通用属性" class="headerlink" title="Trigger的通用属性"></a>Trigger的通用属性</h3></li>
+<li>Job Key： 获取JobDetail的key值</li>
+<li>startTime： 触发器首次触发的时间</li>
+<li>endTime： …停止时间</li>
+</ul>
+<h2 id="SimpleTrigger-amp-CronTrigger"><a href="#SimpleTrigger-amp-CronTrigger" class="headerlink" title="SimpleTrigger&amp; CronTrigger"></a>SimpleTrigger&amp; CronTrigger</h2><h3 id="SimpleTrigger："><a href="#SimpleTrigger：" class="headerlink" title="SimpleTrigger："></a>SimpleTrigger：</h3><p>   SimpleTrigge有点类似Java中<code>Timer</code>的一个变体，但是个人觉得在逻辑上比<code>Timer</code>要来的简便</p>
+<h3 id="CronTrigger："><a href="#CronTrigger：" class="headerlink" title="CronTrigger："></a>CronTrigger：</h3><p>  <code>CronTrigger</code>是<strong>Quartz</strong>的核心，是一种<strong>基于日历</strong>的作业调度器</p>
+<p>  <strong>重点：</strong><br>    cron表达式：用来配置CronTrigger实例</p>
+<p>由<code>7个子表达式组成</code>,描述了<code>时间表</code>的详细信息</p>
+<h4 id="格式："><a href="#格式：" class="headerlink" title="格式："></a>格式：</h4><p>  <strong>[秒] [分] [小时] [日] [月] [年]</strong><br>  <strong>注意</strong> <code>[]</code>之间有空格符</p>
+<p><code>事例</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">JobDetail jobDetail = JobBuilder.newJob(QuartzJob.class)</div><div class="line">        .withIdentity(&quot;myJob&quot;).build();</div><div class="line">CronTrigger trigger = (CronTrigger) TriggerBuilder</div><div class="line">        .newTrigger()</div><div class="line">        .withIdentity(&quot;myTrigger&quot;, &quot;group1&quot;)</div><div class="line">        .withSchedule(</div><div class="line">                CronScheduleBuilder.cronSchedule(&quot;* * * * * ?&quot;))</div><div class="line">        .build();</div><div class="line">// 创建Scheduler实例</div><div class="line">SchedulerFactory sfact = new StdSchedulerFactory();</div><div class="line">Scheduler scheduler = sfact.getScheduler();</div><div class="line">scheduler.start();</div><div class="line">System.out.println(&quot;scheduled time is :&quot;</div><div class="line">        + sf.format(scheduler.scheduleJob(jobDetail, trigger)));</div><div class="line">//scheduler执行两秒后挂起</div><div class="line">Thread.sleep(2000L);</div><div class="line">//shutdown(true)表示等待所有正在执行的job执行完毕之后，再关闭scheduler</div><div class="line">//shutdown(false)即shutdown()表示直接关闭scheduler</div><div class="line">scheduler.shutdown(false);</div><div class="line">System.out.println(&quot;scheduler is shut down? &quot; + scheduler.isShutdown());</div></pre></td></tr></table></figure>
+<p>其中<code>CronScheduleBuilder.cronSchedule(&quot;* * * * * ?&quot;))</code>这句就是Cron表达式的用法</p>
+<h4 id="关于Cron表达式的字符含义"><a href="#关于Cron表达式的字符含义" class="headerlink" title="关于Cron表达式的字符含义:"></a>关于Cron表达式的字符含义:</h4><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>是否必填</th>
+<th>允许值</th>
+<th>允许的特殊字符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>秒</td>
+<td>是</td>
+<td>0-59</td>
+<td>, - * /</td>
+</tr>
+<tr>
+<td>分</td>
+<td>是</td>
+<td>0-59</td>
+<td>, - * /</td>
+</tr>
+<tr>
+<td>小时</td>
+<td>是</td>
+<td>0-23</td>
+<td>, - * /</td>
+</tr>
+<tr>
+<td>日</td>
+<td>是</td>
+<td>1-31</td>
+<td>, - *  ? / L W C</td>
+</tr>
+<tr>
+<td>月</td>
+<td>是</td>
+<td>1-12或者JAN-DEC</td>
+<td>, - * /</td>
+</tr>
+<tr>
+<td>周</td>
+<td>是</td>
+<td>1-7或者SUN-SAT</td>
+<td>,- * ? / L C #</td>
+</tr>
+<tr>
+<td>年</td>
+<td>否</td>
+<td>empty,1970-2099</td>
+<td>, - * /  </td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>特殊字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>,</code></td>
+<td>表示或  的意思</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>至某事某刻，between的关系</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>表示每，</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>表示每隔某时间段触发，比如分的写法:<code>0/5</code> 表示每隔5分钟触发，<code>5/20</code>代表每五分钟触发一次，25,45各触发一次</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>表示无所谓，不关注，无关紧要</td>
+</tr>
+<tr>
+<td><code>#</code></td>
+<td><code>第</code>的意思，如<code>6#3</code>每月第三周星期五触发，<code>6</code>代表周五</td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td>代表最后一  的意思</td>
+</tr>
+<tr>
+<td><code>W</code></td>
+<td>表示有效工作日（周一到周五）， <code>L</code>与<code>W</code>可连用，表示某月最后一个工作日</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关于周的换算：1代表周日，6代表周五，以此类推类推</strong></p>
+<p>如：<br><code>0 15 10 ? * 6L 2016-2017</code>: 2016-2017年每月最后一周的周五10点15分执行</p>
+<p>年可以不填QAQ</p>
+<p>###SchedulerFactory</p>
+<p>用来工厂模式来创建Schedular</p>
+<h3 id="StdSchedulerFactory"><a href="#StdSchedulerFactory" class="headerlink" title="StdSchedulerFactory"></a>StdSchedulerFactory</h3><p>利用<code>.getScheduler();</code>方法初始创建调度器，参数配置可以采用<code>quartz。properties</code>方法</p>
+<h3 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h3><h4 id="Timer"><a href="#Timer" class="headerlink" title="Timer"></a>Timer</h4><p>1.无法并发执行：Timer不怎么支持并发</p>
+<p>2.因为Timer有且仅有一个后台执行的线程，若一旦爆出RunTimeException，则会停止<code>所有</code>的任务执行</p>
+<h4 id="瓶颈："><a href="#瓶颈：" class="headerlink" title="瓶颈："></a>瓶颈：</h4><p>a) 对时效性要求较高的多任务并发作业，虽然支持多任务，但是毕竟是串行接口</p>
+<p>b) 对复杂任务的调度不足，不支持定时任务</p>
+<h4 id="Quartz-1"><a href="#Quartz-1" class="headerlink" title="Quartz"></a>Quartz</h4><p>1.精细控制流程</p>
+<p>2.支持若干任务在上面执行</p>
+<p>a)调度功能</p>
+<p>b) 持久化机制，数据不会丢失</p>
+<p>c) 分布&amp;集群功能</p>
+
         
         </div>
         <footer class="article-footer">
@@ -257,7 +397,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/27/sd/" data-id="cj4nusn320000loow9lkxwxvb" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cj5802b0c0000m8owwpr20dwj" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -325,7 +465,137 @@
 
             
     
-        <a href="http://sunjx93.com/2017/05/27/sd/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/27/sd/">Comments</a>
+        <a href="http://sunjx93.com/2017/07/07/Quartz/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/07/07/Quartz/">Comentarios</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-sd" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2017/05/27/sd/">SpringData相关</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/05/27/sd/">
+            <time datetime="2017-05-27T08:52:09.000Z" itemprop="datePublished">2017-05-27</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Java/">Java</a>, <a class="tag-link" href="/tags/SpringData/">SpringData</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><blockquote>
+<p>SpringData是原先工作用到了的东西，提供一个一致性的，基于spring的项目，用来访问数据（访问数据库），现在来半预习半复习一下</p>
+</blockquote></p>
+            <p class="article-more-link">
+                <a href="/2017/05/27/sd/#more">Read More</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://sunjx93.com/2017/05/27/sd/" data-id="cj5800gv30000kcow7z7hf74p" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://sunjx93.com/2017/05/27/sd/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/27/sd/">Comentarios</a>
     
 
         </footer>
@@ -387,7 +657,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cj4nusn3a0001loowh51eqo7e" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cj5800gvf0001kcowsdkwt61o" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -455,7 +725,7 @@
 
             
     
-        <a href="http://sunjx93.com/2017/05/10/jquery_log1/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/10/jquery_log1/">Comments</a>
+        <a href="http://sunjx93.com/2017/05/10/jquery_log1/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/10/jquery_log1/">Comentarios</a>
     
 
         </footer>
@@ -517,7 +787,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/04/18/终于搞定了/" data-id="cj4nusn4x0008loowxw94g8f1" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/04/18/终于搞定了/" data-id="cj5800gvm0003kcowwzjvt4sx" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -585,7 +855,7 @@
 
             
     
-        <a href="http://sunjx93.com/2017/04/18/终于搞定了/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/04/18/终于搞定了/">Comments</a>
+        <a href="http://sunjx93.com/2017/04/18/终于搞定了/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/04/18/终于搞定了/">Comentarios</a>
     
 
         </footer>
@@ -600,9 +870,28 @@
    
         
     <div class="widget-wrap">
-        <h3 class="widget-title">recent</h3>
+        <h3 class="widget-title">Recientes</h3>
         <div class="widget">
             <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/07/07/Quartz/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/07/07/Quartz/" class="title">Quartz实现定时任务</a></p>
+                            <p class="item-date"><time datetime="2017-07-07T08:52:09.000Z" itemprop="datePublished">2017-07-07</time></p>
+                        </div>
+                    </li>
                 
                     <li>
                         
@@ -670,34 +959,34 @@
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">archives</h3>
+        <h3 class="widget-title">Archivos</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tags</h3>
+        <h3 class="widget-title">Etiquetas</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz-Timer/">Quartz - Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li></ul>
         </div>
     </div>
 
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tag cloud</h3>
+        <h3 class="widget-title">Nube de etiquetas</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a>
+            <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Quartz-Timer/" style="font-size: 10px;">Quartz - Timer</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a>
         </div>
     </div>
 
     
         
     <div class="widget-wrap widget-list">
-        <h3 class="widget-title">links</h3>
+        <h3 class="widget-title">Links</h3>
         <div class="widget">
             <ul>
                 

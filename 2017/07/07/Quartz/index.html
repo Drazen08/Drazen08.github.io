@@ -3,19 +3,19 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Jquery 的一些林林总总 | Drazen</title>
+    <title>Quartz实现定时任务 | Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助">
-<meta name="keywords" content="Jquery">
+    <meta name="description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz Quartz 的生命周期 Job接口在execute（JobExecation…）{}中编写逻辑    调用器 执行Job时创建的Job实例，调用完成时，job实例会被释放并回收    JobDetail属性 name          任务名称 group         任务">
+<meta name="keywords" content="Quartz - Timer">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Jquery 的一些林林总总">
-<meta property="og:url" content="http://sunjx93.com/2017/05/10/jquery_log1/index.html">
+<meta property="og:title" content="Quartz实现定时任务">
+<meta property="og:url" content="http://sunjx93.com/2017/07/07/Quartz/index.html">
 <meta property="og:site_name" content="Drazen">
-<meta property="og:description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助">
-<meta property="og:updated_time" content="2017-05-27T08:16:23.245Z">
+<meta property="og:description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz Quartz 的生命周期 Job接口在execute（JobExecation…）{}中编写逻辑    调用器 执行Job时创建的Job实例，调用完成时，job实例会被释放并回收    JobDetail属性 name          任务名称 group         任务">
+<meta property="og:updated_time" content="2017-07-17T10:21:01.281Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jquery 的一些林林总总">
-<meta name="twitter:description" content="Jquery 的一些林林总总 最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助">
+<meta name="twitter:title" content="Quartz实现定时任务">
+<meta name="twitter:description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz Quartz 的生命周期 Job接口在execute（JobExecation…）{}中编写逻辑    调用器 执行Job时创建的Job实例，调用完成时，job实例会被释放并回收    JobDetail属性 name          任务名称 group         任务">
     
 
     
@@ -206,7 +206,7 @@
 </aside>
 
             
-            <section id="main"><article id="post-jquery_log1" class="article article-type-post" itemscope itemprop="blogPost">
+            <section id="main"><article id="post-Quartz" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -214,7 +214,7 @@
                 
     
         <h1 class="article-title" itemprop="name">
-            Jquery 的一些林林总总
+            Quartz实现定时任务
         </h1>
     
 
@@ -223,8 +223,8 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/05/10/jquery_log1/">
-            <time datetime="2017-05-10T08:52:09.000Z" itemprop="datePublished">2017-05-10</time>
+        <a href="/2017/07/07/Quartz/">
+            <time datetime="2017-07-07T08:52:09.000Z" itemprop="datePublished">2017-07-07</time>
         </a>
     </div>
 
@@ -233,7 +233,7 @@
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Jquery/">Jquery</a>
+        <a class="tag-link" href="/tags/Quartz-Timer/">Quartz - Timer</a>
     </div>
 
                     </div>
@@ -244,66 +244,150 @@
         <div class="article-entry" itemprop="articleBody">
         
             
-            <h1 id="Jquery-的一些林林总总"><a href="#Jquery-的一些林林总总" class="headerlink" title="Jquery 的一些林林总总"></a>Jquery 的一些林林总总</h1><blockquote>
-<p>最近看了一本《精妙绝伦JQuery》，里面讲的比较细致，自己都快没耐心啃完了，记下来了一些自己能用到的东西，希望以后可以有所帮助</p>
+            <h1 id="Quartz"><a href="#Quartz" class="headerlink" title="Quartz"></a>Quartz</h1><blockquote>
+<p>最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz</p>
+<h2 id="Quartz-的生命周期"><a href="#Quartz-的生命周期" class="headerlink" title="Quartz 的生命周期"></a>Quartz 的生命周期</h2><ul>
+<li>Job接口<br>在execute（JobExecation…）{}中编写逻辑</li>
+</ul>
 </blockquote>
-<a id="more"></a>
-<h4 id="首先-最近面试的时候问到的："><a href="#首先-最近面试的时候问到的：" class="headerlink" title="首先 - - 最近面试的时候问到的："></a>首先 - - 最近面试的时候问到的：</h4>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(document).ready 与JavaScript里onload方法的区别：</div><div class="line">$(document).ready(function()&#123;&#125;) 代表的是在DOM加载之前完成代码内加载</div><div class="line">onload 事件会在页面或图像加载完成后立即发生。</div></pre></td></tr></table></figure>
-<p><strong>这是jQuery的一些常用方法</strong><br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">1.			.load()	预加载图片</div><div class="line">2.			.ready()	事件监测DOM是否完全加载</div><div class="line">3.			.unload()	在离开页面时或用户单机一个新连接是触发</div><div class="line">4.			.resize()	改变浏览器大小时触发</div><div class="line">5.			.scroll()	用户滚动窗口时触发</div><div class="line">6.			.error()	当http请求遇到错误是触发	可以用来显示备用图片，也就是</div><div class="line">      网页上的图挂了之后，可以用别的图替代图挂了- - 表达不能2333</div><div class="line"></div><div class="line"></div><div class="line">7.		.bind()	绑定事件函数</div><div class="line"></div><div class="line">8.		.live()	提供一个灵活的捕获事件的方式</div><div class="line">    	.live(event type,event handler);</div><div class="line"></div><div class="line">9.		.delegate()	三个参数：1.选择器		2.事件类型		3.响应函数</div></pre></td></tr></table></figure></p>
-<p><strong>捕获鼠标事件</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">click	单击鼠标并释放</div><div class="line">dbclick	双击触发</div><div class="line">mousedown	鼠标被按下触发</div><div class="line">mouseup		鼠标松开后触发</div><div class="line">mouseenter	鼠标进入某易元素区域时触发</div><div class="line">mouseleave	..离开时触发</div><div class="line">mousemove	鼠标在区域内移动时触发</div><div class="line">mouseout	离开该区域及父元素时触发</div><div class="line">mouseover	鼠标进入某一元素及父元素时触发</div></pre></td></tr></table></figure></p>
-<p><strong>捕获表单事件</strong><br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">change()	表单值改变时触发</div><div class="line">focus()		敲TAB键触发</div><div class="line">focusin()	元素或子元素得到焦点时触发</div><div class="line">focusout()	元素或子元素失去焦点时触发</div><div class="line">blur()		文本域/文本框失去焦点时触发</div><div class="line">select()	元素内文本被选中时触发</div><div class="line">submit()	表单提交时触发</div><div class="line">reset()		重置</div></pre></td></tr></table></figure></p>
-<h4 id="关于网站特效"><a href="#关于网站特效" class="headerlink" title="关于网站特效"></a>关于网站特效</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">show()</div><div class="line">hide()</div><div class="line">toggle()	根据当前状态显示/隐藏 切换状态</div><div class="line">slideDown()	以向下滑动展开的方式显示元素</div><div class="line">fadeIn()	元素以淡入的方式显示</div><div class="line">fadeout()	元素以淡入淡出的方式消失</div><div class="line">fadeTo()	淡入淡出至某个透明度</div></pre></td></tr></table></figure>
-<h3 id="关于cookie（这可是他娘的重点）"><a href="#关于cookie（这可是他娘的重点）" class="headerlink" title="关于cookie（这可是他娘的重点）"></a>关于cookie（这可是他娘的重点）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">1.如何种cookie</div><div class="line">		function  startCookie()&#123;</div><div class="line">		var expirDate = new Date();</div><div class="line">		expirDate.setDate(expirDate.getDate+30);	cookie过期时间</div><div class="line">		document.cookie = &quot;name=hideCookie;expires=&quot;+expirDate.toUTCString</div><div class="line">		&#125;</div><div class="line"></div><div class="line"></div><div class="line">	(可以使用jQuery的cookie插件拿到具体cookie)</div></pre></td></tr></table></figure>
-<p>  <strong>注</strong>：当没有指明 cookie有效时间时，所创建的cookie有效期默认到用户关闭浏览器为止，所以被称为<br>  “会话cookie（session cookie）”。</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$.cookie(&apos;cookName&apos;)</div><div class="line">$.cookie(&apos;key&apos;,&apos;value&apos;)</div><div class="line">$.cookie(&apos;key&apos;,&apos;value&apos;,&#123; expires: 7 &#125;);//意思是创建一个7天有效期的cookie</div><div class="line"></div><div class="line">$.cookie(&apos;key&apos;,&apos;value&apos;,&#123; expires: 7,path:&apos;/&apos;&#125;);</div><div class="line">//意思是创建一个7天有效期的cookie,且存储路径为/</div></pre></td></tr></table></figure>
-<h4 id="读取cookie："><a href="#读取cookie：" class="headerlink" title="读取cookie："></a>读取cookie：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$.cookie(&apos;the_cookie&apos;); // cookie存在 =&gt; &apos;the_value&apos;</div><div class="line"></div><div class="line">$.cookie(&apos;not_existing&apos;); // cookie不存在 =&gt; null</div><div class="line"></div><div class="line">5.删除cookie，通过传递null作为cookie的值即可：</div><div class="line"></div><div class="line">$.cookie(&apos;the_cookie&apos;, null);</div></pre></td></tr></table></figure>
-<h3 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h3><blockquote>
-<p>传说中的，标志着人类互联网历史的一大步，就连名字也很后现代化的Ajax</p>
+<ul>
+<li>调用器<blockquote>
+<p>执行Job时创建的Job实例，调用完成时，job实例会被释放并回收</p>
 </blockquote>
-<p>  <strong> Ajax指在不需要刷新页面的情况下，允许客户端应用程序传递数据给服务器并获取数据的一组模式和技术 </strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">1.$(selector).load(URL,回调函数&#123;  &#125;)</div><div class="line">   $(&apos;#content&apos;).load(&apos;Class5.html&apos;,function(responseText,textStatus,XMLHttpRequest)&#123;</div><div class="line"></div><div class="line">           //检查不同的响应码</div><div class="line"></div><div class="line">           if(XMLHttpRequest.status == 404||XMLHttpRequest.status == 500)&#123;</div><div class="line">               $(&apos;#content&apos;).html(&apos;There has been an error,please try angin later&apos;);</div><div class="line">           &#125;</div><div class="line">       &#125;);</div></pre></td></tr></table></figure></p>
-<h4 id="关于响应码"><a href="#关于响应码" class="headerlink" title="关于响应码"></a>关于响应码</h4><table>
+</li>
+</ul>
+<h2 id="JobDetail"><a href="#JobDetail" class="headerlink" title="JobDetail"></a>JobDetail</h2><p><strong>属性</strong></p>
+<pre><code>name          任务名称
+group         任务组 默认DEFAULT
+jobclass      
+jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
+......
+</code></pre><p><strong>JobDataMap&amp;TriggerDataMap:</strong><br>  强力的map型参数，由quzrtz封装，同时实现了map接口</p>
+<h2 id="关于Quzrtz的Trigger"><a href="#关于Quzrtz的Trigger" class="headerlink" title="关于Quzrtz的Trigger"></a>关于Quzrtz的Trigger</h2><ul>
+<li>作为Quartz的触发器来执行Job<h3 id="Trigger的通用属性"><a href="#Trigger的通用属性" class="headerlink" title="Trigger的通用属性"></a>Trigger的通用属性</h3></li>
+<li>Job Key： 获取JobDetail的key值</li>
+<li>startTime： 触发器首次触发的时间</li>
+<li>endTime： …停止时间</li>
+</ul>
+<h2 id="SimpleTrigger-amp-CronTrigger"><a href="#SimpleTrigger-amp-CronTrigger" class="headerlink" title="SimpleTrigger&amp; CronTrigger"></a>SimpleTrigger&amp; CronTrigger</h2><h3 id="SimpleTrigger："><a href="#SimpleTrigger：" class="headerlink" title="SimpleTrigger："></a>SimpleTrigger：</h3><p>   SimpleTrigge有点类似Java中<code>Timer</code>的一个变体，但是个人觉得在逻辑上比<code>Timer</code>要来的简便</p>
+<h3 id="CronTrigger："><a href="#CronTrigger：" class="headerlink" title="CronTrigger："></a>CronTrigger：</h3><p>  <code>CronTrigger</code>是<strong>Quartz</strong>的核心，是一种<strong>基于日历</strong>的作业调度器</p>
+<p>  <strong>重点：</strong><br>    cron表达式：用来配置CronTrigger实例</p>
+<p>由<code>7个子表达式组成</code>,描述了<code>时间表</code>的详细信息</p>
+<h4 id="格式："><a href="#格式：" class="headerlink" title="格式："></a>格式：</h4><p>  <strong>[秒] [分] [小时] [日] [月] [年]</strong><br>  <strong>注意</strong> <code>[]</code>之间有空格符</p>
+<p><code>事例</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">JobDetail jobDetail = JobBuilder.newJob(QuartzJob.class)</div><div class="line">        .withIdentity(&quot;myJob&quot;).build();</div><div class="line">CronTrigger trigger = (CronTrigger) TriggerBuilder</div><div class="line">        .newTrigger()</div><div class="line">        .withIdentity(&quot;myTrigger&quot;, &quot;group1&quot;)</div><div class="line">        .withSchedule(</div><div class="line">                CronScheduleBuilder.cronSchedule(&quot;* * * * * ?&quot;))</div><div class="line">        .build();</div><div class="line">// 创建Scheduler实例</div><div class="line">SchedulerFactory sfact = new StdSchedulerFactory();</div><div class="line">Scheduler scheduler = sfact.getScheduler();</div><div class="line">scheduler.start();</div><div class="line">System.out.println(&quot;scheduled time is :&quot;</div><div class="line">        + sf.format(scheduler.scheduleJob(jobDetail, trigger)));</div><div class="line">//scheduler执行两秒后挂起</div><div class="line">Thread.sleep(2000L);</div><div class="line">//shutdown(true)表示等待所有正在执行的job执行完毕之后，再关闭scheduler</div><div class="line">//shutdown(false)即shutdown()表示直接关闭scheduler</div><div class="line">scheduler.shutdown(false);</div><div class="line">System.out.println(&quot;scheduler is shut down? &quot; + scheduler.isShutdown());</div></pre></td></tr></table></figure>
+<p>其中<code>CronScheduleBuilder.cronSchedule(&quot;* * * * * ?&quot;))</code>这句就是Cron表达式的用法</p>
+<h4 id="关于Cron表达式的字符含义"><a href="#关于Cron表达式的字符含义" class="headerlink" title="关于Cron表达式的字符含义:"></a>关于Cron表达式的字符含义:</h4><table>
 <thead>
 <tr>
-<th>响应码</th>
-<th>对应解释</th>
+<th>字段</th>
+<th>是否必填</th>
+<th>允许值</th>
+<th>允许的特殊字符</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>200</td>
-<td>成功</td>
+<td>秒</td>
+<td>是</td>
+<td>0-59</td>
+<td>, - * /</td>
 </tr>
 <tr>
-<td>301</td>
-<td>永久跳转</td>
+<td>分</td>
+<td>是</td>
+<td>0-59</td>
+<td>, - * /</td>
 </tr>
 <tr>
-<td>302</td>
-<td>临时跳转</td>
+<td>小时</td>
+<td>是</td>
+<td>0-23</td>
+<td>, - * /</td>
 </tr>
 <tr>
-<td>400</td>
-<td>错误请求</td>
+<td>日</td>
+<td>是</td>
+<td>1-31</td>
+<td>, - *  ? / L W C</td>
 </tr>
 <tr>
-<td>401</td>
-<td>未授权</td>
+<td>月</td>
+<td>是</td>
+<td>1-12或者JAN-DEC</td>
+<td>, - * /</td>
 </tr>
 <tr>
-<td>403</td>
-<td>禁止访问</td>
+<td>周</td>
+<td>是</td>
+<td>1-7或者SUN-SAT</td>
+<td>,- * ? / L C #</td>
 </tr>
 <tr>
-<td>404</td>
-<td>未找到</td>
-</tr>
-<tr>
-<td>500</td>
-<td>服务器错误</td>
+<td>年</td>
+<td>否</td>
+<td>empty,1970-2099</td>
+<td>, - * /  </td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">  2.载入过程的动画</div><div class="line"></div><div class="line">  在.load() 之前 $(&apos;#content&apos;).html(&apos;&lt;img...&gt;&apos;);</div><div class="line"></div><div class="line"></div><div class="line">  3.载入部分内容</div><div class="line">  $(&apos;#content&apos;).load(URL class or id or tag name )</div><div class="line">  如：	$(&apos;#content&apos;).load(&apos;class1.html.specal&apos;)------意味着该html里只有class=&quot;specal&quot; 的标签才可以被加载</div><div class="line"></div><div class="line"></div><div class="line">  4.get/post 提交表单</div><div class="line"></div><div class="line">  Get:服务器在URL中拾取键值对</div><div class="line"></div><div class="line">  Post:</div><div class="line">    $.ajax(&#123;</div><div class="line">    type:&apos;post&apos;,</div><div class="line">    url:url,</div><div class="line">    data:data,</div><div class="line">    success:success,</div><div class="line">    dataType:dataType</div><div class="line">    &#125;);</div><div class="line"></div><div class="line"></div><div class="line">  post 请求提交数据：</div><div class="line">      两种方式：标准\快捷</div><div class="line"></div><div class="line">        标准：$.post(url,[data],[success],dataType);</div><div class="line"></div><div class="line">        快捷：$.ajax(&#123;</div><div class="line">        url:url,</div><div class="line">        data:data,</div><div class="line">        success:success,</div><div class="line">        dataType:dataType</div><div class="line">        &#125;);</div><div class="line"></div><div class="line"></div><div class="line">  5.操作XML数据</div><div class="line"></div><div class="line">  a.XML是跨平台的标准</div><div class="line">    如何得到xml并解读，展示在html上</div><div class="line">      $.ajax(&#123;</div><div class="line">    type:&apos;GET&apos;,</div><div class="line">    url:&quot;xx.xml&quot;,</div><div class="line">    dataType:&quot;XML&quot;,</div><div class="line">    success:parseXML ---回调函数</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">生成html</div><div class="line">  function parseXML(xml)&#123;</div><div class="line">    $(xml).find(&quot;Book&quot;).each(function()&#123;</div><div class="line">    var author = $(this).attr(&apos;author&apos;);</div><div class="line">    $(&apos;&lt;li&gt;&lt;/li&gt;&apos;).html(&apos;&lt;b&gt;Author&lt;/b&gt;:&apos;+author).appendTo(&apos;#books&apos;);;</div><div class="line">    &#125;;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">6.操作JSon数据</div><div class="line"></div><div class="line">  json是JavaScript的表示法，它允许以键值对的形式创建自己的数据结构</div><div class="line"></div><div class="line">  a.获取json并生成html</div><div class="line"></div><div class="line">    $.getJSON();或$.ajax</div><div class="line"></div><div class="line"></div><div class="line">    function processJson(data)&#123;</div><div class="line">    $.each(data.books,function(i,item));</div><div class="line">    &#125;</div><div class="line">    接下来要做的跟xml类似，你只需要获取item中的键值来生成html</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>特殊字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>,</code></td>
+<td>表示或  的意思</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>至某事某刻，between的关系</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>表示每，</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>表示每隔某时间段触发，比如分的写法:<code>0/5</code> 表示每隔5分钟触发，<code>5/20</code>代表每五分钟触发一次，25,45各触发一次</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>表示无所谓，不关注，无关紧要</td>
+</tr>
+<tr>
+<td><code>#</code></td>
+<td><code>第</code>的意思，如<code>6#3</code>每月第三周星期五触发，<code>6</code>代表周五</td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td>代表最后一  的意思</td>
+</tr>
+<tr>
+<td><code>W</code></td>
+<td>表示有效工作日（周一到周五）， <code>L</code>与<code>W</code>可连用，表示某月最后一个工作日</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关于周的换算：1代表周日，6代表周五，以此类推类推</strong></p>
+<p>如：<br><code>0 15 10 ? * 6L 2016-2017</code>: 2016-2017年每月最后一周的周五10点15分执行</p>
+<p>年可以不填QAQ</p>
+<p>###SchedulerFactory</p>
+<p>用来工厂模式来创建Schedular</p>
+<h3 id="StdSchedulerFactory"><a href="#StdSchedulerFactory" class="headerlink" title="StdSchedulerFactory"></a>StdSchedulerFactory</h3><p>利用<code>.getScheduler();</code>方法初始创建调度器，参数配置可以采用<code>quartz。properties</code>方法</p>
+<h3 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h3><h4 id="Timer"><a href="#Timer" class="headerlink" title="Timer"></a>Timer</h4><p>1.无法并发执行：Timer不怎么支持并发</p>
+<p>2.因为Timer有且仅有一个后台执行的线程，若一旦爆出RunTimeException，则会停止<code>所有</code>的任务执行</p>
+<h4 id="瓶颈："><a href="#瓶颈：" class="headerlink" title="瓶颈："></a>瓶颈：</h4><p>a) 对时效性要求较高的多任务并发作业，虽然支持多任务，但是毕竟是串行接口</p>
+<p>b) 对复杂任务的调度不足，不支持定时任务</p>
+<h4 id="Quartz-1"><a href="#Quartz-1" class="headerlink" title="Quartz"></a>Quartz</h4><p>1.精细控制流程</p>
+<p>2.支持若干任务在上面执行</p>
+<p>a)调度功能</p>
+<p>b) 持久化机制，数据不会丢失</p>
+<p>c) 分布&amp;集群功能</p>
 
         
         </div>
@@ -314,7 +398,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cj5800gvf0001kcowsdkwt61o" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
+    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cj5802b0c0000m8owwpr20dwj" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -382,7 +466,7 @@
 
             
     
-        <a href="http://sunjx93.com/2017/05/10/jquery_log1/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/10/jquery_log1/">Comentarios</a>
+        <a href="http://sunjx93.com/2017/07/07/Quartz/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/07/07/Quartz/">Comentarios</a>
     
 
         </footer>
@@ -391,20 +475,15 @@
         
 <nav id="article-nav">
     
-        <a href="/2017/04/18/终于搞定了/" id="article-nav-newer" class="article-nav-link-wrap">
+        <a href="/2017/05/27/sd/" id="article-nav-newer" class="article-nav-link-wrap">
             <strong class="article-nav-caption">Más nuevo</strong>
             <div class="article-nav-title">
                 
-                    终于搞定了
+                    SpringData相关
                 
             </div>
         </a>
     
-    
-        <a href="/2017/05/27/sd/" id="article-nav-older" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Más viejo</strong>
-            <div class="article-nav-title">SpringData相关</div>
-        </a>
     
 </nav>
 
@@ -577,9 +656,9 @@
     <script>
     var disqus_config = function () {
         
-            this.page.url = 'http://sunjx93.com/2017/05/10/jquery_log1/';
+            this.page.url = 'http://sunjx93.com/2017/07/07/Quartz/';
         
-        this.page.identifier = 'jquery_log1';
+        this.page.identifier = 'Quartz';
     };
     (function() { 
         var d = document, s = d.createElement('script');  
