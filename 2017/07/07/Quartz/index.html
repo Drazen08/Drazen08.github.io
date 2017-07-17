@@ -5,17 +5,17 @@
     
     <title>Quartz实现定时任务 | Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz Quartz 的生命周期 Job接口在execute（JobExecation…）{}中编写逻辑    调用器 执行Job时创建的Job实例，调用完成时，job实例会被释放并回收    JobDetail属性 name          任务名称 group         任务">
+    <meta name="description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz">
 <meta name="keywords" content="Quartz - Timer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Quartz实现定时任务">
 <meta property="og:url" content="http://sunjx93.com/2017/07/07/Quartz/index.html">
 <meta property="og:site_name" content="Drazen">
-<meta property="og:description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz Quartz 的生命周期 Job接口在execute（JobExecation…）{}中编写逻辑    调用器 执行Job时创建的Job实例，调用完成时，job实例会被释放并回收    JobDetail属性 name          任务名称 group         任务">
-<meta property="og:updated_time" content="2017-07-17T10:21:01.281Z">
+<meta property="og:description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz">
+<meta property="og:updated_time" content="2017-07-17T10:32:09.781Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quartz实现定时任务">
-<meta name="twitter:description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz Quartz 的生命周期 Job接口在execute（JobExecation…）{}中编写逻辑    调用器 执行Job时创建的Job实例，调用完成时，job实例会被释放并回收    JobDetail属性 name          任务名称 group         任务">
+<meta name="twitter:description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz">
     
 
     
@@ -83,7 +83,7 @@
             <div id="search-form-wrap">
 
     <form class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
         <button type="submit" class="search-form-submit"></button>
     </form>
     <div class="ins-search">
@@ -102,10 +102,10 @@
 (function (window) {
     var INSIGHT_CONFIG = {
         TRANSLATION: {
-            POSTS: 'Entradas',
+            POSTS: 'Posts',
             PAGES: 'Pages',
-            CATEGORIES: 'Categorias',
-            TAGS: 'Etiquetas',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
             UNTITLED: '(Untitled)',
         },
         ROOT_URL: '/',
@@ -136,7 +136,7 @@
                 <td>
                     
     <div class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
     </div>
 
                 </td>
@@ -156,16 +156,16 @@
             <h2 id="name">Drazen&#39;</h2>
             <h3 id="title">Java Developer &amp; HandSome</h3>
             <span id="location"><i class="fa fa-map-marker"></i>JiNan, China</span>
-            <a id="follow" target="_blank" href="https://github.com/Drazen08">SEGUIR</a>
+            <a id="follow" target="_blank" href="https://github.com/Drazen08">FOLLOW</a>
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
                 4
-                <span>Entradas</span>
+                <span>posts</span>
             </div>
             <div class="article-info-block">
                 5
-                <span>Etiquetas</span>
+                <span>tags</span>
             </div>
         </div>
         
@@ -245,7 +245,7 @@
         
             
             <h1 id="Quartz"><a href="#Quartz" class="headerlink" title="Quartz"></a>Quartz</h1><blockquote>
-<p>最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz</p>
+<p>最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz<br><a id="more"></a></p>
 <h2 id="Quartz-的生命周期"><a href="#Quartz-的生命周期" class="headerlink" title="Quartz 的生命周期"></a>Quartz 的生命周期</h2><ul>
 <li>Job接口<br>在execute（JobExecation…）{}中编写逻辑</li>
 </ul>
@@ -398,7 +398,7 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cj5802b0c0000m8owwpr20dwj" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
+    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cj580gxch0000nkowlju1syuy" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -466,7 +466,7 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
 
             
     
-        <a href="http://sunjx93.com/2017/07/07/Quartz/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/07/07/Quartz/">Comentarios</a>
+        <a href="http://sunjx93.com/2017/07/07/Quartz/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/07/07/Quartz/">Comments</a>
     
 
         </footer>
@@ -476,7 +476,7 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
 <nav id="article-nav">
     
         <a href="/2017/05/27/sd/" id="article-nav-newer" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Más nuevo</strong>
+            <strong class="article-nav-caption">Newer</strong>
             <div class="article-nav-title">
                 
                     SpringData相关
@@ -509,7 +509,7 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
    
         
     <div class="widget-wrap">
-        <h3 class="widget-title">Recientes</h3>
+        <h3 class="widget-title">recent</h3>
         <div class="widget">
             <ul id="recent-post" class="">
                 
@@ -598,7 +598,7 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">Archivos</h3>
+        <h3 class="widget-title">archives</h3>
         <div class="widget">
             <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
         </div>
@@ -607,7 +607,7 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">Etiquetas</h3>
+        <h3 class="widget-title">tags</h3>
         <div class="widget">
             <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz-Timer/">Quartz - Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li></ul>
         </div>
@@ -616,7 +616,7 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">Nube de etiquetas</h3>
+        <h3 class="widget-title">tag cloud</h3>
         <div class="widget tagcloud">
             <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Quartz-Timer/" style="font-size: 10px;">Quartz - Timer</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a>
         </div>
@@ -625,7 +625,7 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
     
         
     <div class="widget-wrap widget-list">
-        <h3 class="widget-title">Links</h3>
+        <h3 class="widget-title">links</h3>
         <div class="widget">
             <ul>
                 
