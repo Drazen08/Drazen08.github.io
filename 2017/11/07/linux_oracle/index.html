@@ -3,17 +3,19 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Archivo: 2017 | Drazen</title>
+    <title>Linux 下oracle的数据恢复以及数据库命令行安装 | Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="start from zero">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Drazen">
-<meta property="og:url" content="http://sunjx93.com/archives/2017/index.html">
+    <meta name="description" content="Linux 下oracle的数据恢复以及数据库命令行安装 由于项目在运行过程中所需的空间越来越大，最终Linux的表分区使用比例达到了100%，导致项目无法正常登录以及无法正常访问数据库，原因主要是表空间过大。在备份了dbf文件后之后，由于操作有误，误删了oracle的一个redo日志，于是不得不重装oracle 因为表空间主要存储的都是用户上传的文件数据，所以必须恢复">
+<meta name="keywords" content="Linux - Oracle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 下oracle的数据恢复以及数据库命令行安装">
+<meta property="og:url" content="http://sunjx93.com/2017/11/07/linux_oracle/index.html">
 <meta property="og:site_name" content="Drazen">
-<meta property="og:description" content="start from zero">
+<meta property="og:description" content="Linux 下oracle的数据恢复以及数据库命令行安装 由于项目在运行过程中所需的空间越来越大，最终Linux的表分区使用比例达到了100%，导致项目无法正常登录以及无法正常访问数据库，原因主要是表空间过大。在备份了dbf文件后之后，由于操作有误，误删了oracle的一个redo日志，于是不得不重装oracle 因为表空间主要存储的都是用户上传的文件数据，所以必须恢复">
+<meta property="og:updated_time" content="2017-11-07T07:10:50.794Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Drazen">
-<meta name="twitter:description" content="start from zero">
+<meta name="twitter:title" content="Linux 下oracle的数据恢复以及数据库命令行安装">
+<meta name="twitter:description" content="Linux 下oracle的数据恢复以及数据库命令行安装 由于项目在运行过程中所需的空间越来越大，最终Linux的表分区使用比例达到了100%，导致项目无法正常登录以及无法正常访问数据库，原因主要是表空间过大。在备份了dbf文件后之后，由于操作有误，误删了oracle的一个redo日志，于是不得不重装oracle 因为表空间主要存储的都是用户上传的文件数据，所以必须恢复">
     
 
     
@@ -204,25 +206,21 @@
 </aside>
 
             
-            <section id="main"><div class="timeline timeline-wrap">
-    
-            <div class="timeline-row timeline-row-major">
-                <span class="node"><i class="fa fa-calendar"></i></span>
-                <h1 class="title">2017</h1>
-            </div>
+            <section id="main"><article id="post-linux_oracle" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
         
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+        
+            <header class="article-header">
                 
     
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/11/07/linux_oracle/">Linux 下oracle的数据恢复以及数据库命令行安装</a>
+        <h1 class="article-title" itemprop="name">
+            Linux 下oracle的数据恢复以及数据库命令行安装
         </h1>
     
 
-                <div class="article-meta">
-                    
+                
+                    <div class="article-meta">
+                        
     <div class="article-date">
         <i class="fa fa-calendar"></i>
         <a href="/2017/11/07/linux_oracle/">
@@ -231,142 +229,174 @@
     </div>
 
 
-                    
-                    
+                        
+                        
     <div class="article-tag">
         <i class="fa fa-tag"></i>
         <a class="tag-link" href="/tags/Linux-Oracle/">Linux - Oracle</a>
     </div>
 
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+                    </div>
                 
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/07/07/Quartz/">Quartz实现定时任务</a>
-        </h1>
-    
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="Linux-下oracle的数据恢复以及数据库命令行安装"><a href="#Linux-下oracle的数据恢复以及数据库命令行安装" class="headerlink" title="Linux 下oracle的数据恢复以及数据库命令行安装"></a>Linux 下oracle的数据恢复以及数据库命令行安装</h1><blockquote>
+<p>由于项目在运行过程中所需的空间越来越大，最终Linux的表分区使用比例达到了100%，导致项目无法正常登录以及无法正常访问数据库，原因主要是表空间过大。在备份了dbf文件后之后，由于操作有误，误删了oracle的一个redo日志，于是不得不重装oracle</p>
+<p>因为表空间主要存储的都是用户上传的文件数据，所以必须恢复</p>
+</blockquote>
+<a id="more"></a>
+<p><strong>ps: 因为服务器上相关的配置文件都配置过一遍，所以不用重新配置</strong></p>
+<h2 id="1-把dbf文件通过恢复工具导入到测试环境"><a href="#1-把dbf文件通过恢复工具导入到测试环境" class="headerlink" title="1. 把dbf文件通过恢复工具导入到测试环境"></a>1. 把dbf文件通过恢复工具导入到测试环境</h2><p><strong>在网上找了好多数据库恢复的软件，但都是收费的</strong>…QAQ</p>
+<p>最后选择一个叫<code>odu</code>的工具，非图形化界面，需要注意的是配置文件的格式需要规范一点，具体的操作步骤可以看：</p>
+<p><a href="http://www.laoxiong.net/odu" target="_blank" rel="external">老熊的博客</a></p>
+<p><a href="">再贴一个odu的下载</a></p>
+<p>总之经过一番操作之后终于把数据跑到自己电脑上了，随后我们要进行的是linux在oracle的命令行安装。</p>
+<h2 id="2-oracle-静默安装"><a href="#2-oracle-静默安装" class="headerlink" title="2. oracle 静默安装"></a>2. oracle 静默安装</h2><blockquote>
+<blockquote>
+<p>由于这个项目的运行环境是内网环境，所以一些yum什么的工具都暂时用不了，当时也没有什么时间去鼓捣图形化之类的东西了，就试着用xshell进行了命令行安装。</p>
+</blockquote>
+</blockquote>
+<h4 id="a-下载oracle-for-linux-的zip安装包"><a href="#a-下载oracle-for-linux-的zip安装包" class="headerlink" title="a. 下载oracle for linux 的zip安装包"></a>a. 下载oracle for linux 的zip安装包</h4><p>上传到机器上并解压，要注意文件的权限不能是<code>root</code>，应该是<code>oracle</code>，也就是用作数据库的权限账号</p>
+<h4 id="b-使用oracle用户登录并解压到一个目录下-unzip-filename"><a href="#b-使用oracle用户登录并解压到一个目录下-unzip-filename" class="headerlink" title="b. 使用oracle用户登录并解压到一个目录下 unzip filename"></a>b. 使用oracle用户登录并解压到一个目录下 <code>unzip filename</code></h4><h4 id="c-解压完之后会有一个database目录"><a href="#c-解压完之后会有一个database目录" class="headerlink" title="c. 解压完之后会有一个database目录"></a>c. 解压完之后会有一个<code>database</code>目录</h4><p>我们要找到<code>/oracle/database/response</code>下的三个<code>.rsp</code> 文件，复制到<code>/home/oracle</code>里面，并在这里做一些修改。</p>
+<p><strong>首先</strong> 是<code>db_install.rsp</code>,这里的改动需要仔细，如果配置错误的话就会报错。</p>
+<p><a href="http://loofeer.blog.51cto.com/707932/1119713" target="_blank" rel="external">静默安装_db-install.rsp 配置</a></p>
+<p>接下来是<code>dbca.rsp</code>和<code>netca.rsp</code></p>
+<h4 id="dbca-rsp"><a href="#dbca-rsp" class="headerlink" title="dbca.rsp"></a><code>dbca.rsp</code></h4><p>vi dbca.rsp 修改以下内容</p>
+<p>GDBNAME = “ora11g”</p>
+<p>SID = “ora11g”</p>
+<p>SYSPASSWORD = “oracle11”</p>
+<p>SYSTEMPASSWORD = “oracle11”</p>
+<h4 id="netca-rsp"><a href="#netca-rsp" class="headerlink" title="netca.rsp"></a><code>netca.rsp</code></h4><p>vi netca.rsp修改以下内容</p>
+<p>INSTALL_TYPE=””custom””</p>
+<p>配置完之后进入<code>database</code>目录下，执行脚本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./runInstaller -silent -responseFile /home/oracle/db_install.rsp</div></pre></td></tr></table></figure></p>
+<p>如果一切顺利的话，会提示你<code>the setup completed</code> 之类的，而且会提示你运行两个文件，<strong>注意:</strong> 这两个文件需要用<code>root</code>用户运行。</p>
+<p>运行完成后，可能要退回oracle 的主目录刷新一下<code>.bash_profile</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source .bash_profile</div></pre></td></tr></table></figure></p>
+<p>成功后就可以看到登录信息里有自己的sid了，这个时候就是常规操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">创建数据库 dbca -silent -cloneTemplate -responseFile ./dbca.rsp</div><div class="line"></div><div class="line">创建监听 netca /silent /responseFile /home/oracle/netca.rsp</div><div class="line"></div><div class="line">开启oracle监听 lsnrctl start</div></pre></td></tr></table></figure>
+<h2 id="3-创建oracle-实例"><a href="#3-创建oracle-实例" class="headerlink" title="3 创建oracle 实例"></a>3 创建oracle 实例</h2><blockquote>
+<p>安装好oracle 之后是没有oracle实例的，需要自己去建</p>
+</blockquote>
+<p><a href="http://blog.csdn.net/Trigl/article/details/53101888" target="_blank" rel="external">创建oracle实例（没错我在偷懒）</a></p>
+<p>总之最后很幸运的没有丢数据，我们一定要做好的是备份！备份！备份！</p>
 
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2017/07/07/Quartz/">
-            <time datetime="2017-07-07T08:52:09.000Z" itemprop="datePublished">2017-07-07</time>
-        </a>
-    </div>
-
-
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Quartz-Timer/">Quartz - Timer</a>
-    </div>
-
-                </div>
-            </div>
+        
         </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
-                
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/05/27/sd/">SpringData相关</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2017/05/27/sd/">
-            <time datetime="2017-05-27T08:52:09.000Z" itemprop="datePublished">2017-05-27</time>
-        </a>
-    </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
 
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Java/">Java</a>, <a class="tag-link" href="/tags/SpringData/">SpringData</a>
-    </div>
 
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
-                
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/05/10/jquery_log1/">Jquery 的一些林林总总</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2017/05/10/jquery_log1/">
-            <time datetime="2017-05-10T08:52:09.000Z" itemprop="datePublished">2017-05-10</time>
-        </a>
-    </div>
-
-
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Jquery/">Jquery</a>
-    </div>
-
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
-                
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/04/18/终于搞定了/">终于搞定了</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2017/04/18/终于搞定了/">
-            <time datetime="2017-04-18T08:52:09.000Z" itemprop="datePublished">2017-04-18</time>
-        </a>
-    </div>
-
-
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Hexo-Github/">Hexo_Github</a>
-    </div>
-
-                </div>
-            </div>
-        </div>
-    
 </div>
+
+    <a data-url="http://sunjx93.com/2017/11/07/linux_oracle/" data-id="cj9pbb0zh0003c8jhawwe74at" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://sunjx93.com/2017/11/07/linux_oracle/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/11/07/linux_oracle/">Comentarios</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/07/07/Quartz/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Más nuevo</strong>
+            <div class="article-nav-title">
+                
+                    Quartz实现定时任务
+                
+            </div>
+        </a>
+    
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
 </section>
             
                 <aside id="sidebar">
@@ -539,11 +569,13 @@
     <script>
     var disqus_config = function () {
         
-        this.page.identifier = 'undefined';
+            this.page.url = 'http://sunjx93.com/2017/11/07/linux_oracle/';
+        
+        this.page.identifier = 'linux_oracle';
     };
     (function() { 
         var d = document, s = d.createElement('script');  
-        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/count.js';
+        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();
