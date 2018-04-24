@@ -162,7 +162,7 @@
                 <span>Articles</span>
             </div>
             <div class="article-info-block">
-                9
+                11
                 <span>Tags</span>
             </div>
         </div>
@@ -256,7 +256,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2018/04/10/fenye/" data-id="cjgdga8oa00008ojhcj8plea5" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
+    <a data-url="http://sunjx93.com/2018/04/10/fenye/" data-id="cjgdgj8nq000170jhcq1pzb34" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -334,135 +334,6 @@
 
 
 
-    <article id="post-annotation" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2018/04/07/annotation/">自定义注解</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2018/04/07/annotation/">
-            <time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time>
-        </a>
-    </div>
-
-
-                        
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Java-Annotation/">Java - Annotation</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><blockquote>
-<p>自定义注解的用法，会了的话定义一个@Override同名注解什么的…<br></p>
-            <p class="article-more-link">
-                <a href="/2018/04/07/annotation/#more">Read More</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-
-</div>
-
-    <a data-url="http://sunjx93.com/2018/04/07/annotation/" data-id="cjgdga8oz00038ojhbwtvh2w6" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
-<script>
-    (function ($) {
-        // Prevent duplicate binding
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-</script>
-
-            
-    
-        <a href="http://sunjx93.com/2018/04/07/annotation/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/annotation/">Commentaires</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
     <article id="post-LifeBean" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -490,7 +361,7 @@
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Java-Spring/">Java - Spring</a>
+        <a class="tag-link" href="/tags/Java/">Java</a>, <a class="tag-link" href="/tags/Spring/">Spring</a>
     </div>
 
                     </div>
@@ -501,7 +372,8 @@
         <div class="article-entry" itemprop="articleBody">
         
             <p><blockquote>
-<p>Spring Bean 的生命周期在面试中被问到不止一次了，每次结结巴巴的说出来好没面子呀~<br></p>
+<p>Spring Bean 的生命周期在面试中被问到不止一次了，每次结结巴巴的说出来好没面子呀~</p>
+</blockquote></p>
             <p class="article-more-link">
                 <a href="/2018/04/07/LifeBean/#more">Read More</a>
             </p>
@@ -514,7 +386,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2018/04/07/LifeBean/" data-id="cjgdga8p600048ojha4j9a2hy" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
+    <a data-url="http://sunjx93.com/2018/04/07/LifeBean/" data-id="cjgdgj8o7000370jhkofhf58y" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -592,6 +464,136 @@
 
 
 
+    <article id="post-annotation" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2018/04/07/annotation/">自定义注解</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/04/07/annotation/">
+            <time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Annotation/">Annotation</a>, <a class="tag-link" href="/tags/Java/">Java</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><blockquote>
+<p>自定义注解的用法，会了的话定义一个@Override同名注解什么的…</p>
+</blockquote></p>
+            <p class="article-more-link">
+                <a href="/2018/04/07/annotation/#more">Read More</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://sunjx93.com/2018/04/07/annotation/" data-id="cjgdgj8ob000470jh0xcby4wo" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://sunjx93.com/2018/04/07/annotation/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/annotation/">Commentaires</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
     <article id="post-linux_oracle" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -619,7 +621,7 @@
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Linux-Oracle/">Linux - Oracle</a>
+        <a class="tag-link" href="/tags/Linux/">Linux</a>, <a class="tag-link" href="/tags/Oracle/">Oracle</a>
     </div>
 
                     </div>
@@ -645,7 +647,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/11/07/linux_oracle/" data-id="cjgdga8pt00098ojhz3bu0je1" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
+    <a data-url="http://sunjx93.com/2017/11/07/linux_oracle/" data-id="cjgdgj8oo000770jh8swh0q7a" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -750,7 +752,7 @@
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Quartz-Timer/">Quartz - Timer</a>
+        <a class="tag-link" href="/tags/Quartz/">Quartz</a>, <a class="tag-link" href="/tags/Timer/">Timer</a>
     </div>
 
                     </div>
@@ -774,7 +776,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cjgdga8on00018ojhigta72e2" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
+    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cjgdgj8nc000070jhcah96x8o" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -904,7 +906,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/27/sd/" data-id="cjgdga8q1000b8ojhgzm0fmrc" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
+    <a data-url="http://sunjx93.com/2017/05/27/sd/" data-id="cjgdgj8oh000570jhz65yg2ma" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1034,7 +1036,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cjgdga8pg00058ojhpk0jgooc" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
+    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cjgdgj8os000870jhb7iy6aop" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1164,7 +1166,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/04/18/终于搞定了/" data-id="cjgdga8po00088ojhfdd1o2nd" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
+    <a data-url="http://sunjx93.com/2017/04/18/终于搞定了/" data-id="cjgdgj8ow000a70jh7tdgzw1j" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1273,25 +1275,6 @@
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2018/04/07/annotation/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"></p>
-                            <p class="item-title"><a href="/2018/04/07/annotation/" class="title">自定义注解</a></p>
-                            <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
                             <a href="/2018/04/07/LifeBean/" class="thumbnail">
     
     
@@ -1304,6 +1287,25 @@
                         <div class="item-inner">
                             <p class="item-category"></p>
                             <p class="item-title"><a href="/2018/04/07/LifeBean/" class="title">Bean 生命周期</a></p>
+                            <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/04/07/annotation/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2018/04/07/annotation/" class="title">自定义注解</a></p>
                             <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
                         </div>
                     </li>
@@ -1366,7 +1368,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">Tags</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Annotation/">Java - Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/">Java - Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Oracle/">Linux - Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz-Timer/">Quartz - Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/">Quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Timer/">Timer</a><span class="tag-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -1375,7 +1377,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">Nuage de tags</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Java-Annotation/" style="font-size: 10px;">Java - Annotation</a> <a href="/tags/Java-Spring/" style="font-size: 10px;">Java - Spring</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux-Oracle/" style="font-size: 10px;">Linux - Oracle</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Quartz-Timer/" style="font-size: 10px;">Quartz - Timer</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a>
+            <a href="/tags/Annotation/" style="font-size: 10px;">Annotation</a> <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/Quartz/" style="font-size: 10px;">Quartz</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a> <a href="/tags/Timer/" style="font-size: 10px;">Timer</a>
         </div>
     </div>
 
