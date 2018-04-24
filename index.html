@@ -158,11 +158,11 @@
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                6
+                7
                 <span>posts</span>
             </div>
             <div class="article-info-block">
-                7
+                8
                 <span>tags</span>
             </div>
         </div>
@@ -256,7 +256,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2018/04/10/fenye/" data-id="cjgdfp0bi00008kjh8mw3hq5z" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2018/04/10/fenye/" data-id="cjgdfwff60005mgjhi42otfbb" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -334,6 +334,217 @@
 
 
 
+    <article id="post-annotation" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2017/11/07/annotation/">自定义注解</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/11/07/annotation/">
+            <time datetime="2017-11-07T08:52:09.000Z" itemprop="datePublished">2017-11-07</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Java-Annotation/">Java - Annotation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <a id="more"></a>
+<h4 id="1-首先要了解自定义注解的两个元素（元注解）"><a href="#1-首先要了解自定义注解的两个元素（元注解）" class="headerlink" title="1.首先要了解自定义注解的两个元素（元注解）"></a>1.首先要了解自定义注解的两个元素（元注解）</h4><blockquote>
+<p>用来声明注解本身的行为</p>
+</blockquote>
+<ul>
+<li><p><code>@Target</code></p>
+<ul>
+<li><p>用来声明注解可以被添加在哪些类型的元素上,如类型、方法和域等。</p>
+<p>传入参数|描述<br>–|–<br>TYPE|<br>METHOD|<br>CONSTRUCTOR    |<br>FIELD|</p>
+</li>
+</ul>
+</li>
+<li><p><code>@Retention</code> : 声明注解的保留策略</p>
+<p>  关键字|描述<br>  –|–<br>  CLASS|声明注解保存在类文件<br>  RUNTIME|声明注解保存在JVM运行时<br>  SOURCE|声明注解保存在源码中</p>
+</li>
+<li><p><code>@Documented</code></p>
+<ul>
+<li>指明拥有这个注解的元素可以被javadoc此类的工具文档化。这种类型应该用于注解那些影响客户使用带注释的元素声明的类型。如果一种声明使用Documented进行注解，这种类型的注解被作为被标注的程序成员的公共API。</li>
+</ul>
+</li>
+<li><p><code>@Inherited</code></p>
+<ul>
+<li>指明该注解类型被自动继承。如果用户在当前类中查询这个元注解类型并且当前类的声明中不包含这个元注解类型，那么也将自动查询当前类的父类是否存在Inherited元注解，这个动作将被重复执行知道这个标注类型被找到，或者是查询到顶层的父类。</li>
+</ul>
+</li>
+</ul>
+<h4 id="Java内建注解"><a href="#Java内建注解" class="headerlink" title="Java内建注解"></a>Java内建注解</h4><p>Java提供了三种内建注解。</p>
+<ul>
+<li><p>@Override</p>
+<ul>
+<li>当我们想要复写父类中的方法时，我们需要使用该注解去告知编译器我们想要复写这个方法。这样一来当父类中的方法移除或者发生更改时编译器将提示错误信息。</li>
+</ul>
+</li>
+<li><p>@Deprecated</p>
+<ul>
+<li>当我们希望编译器知道某一方法不建议使用时，我们应该使用这个注解。Java在javadoc 中推荐使用该注解，我们应该提供为什么该方法不推荐使用以及替代的方法。</li>
+</ul>
+<ul>
+<li>@SuppressWarnings<ul>
+<li>这个仅仅是告诉编译器忽略特定的警告信息，例如在泛型中使用原生数据类型。它的保留策略是SOURCE,并且被编译器丢弃。<h4 id="2-开始"><a href="#2-开始" class="headerlink" title="2.开始"></a>2.开始</h4></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="a-以此在类中声明一个自定义注解"><a href="#a-以此在类中声明一个自定义注解" class="headerlink" title="a.以此在类中声明一个自定义注解"></a>a.以此在类中声明一个自定义注解</h5><pre><code>@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface AnnotationDemo {
+    // 声明一个注解
+     String name();
+    int age() default 0;
+
+}
+</code></pre><p>其中，<code>finished</code>这个注解的默认值是0,也就是<strong>可以设置默认值！</strong></p>
+<h5 id="b-在某项中注入值"><a href="#b-在某项中注入值" class="headerlink" title="b.在某项中注入值"></a>b.在某项中注入值</h5><pre><code>public class AnnotationPriv {
+
+
+    @AnnotationDemo(name = &quot;Tom&quot;,age = 19)
+    private String id;
+}
+</code></pre><h5 id="c-设置注解的逻辑处理"><a href="#c-设置注解的逻辑处理" class="headerlink" title="c.设置注解的逻辑处理"></a>c.设置注解的逻辑处理</h5><pre><code>public class AnnotationUtilDemo {
+public static void getFruitInfo(Class&lt;?&gt; clazz){
+
+    String personName =&quot;名称：&quot;;
+    String personAge = &quot;年龄&quot;;
+
+    Field[] fields = clazz.getDeclaredFields();
+
+    for(Field field :fields){
+        if(field.isAnnotationPresent(AnnotationDemo.class)){
+            AnnotationDemo annotationDemo = (AnnotationDemo) field.getAnnotation(AnnotationDemo.class);
+            personName = personName+annotationDemo.name();
+            personAge = personAge + annotationDemo.age();
+            System.out.println(personName);
+            System.out.println(personAge);
+            }
+
+        }
+    }
+}
+</code></pre><h5 id="d-运行"><a href="#d-运行" class="headerlink" title="d.运行"></a>d.运行</h5><pre><code> public static void main(String[] args) {
+    AnnotationUtilDemo.getFruitInfo(AnnotationPriv.class);
+}
+</code></pre><h5 id="e-得出结果"><a href="#e-得出结果" class="headerlink" title="e.得出结果"></a>e.得出结果</h5><pre><code>名称：Tom   
+年龄19
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://sunjx93.com/2017/11/07/annotation/" data-id="cjgdfwfel0001mgjhg2kkfqxo" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://sunjx93.com/2017/11/07/annotation/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/11/07/annotation/">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
     <article id="post-linux_oracle" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -387,7 +598,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/11/07/linux_oracle/" data-id="cjgdfp0c700048kjhcq7ebsbo" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/11/07/linux_oracle/" data-id="cjgdfwff00004mgjh5bwrwqw0" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -516,7 +727,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cjgdfp0c400038kjhpl0cakol" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cjgdfwfe90000mgjh19ihl4sf" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -646,7 +857,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/27/sd/" data-id="cjgdfp0ci00088kjharj6c5w6" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/05/27/sd/" data-id="cjgdfwffb0008mgjhere12tq7" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -776,7 +987,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cjgdfp0bu00018kjhc87aggqq" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cjgdfwfex0003mgjh2hujuclq" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -906,7 +1117,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/04/18/终于搞定了/" data-id="cjgdfp0cc00058kjhyygjcqzi" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/04/18/终于搞定了/" data-id="cjgdfwffj0009mgjhxxi3s3xz" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1015,6 +1226,25 @@
                     <li>
                         
                         <div class="item-thumbnail">
+                            <a href="/2017/11/07/annotation/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/11/07/annotation/" class="title">自定义注解</a></p>
+                            <p class="item-date"><time datetime="2017-11-07T08:52:09.000Z" itemprop="datePublished">2017-11-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
                             <a href="/2017/11/07/linux_oracle/" class="thumbnail">
     
     
@@ -1069,25 +1299,6 @@
                         </div>
                     </li>
                 
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2017/05/10/jquery_log1/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"></p>
-                            <p class="item-title"><a href="/2017/05/10/jquery_log1/" class="title">Jquery 的一些林林总总</a></p>
-                            <p class="item-date"><time datetime="2017-05-10T08:52:09.000Z" itemprop="datePublished">2017-05-10</time></p>
-                        </div>
-                    </li>
-                
             </ul>
         </div>
     </div>
@@ -1099,7 +1310,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">archives</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -1108,7 +1319,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">tags</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Oracle/">Linux - Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz-Timer/">Quartz - Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Annotation/">Java - Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Oracle/">Linux - Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz-Timer/">Quartz - Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -1117,7 +1328,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">tag cloud</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux-Oracle/" style="font-size: 10px;">Linux - Oracle</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Quartz-Timer/" style="font-size: 10px;">Quartz - Timer</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a>
+            <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Java-Annotation/" style="font-size: 10px;">Java - Annotation</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux-Oracle/" style="font-size: 10px;">Linux - Oracle</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Quartz-Timer/" style="font-size: 10px;">Quartz - Timer</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a>
         </div>
     </div>
 
