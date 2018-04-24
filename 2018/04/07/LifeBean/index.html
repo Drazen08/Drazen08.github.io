@@ -3,17 +3,19 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Archivo | Drazen</title>
+    <title>Bean 生命周期 | Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="start from zero">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Drazen">
-<meta property="og:url" content="http://sunjx93.com/archives/index.html">
+    <meta name="description" content="Spring Bean 作用域、生命周期Bean的作用域 Spring 3中为Bean定义了5中作用域，分别为singleton（单例）、prototype（原型）、request、session和global session，5种作用域说明如下：  singleton：单例模式，Spring IoC容器中只会存在一个共享的Bean实例，无论有多少个Bean引用它，始终指向同一对象。Single">
+<meta name="keywords" content="Java - Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bean 生命周期">
+<meta property="og:url" content="http://sunjx93.com/2018/04/07/LifeBean/index.html">
 <meta property="og:site_name" content="Drazen">
-<meta property="og:description" content="start from zero">
+<meta property="og:description" content="Spring Bean 作用域、生命周期Bean的作用域 Spring 3中为Bean定义了5中作用域，分别为singleton（单例）、prototype（原型）、request、session和global session，5种作用域说明如下：  singleton：单例模式，Spring IoC容器中只会存在一个共享的Bean实例，无论有多少个Bean引用它，始终指向同一对象。Single">
+<meta property="og:updated_time" content="2018-04-24T09:02:50.571Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Drazen">
-<meta name="twitter:description" content="start from zero">
+<meta name="twitter:title" content="Bean 生命周期">
+<meta name="twitter:description" content="Spring Bean 作用域、生命周期Bean的作用域 Spring 3中为Bean定义了5中作用域，分别为singleton（单例）、prototype（原型）、request、session和global session，5种作用域说明如下：  singleton：单例模式，Spring IoC容器中只会存在一个共享的Bean实例，无论有多少个Bean引用它，始终指向同一对象。Single">
     
 
     
@@ -204,56 +206,21 @@
 </aside>
 
             
-            <section id="main"><div class="timeline timeline-wrap">
-    
-            <div class="timeline-row timeline-row-major">
-                <span class="node"><i class="fa fa-calendar"></i></span>
-                <h1 class="title">2018</h1>
-            </div>
+            <section id="main"><article id="post-LifeBean" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
         
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+        
+            <header class="article-header">
                 
     
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2018/04/10/fenye/">Mysql 分页整理</a>
+        <h1 class="article-title" itemprop="name">
+            Bean 生命周期
         </h1>
     
 
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2018/04/10/fenye/">
-            <time datetime="2018-04-10T05:52:09.000Z" itemprop="datePublished">2018-04-10</time>
-        </a>
-    </div>
-
-
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Mysql/">Mysql</a>
-    </div>
-
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
                 
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2018/04/07/LifeBean/">Bean 生命周期</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
+                    <div class="article-meta">
+                        
     <div class="article-date">
         <i class="fa fa-calendar"></i>
         <a href="/2018/04/07/LifeBean/">
@@ -262,209 +229,182 @@
     </div>
 
 
-                    
-                    
+                        
+                        
     <div class="article-tag">
         <i class="fa fa-tag"></i>
         <a class="tag-link" href="/tags/Java-Spring/">Java - Spring</a>
     </div>
 
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+                    </div>
                 
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2018/04/07/annotation/">自定义注解</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2018/04/07/annotation/">
-            <time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time>
-        </a>
-    </div>
-
-
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Java-Annotation/">Java - Annotation</a>
-    </div>
-
-                </div>
-            </div>
-        </div>
-    
-            <div class="timeline-row timeline-row-major">
-                <span class="node"><i class="fa fa-calendar"></i></span>
-                <h1 class="title">2017</h1>
-            </div>
+            </header>
         
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
-                
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/11/07/linux_oracle/">Linux 下oracle的数据恢复以及数据库命令行安装</a>
-        </h1>
-    
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <a id="more"></a>
+<h1 id="Spring-Bean-作用域、生命周期"><a href="#Spring-Bean-作用域、生命周期" class="headerlink" title="Spring Bean 作用域、生命周期"></a>Spring Bean 作用域、生命周期</h1><h3 id="Bean的作用域"><a href="#Bean的作用域" class="headerlink" title="Bean的作用域"></a>Bean的作用域</h3><ul>
+<li><p>Spring 3中为Bean定义了5中作用域，分别为<code>singleton（单例）</code>、<code>prototype（原型）</code>、<code>request</code>、<code>session</code>和<code>global session</code>，5种作用域说明如下：</p>
+<ul>
+<li><p><strong>singleton：单例模式</strong>，Spring IoC容器中只会存在一个共享的Bean实例，无论有多少个Bean引用它，始终指向同一对象。Singleton作用域是Spring中的缺省（默认）作用域，也可以显示的将Bean定义为singleton模式，配置为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;userDao&quot; class=&quot;com.ioc.UserDaoImpl&quot; scope=&quot;singleton&quot;/&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>prototype:原型模式</strong>，每次通过Spring容器获取prototype定义的bean时，容器都将创建一个新的Bean实例，每个Bean实例都有自己的属性和状态，而singleton全局只有一个对象。根据经验，对有状态的bean使用prototype作用域，而对无状态的bean使用singleton作用域。</p>
+</li>
+<li><p><strong>request</strong>：在一次Http请求中，容器会返回该Bean的同一实例。而对不同的Http请求则会产生新的Bean，而且该bean仅在当前Http Request内有效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;loginAction&quot; class=&quot;com.cnblogs.Login&quot; scope=&quot;request&quot;/&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>针对每一次Http请求，Spring容器根据该bean的定义创建一个全新的实例，且该实例仅在当前Http请求内有效，而其它请求无法看到当前请求中状态的变化，当当前Http请求结束，该bean实例也将会被销毁。</p>
+<ul>
+<li><strong>session</strong>：在一次Http Session中，容器会返回该Bean的同一实例。而对不同的Session请求则会创建新的实例，该bean实例仅在当前Session内有效。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;userPreference&quot; class=&quot;com.ioc.UserPreference&quot; scope=&quot;session&quot;/&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>同Http请求相同，每一次session请求创建新的实例，而不同的实例之间不共享属性，且实例仅在自己的session请求内有效，请求结束，则实例将被销毁。</p>
+<ul>
+<li><strong>global Session</strong>：在一个全局的Http Session中，容器会返回该Bean的同一个实例，仅在使用portlet context时有效。</li>
+</ul>
+<h3 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h3><ul>
+<li><p>Spring容器可以管理singleton作用域下Bean的生命周期，在此作用域下，Spring能够精确地知道Bean何时被创建，何时初始化完成，以及何时被销毁。</p>
+</li>
+<li><p>对于prototype作用域的Bean，Spring只负责创建，当容器创建了Bean的实例后，Bean的实例就交给了客户端的代码管理，Spring容器将不再跟踪其生命周期，并且不会管理那些被配置成prototype作用域的Bean的生命周期</p>
+</li>
+</ul>
+<h3 id="Bean的生命周期："><a href="#Bean的生命周期：" class="headerlink" title="Bean的生命周期："></a>Bean的生命周期：</h3><p> 1、实例化一个Bean－－也就是我们常说的<code>new</code></p>
+<p> 2、按照Spring上下文对实例化的Bean进行配置－－也就是IOC注入；</p>
+<p> 3、如果这个Bean已经实现了<code>BeanNameAware</code>接口，会调用它实现的<code>setBeanName(String)</code>方法，此处传递的就是Spring配置文件中Bean的id值</p>
+<p> 4、如果这个Bean已经实现了<code>BeanFactoryAware</code>接口，会调用它实现的setBeanFactory(setBeanFactory(BeanFactory)传递的是Spring工厂自身（可以用这个方式来获取其它Bean，只需在Spring配置文件中配置一个普通的Bean就可以）；</p>
+<p> 5、如果这个Bean已经实现了<code>ApplicationContextAware</code>接口，会调用<code>setApplicationContext(ApplicationContext)</code>方法，传入Spring上下文（同样这个方式也可以实现步骤4的内容，但比4更好，因为ApplicationContext是BeanFactory的子接口，有更多的实现方法）；</p>
+<p> 6、如果这个Bean关联了<code>BeanPostProcessor</code>接口，将会调用<code>postProcessBeforeInitialization(Object obj, String s)</code>方法，BeanPostProcessor经常被用作是Bean内容的更改，并且由于这个是在Bean初始化结束时调用那个的方法，也可以被应用于内存或缓存技术；主要是我们如果需要在spring中增加自己的逻辑</p>
+<p> 7、如果Bean在Spring配置文件中配置了<code>init-method</code>属性会自动调用其配置的初始化方法。</p>
+<p> 8、如果这个Bean关联了BeanPostProcessor接口，将会调用postProcessAfterInitialization(Object obj, String s)方法；</p>
+<p> 注：以上工作完成以后就可以应用这个Bean了，那这个Bean是一个Singleton的，所以一般情况下我们调用同一个id的Bean会是在内容地址相同的实例，当然在Spring配置文件中也可以配置非Singleton，这里我们不做赘述。</p>
+<p> 9、当Bean不再需要时，会经过清理阶段，如果Bean实现了DisposableBean这个接口，会调用那个其实现的destroy()方法；</p>
+<p> 10、最后，如果这个Bean的Spring配置中配置了destroy-method属性，会自动调用其配置的销毁方法。</p>
 
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2017/11/07/linux_oracle/">
-            <time datetime="2017-11-07T08:52:09.000Z" itemprop="datePublished">2017-11-07</time>
-        </a>
-    </div>
-
-
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Linux-Oracle/">Linux - Oracle</a>
-    </div>
-
-                </div>
-            </div>
+        
         </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
-                
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/07/07/Quartz/">Quartz实现定时任务</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2017/07/07/Quartz/">
-            <time datetime="2017-07-07T08:52:09.000Z" itemprop="datePublished">2017-07-07</time>
-        </a>
-    </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
 
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Quartz-Timer/">Quartz - Timer</a>
-    </div>
 
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
-                
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/05/27/sd/">SpringData相关</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2017/05/27/sd/">
-            <time datetime="2017-05-27T08:52:09.000Z" itemprop="datePublished">2017-05-27</time>
-        </a>
-    </div>
-
-
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Java/">Java</a>, <a class="tag-link" href="/tags/SpringData/">SpringData</a>
-    </div>
-
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
-                
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/05/10/jquery_log1/">Jquery 的一些林林总总</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2017/05/10/jquery_log1/">
-            <time datetime="2017-05-10T08:52:09.000Z" itemprop="datePublished">2017-05-10</time>
-        </a>
-    </div>
-
-
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Jquery/">Jquery</a>
-    </div>
-
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
-                
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/04/18/终于搞定了/">终于搞定了</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2017/04/18/终于搞定了/">
-            <time datetime="2017-04-18T08:52:09.000Z" itemprop="datePublished">2017-04-18</time>
-        </a>
-    </div>
-
-
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Hexo-Github/">Hexo_Github</a>
-    </div>
-
-                </div>
-            </div>
-        </div>
-    
 </div>
+
+    <a data-url="http://sunjx93.com/2018/04/07/LifeBean/" data-id="cjgdg07fn0000lcjhp8rhnm3e" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://sunjx93.com/2018/04/07/LifeBean/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/LifeBean/">Comentarios</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/11/07/linux_oracle/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Más nuevo</strong>
+            <div class="article-nav-title">
+                
+                    Linux 下oracle的数据恢复以及数据库命令行安装
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/04/07/annotation/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Más viejo</strong>
+            <div class="article-nav-title">自定义注解</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
 </section>
             
                 <aside id="sidebar">
@@ -637,11 +577,13 @@
     <script>
     var disqus_config = function () {
         
-        this.page.identifier = 'undefined';
+            this.page.url = 'http://sunjx93.com/2018/04/07/LifeBean/';
+        
+        this.page.identifier = 'LifeBean';
     };
     (function() { 
         var d = document, s = d.createElement('script');  
-        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/count.js';
+        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();

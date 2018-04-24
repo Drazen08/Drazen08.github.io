@@ -81,7 +81,7 @@
             <div id="search-form-wrap">
 
     <form class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
         <button type="submit" class="search-form-submit"></button>
     </form>
     <div class="ins-search">
@@ -100,10 +100,10 @@
 (function (window) {
     var INSIGHT_CONFIG = {
         TRANSLATION: {
-            POSTS: 'Posts',
+            POSTS: 'Entradas',
             PAGES: 'Pages',
-            CATEGORIES: 'Categories',
-            TAGS: 'Tags',
+            CATEGORIES: 'Categorias',
+            TAGS: 'Etiquetas',
             UNTITLED: '(Untitled)',
         },
         ROOT_URL: '/',
@@ -134,7 +134,7 @@
                 <td>
                     
     <div class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
     </div>
 
                 </td>
@@ -154,16 +154,16 @@
             <h2 id="name">Drazen&#39;</h2>
             <h3 id="title">Java Developer &amp; HandSome</h3>
             <span id="location"><i class="fa fa-map-marker"></i>JiNan, China</span>
-            <a id="follow" target="_blank" href="https://github.com/Drazen08">FOLLOW</a>
+            <a id="follow" target="_blank" href="https://github.com/Drazen08">SEGUIR</a>
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                7
-                <span>posts</span>
+                8
+                <span>Entradas</span>
             </div>
             <div class="article-info-block">
-                8
-                <span>tags</span>
+                9
+                <span>Etiquetas</span>
             </div>
         </div>
         
@@ -256,7 +256,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2018/04/10/fenye/" data-id="cjgdfwff60005mgjhi42otfbb" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2018/04/10/fenye/" data-id="cjgdg07hf000blcjhd6yu95re" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -324,7 +324,174 @@
 
             
     
-        <a href="http://sunjx93.com/2018/04/10/fenye/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/10/fenye/">Comments</a>
+        <a href="http://sunjx93.com/2018/04/10/fenye/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/10/fenye/">Comentarios</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-LifeBean" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2018/04/07/LifeBean/">Bean 生命周期</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/04/07/LifeBean/">
+            <time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Java-Spring/">Java - Spring</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <a id="more"></a>
+<h1 id="Spring-Bean-作用域、生命周期"><a href="#Spring-Bean-作用域、生命周期" class="headerlink" title="Spring Bean 作用域、生命周期"></a>Spring Bean 作用域、生命周期</h1><h3 id="Bean的作用域"><a href="#Bean的作用域" class="headerlink" title="Bean的作用域"></a>Bean的作用域</h3><ul>
+<li><p>Spring 3中为Bean定义了5中作用域，分别为<code>singleton（单例）</code>、<code>prototype（原型）</code>、<code>request</code>、<code>session</code>和<code>global session</code>，5种作用域说明如下：</p>
+<ul>
+<li><p><strong>singleton：单例模式</strong>，Spring IoC容器中只会存在一个共享的Bean实例，无论有多少个Bean引用它，始终指向同一对象。Singleton作用域是Spring中的缺省（默认）作用域，也可以显示的将Bean定义为singleton模式，配置为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;userDao&quot; class=&quot;com.ioc.UserDaoImpl&quot; scope=&quot;singleton&quot;/&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>prototype:原型模式</strong>，每次通过Spring容器获取prototype定义的bean时，容器都将创建一个新的Bean实例，每个Bean实例都有自己的属性和状态，而singleton全局只有一个对象。根据经验，对有状态的bean使用prototype作用域，而对无状态的bean使用singleton作用域。</p>
+</li>
+<li><p><strong>request</strong>：在一次Http请求中，容器会返回该Bean的同一实例。而对不同的Http请求则会产生新的Bean，而且该bean仅在当前Http Request内有效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;loginAction&quot; class=&quot;com.cnblogs.Login&quot; scope=&quot;request&quot;/&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>针对每一次Http请求，Spring容器根据该bean的定义创建一个全新的实例，且该实例仅在当前Http请求内有效，而其它请求无法看到当前请求中状态的变化，当当前Http请求结束，该bean实例也将会被销毁。</p>
+<ul>
+<li><strong>session</strong>：在一次Http Session中，容器会返回该Bean的同一实例。而对不同的Session请求则会创建新的实例，该bean实例仅在当前Session内有效。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;userPreference&quot; class=&quot;com.ioc.UserPreference&quot; scope=&quot;session&quot;/&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>同Http请求相同，每一次session请求创建新的实例，而不同的实例之间不共享属性，且实例仅在自己的session请求内有效，请求结束，则实例将被销毁。</p>
+<ul>
+<li><strong>global Session</strong>：在一个全局的Http Session中，容器会返回该Bean的同一个实例，仅在使用portlet context时有效。</li>
+</ul>
+<h3 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h3><ul>
+<li><p>Spring容器可以管理singleton作用域下Bean的生命周期，在此作用域下，Spring能够精确地知道Bean何时被创建，何时初始化完成，以及何时被销毁。</p>
+</li>
+<li><p>对于prototype作用域的Bean，Spring只负责创建，当容器创建了Bean的实例后，Bean的实例就交给了客户端的代码管理，Spring容器将不再跟踪其生命周期，并且不会管理那些被配置成prototype作用域的Bean的生命周期</p>
+</li>
+</ul>
+<h3 id="Bean的生命周期："><a href="#Bean的生命周期：" class="headerlink" title="Bean的生命周期："></a>Bean的生命周期：</h3><p> 1、实例化一个Bean－－也就是我们常说的<code>new</code></p>
+<p> 2、按照Spring上下文对实例化的Bean进行配置－－也就是IOC注入；</p>
+<p> 3、如果这个Bean已经实现了<code>BeanNameAware</code>接口，会调用它实现的<code>setBeanName(String)</code>方法，此处传递的就是Spring配置文件中Bean的id值</p>
+<p> 4、如果这个Bean已经实现了<code>BeanFactoryAware</code>接口，会调用它实现的setBeanFactory(setBeanFactory(BeanFactory)传递的是Spring工厂自身（可以用这个方式来获取其它Bean，只需在Spring配置文件中配置一个普通的Bean就可以）；</p>
+<p> 5、如果这个Bean已经实现了<code>ApplicationContextAware</code>接口，会调用<code>setApplicationContext(ApplicationContext)</code>方法，传入Spring上下文（同样这个方式也可以实现步骤4的内容，但比4更好，因为ApplicationContext是BeanFactory的子接口，有更多的实现方法）；</p>
+<p> 6、如果这个Bean关联了<code>BeanPostProcessor</code>接口，将会调用<code>postProcessBeforeInitialization(Object obj, String s)</code>方法，BeanPostProcessor经常被用作是Bean内容的更改，并且由于这个是在Bean初始化结束时调用那个的方法，也可以被应用于内存或缓存技术；主要是我们如果需要在spring中增加自己的逻辑</p>
+<p> 7、如果Bean在Spring配置文件中配置了<code>init-method</code>属性会自动调用其配置的初始化方法。</p>
+<p> 8、如果这个Bean关联了BeanPostProcessor接口，将会调用postProcessAfterInitialization(Object obj, String s)方法；</p>
+<p> 注：以上工作完成以后就可以应用这个Bean了，那这个Bean是一个Singleton的，所以一般情况下我们调用同一个id的Bean会是在内容地址相同的实例，当然在Spring配置文件中也可以配置非Singleton，这里我们不做赘述。</p>
+<p> 9、当Bean不再需要时，会经过清理阶段，如果Bean实现了DisposableBean这个接口，会调用那个其实现的destroy()方法；</p>
+<p> 10、最后，如果这个Bean的Spring配置中配置了destroy-method属性，会自动调用其配置的销毁方法。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://sunjx93.com/2018/04/07/LifeBean/" data-id="cjgdg07fn0000lcjhp8rhnm3e" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://sunjx93.com/2018/04/07/LifeBean/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/LifeBean/">Comentarios</a>
     
 
         </footer>
@@ -342,7 +509,7 @@
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/11/07/annotation/">自定义注解</a>
+            <a class="article-title" href="/2018/04/07/annotation/">自定义注解</a>
         </h1>
     
 
@@ -351,8 +518,8 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/11/07/annotation/">
-            <time datetime="2017-11-07T08:52:09.000Z" itemprop="datePublished">2017-11-07</time>
+        <a href="/2018/04/07/annotation/">
+            <time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time>
         </a>
     </div>
 
@@ -467,7 +634,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/11/07/annotation/" data-id="cjgdfwfel0001mgjhg2kkfqxo" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2018/04/07/annotation/" data-id="cjgdg07g00001lcjhkcrit331" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -535,7 +702,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
             
     
-        <a href="http://sunjx93.com/2017/11/07/annotation/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/11/07/annotation/">Comments</a>
+        <a href="http://sunjx93.com/2018/04/07/annotation/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/annotation/">Comentarios</a>
     
 
         </footer>
@@ -598,7 +765,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/11/07/linux_oracle/" data-id="cjgdfwff00004mgjh5bwrwqw0" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/11/07/linux_oracle/" data-id="cjgdg07gs0005lcjh3s3he7tw" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -666,7 +833,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
             
     
-        <a href="http://sunjx93.com/2017/11/07/linux_oracle/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/11/07/linux_oracle/">Comments</a>
+        <a href="http://sunjx93.com/2017/11/07/linux_oracle/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/11/07/linux_oracle/">Comentarios</a>
     
 
         </footer>
@@ -727,7 +894,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cjgdfwfe90000mgjh19ihl4sf" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cjgdg07gi0003lcjh5qihs7tm" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -795,7 +962,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
             
     
-        <a href="http://sunjx93.com/2017/07/07/Quartz/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/07/07/Quartz/">Comments</a>
+        <a href="http://sunjx93.com/2017/07/07/Quartz/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/07/07/Quartz/">Comentarios</a>
     
 
         </footer>
@@ -857,7 +1024,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/27/sd/" data-id="cjgdfwffb0008mgjhere12tq7" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/05/27/sd/" data-id="cjgdg07gz0008lcjh4k6t00a0" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -925,7 +1092,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
             
     
-        <a href="http://sunjx93.com/2017/05/27/sd/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/27/sd/">Comments</a>
+        <a href="http://sunjx93.com/2017/05/27/sd/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/27/sd/">Comentarios</a>
     
 
         </footer>
@@ -987,7 +1154,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cjgdfwfex0003mgjh2hujuclq" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cjgdg07gm0004lcjh5vzy2vuu" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1055,7 +1222,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
             
     
-        <a href="http://sunjx93.com/2017/05/10/jquery_log1/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/10/jquery_log1/">Comments</a>
+        <a href="http://sunjx93.com/2017/05/10/jquery_log1/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/10/jquery_log1/">Comentarios</a>
     
 
         </footer>
@@ -1117,7 +1284,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/04/18/终于搞定了/" data-id="cjgdfwffj0009mgjhxxi3s3xz" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2017/04/18/终于搞定了/" data-id="cjgdg07h50009lcjhoyvba1ue" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1185,7 +1352,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
             
     
-        <a href="http://sunjx93.com/2017/04/18/终于搞定了/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/04/18/终于搞定了/">Comments</a>
+        <a href="http://sunjx93.com/2017/04/18/终于搞定了/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/04/18/终于搞定了/">Comentarios</a>
     
 
         </footer>
@@ -1200,7 +1367,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
    
         
     <div class="widget-wrap">
-        <h3 class="widget-title">recent</h3>
+        <h3 class="widget-title">Recientes</h3>
         <div class="widget">
             <ul id="recent-post" class="">
                 
@@ -1226,7 +1393,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/11/07/annotation/" class="thumbnail">
+                            <a href="/2018/04/07/LifeBean/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1237,8 +1404,27 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
                         
                         <div class="item-inner">
                             <p class="item-category"></p>
-                            <p class="item-title"><a href="/2017/11/07/annotation/" class="title">自定义注解</a></p>
-                            <p class="item-date"><time datetime="2017-11-07T08:52:09.000Z" itemprop="datePublished">2017-11-07</time></p>
+                            <p class="item-title"><a href="/2018/04/07/LifeBean/" class="title">Bean 生命周期</a></p>
+                            <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/04/07/annotation/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2018/04/07/annotation/" class="title">自定义注解</a></p>
+                            <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
                         </div>
                     </li>
                 
@@ -1280,25 +1466,6 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
                         </div>
                     </li>
                 
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2017/05/27/sd/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"></p>
-                            <p class="item-title"><a href="/2017/05/27/sd/" class="title">SpringData相关</a></p>
-                            <p class="item-date"><time datetime="2017-05-27T08:52:09.000Z" itemprop="datePublished">2017-05-27</time></p>
-                        </div>
-                    </li>
-                
             </ul>
         </div>
     </div>
@@ -1308,34 +1475,34 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">archives</h3>
+        <h3 class="widget-title">Archivos</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tags</h3>
+        <h3 class="widget-title">Etiquetas</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Annotation/">Java - Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Oracle/">Linux - Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz-Timer/">Quartz - Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Annotation/">Java - Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/">Java - Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Oracle/">Linux - Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz-Timer/">Quartz - Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li></ul>
         </div>
     </div>
 
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tag cloud</h3>
+        <h3 class="widget-title">Nube de etiquetas</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Java-Annotation/" style="font-size: 10px;">Java - Annotation</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux-Oracle/" style="font-size: 10px;">Linux - Oracle</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Quartz-Timer/" style="font-size: 10px;">Quartz - Timer</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a>
+            <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Java-Annotation/" style="font-size: 10px;">Java - Annotation</a> <a href="/tags/Java-Spring/" style="font-size: 10px;">Java - Spring</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux-Oracle/" style="font-size: 10px;">Linux - Oracle</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Quartz-Timer/" style="font-size: 10px;">Quartz - Timer</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a>
         </div>
     </div>
 
     
         
     <div class="widget-wrap widget-list">
-        <h3 class="widget-title">links</h3>
+        <h3 class="widget-title">Links</h3>
         <div class="widget">
             <ul>
                 
