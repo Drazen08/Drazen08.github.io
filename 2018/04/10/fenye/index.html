@@ -3,17 +3,19 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Archive: 2017/5 | Drazen</title>
+    <title>Mysql 分页整理 | Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="start from zero">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Drazen">
-<meta property="og:url" content="http://sunjx93.com/archives/2017/05/index.html">
+    <meta name="description" content="MySql 分页整理 轻量数据与大量数据的分页完全是两回事，如果没有很好地进行优化，很可能会导致性能的直线下降。现在对mysql分页做一个简单的小整理…">
+<meta name="keywords" content="Mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql 分页整理">
+<meta property="og:url" content="http://sunjx93.com/2018/04/10/fenye/index.html">
 <meta property="og:site_name" content="Drazen">
-<meta property="og:description" content="start from zero">
+<meta property="og:description" content="MySql 分页整理 轻量数据与大量数据的分页完全是两回事，如果没有很好地进行优化，很可能会导致性能的直线下降。现在对mysql分页做一个简单的小整理…">
+<meta property="og:updated_time" content="2018-04-24T08:34:10.530Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Drazen">
-<meta name="twitter:description" content="start from zero">
+<meta name="twitter:title" content="Mysql 分页整理">
+<meta name="twitter:description" content="MySql 分页整理 轻量数据与大量数据的分页完全是两回事，如果没有很好地进行优化，很可能会导致性能的直线下降。现在对mysql分页做一个简单的小整理…">
     
 
     
@@ -204,76 +206,193 @@
 </aside>
 
             
-            <section id="main"><div class="timeline timeline-wrap">
-    
-            <div class="timeline-row timeline-row-major">
-                <span class="node"><i class="fa fa-calendar"></i></span>
-                <h1 class="title">2017</h1>
-            </div>
+            <section id="main"><article id="post-fenye" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
         
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+        
+            <header class="article-header">
                 
     
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/05/27/sd/">SpringData相关</a>
+        <h1 class="article-title" itemprop="name">
+            Mysql 分页整理
         </h1>
     
 
-                <div class="article-meta">
-                    
+                
+                    <div class="article-meta">
+                        
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/05/27/sd/">
-            <time datetime="2017-05-27T08:52:09.000Z" itemprop="datePublished">2017-05-27</time>
+        <a href="/2018/04/10/fenye/">
+            <time datetime="2018-04-10T05:52:09.000Z" itemprop="datePublished">2018-04-10</time>
         </a>
     </div>
 
 
-                    
-                    
+                        
+                        
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Java/">Java</a>, <a class="tag-link" href="/tags/SpringData/">SpringData</a>
+        <a class="tag-link" href="/tags/Mysql/">Mysql</a>
     </div>
 
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+                    </div>
                 
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/05/10/jquery_log1/">Jquery 的一些林林总总</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2017/05/10/jquery_log1/">
-            <time datetime="2017-05-10T08:52:09.000Z" itemprop="datePublished">2017-05-10</time>
-        </a>
-    </div>
-
-
-                    
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Jquery/">Jquery</a>
-    </div>
-
-                </div>
-            </div>
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="MySql-分页整理"><a href="#MySql-分页整理" class="headerlink" title="MySql 分页整理"></a>MySql 分页整理</h1><blockquote>
+<p>轻量数据与大量数据的分页完全是两回事，如果没有很好地进行优化，很可能会导致性能的直线下降。现在对mysql分页做一个简单的小整理…<br><a id="more"></a></p>
+<h2 id="最简单的分页"><a href="#最简单的分页" class="headerlink" title="最简单的分页"></a>最简单的分页</h2></blockquote>
+<pre><code>select * from content order by id desc limit 0, 10
+</code></pre><h2 id="当数据量多了一些的时候："><a href="#当数据量多了一些的时候：" class="headerlink" title="当数据量多了一些的时候："></a>当数据量多了一些的时候：</h2><pre><code>select * from content order by id desc limit 1000000, 10
+</code></pre><p>当数据量比较大的时候，这样分页的方案会导致最后几页的查询速度下降。</p>
+<h4 id="所以"><a href="#所以" class="headerlink" title="所以"></a>所以</h4><pre><code>SELECT * FROM table WHERE id &gt;= (SELECT id FROM table
+  LIMIT 1000000, 1) LIMIT 10;
+</code></pre><p>  因为id是拥有索引的主键，所以，效率会比纯limit高一些</p>
+<h3 id="什么是更优解？"><a href="#什么是更优解？" class="headerlink" title="什么是更优解？"></a>什么是更优解？</h3><pre><code>SELECT * FROM table WHERE id BETWEEN 1000000 AND 1000010;
+</code></pre><h4 id="另："><a href="#另：" class="headerlink" title="另："></a>另：</h4><p>如果找寻的id并不连续，可以先找出id，再用<code>in</code>的方式查询：</p>
+<pre><code>SELECT * FROM table WHERE id IN(10000, 100000, 1000000...);
+</code></pre><h2 id="另一种方式：-FOUND-ROWS"><a href="#另一种方式：-FOUND-ROWS" class="headerlink" title="另一种方式： FOUND_ROWS()"></a>另一种方式： FOUND_ROWS()</h2><blockquote>
+<p>使用MySql中的函数FOUND_ROWS()，在SELECT中可以得到两个结果：</p>
+<ol>
+<li>得到Limit的内容</li>
+<li>得到去除Limit以后所有行数</li>
+</ol>
+</blockquote>
+<p>SELECT语句中经常可能用<code>LIMIT</code>限制返回行数。有时候可能想要知道如果没有LIMIT会返回多少行，但又不想再执行一次相同语句。那么，在SELECT查询中包含<code>SQL_CALC_FOUND_ROWS</code>选项，然后执行<code>FOUND_ROWS()</code>就可以了：</p>
+<pre><code>select SQL_CALC_FOUND_ROWS * FROM tbl_name WHERE id &gt; 100 LIMIT 10;
+SELECT FOUND_ROWS();
+</code></pre><ul>
+<li>如果在前一条语句中使用SQL_CALC_FOUND_ROWS选项，FOUND_ROWS()将返回第一条语句没有LIMIT时返回的行数。</li>
+<li>如果在前一条语句中没有使用SQL_CALC_FOUND_ROWS选项，FOUND_ROWS()将返回前一条语句实际返回的行数。</li>
+<li>如果使用 SELECT SQL_CALC_FOUND_ROWS，MySQL必须计算所有结果集的行数。尽管这样，总比再执行一次不使用LIMIT的查询要快多了吧，因为那样结果集要返回客户端滴。（另外：应该不单是没有将结果集返回的原因，还有原因可能是比如LIKE之类比较费劲的SQL不需要再去劳累一次。）</li>
+</ul>
+<hr>
+<p>– 注意下面语句中的条件 LIKE</p>
+<pre><code>SELECT SQL_CALC_FOUND_ROWS * FROM tbl_name WHERE Name LIKE ‘%string%’ id &gt; 100 LIMIT 10;
+SELECT FOUND_ROWS();
+</code></pre><p>– 上面语句等价于下面语句，但性能方面应该提升非常非常的明显：</p>
+<pre><code>SELECT COUNT(*) FROM tbl_name WHERE Name LIKE ‘%string%’ ;
+SELECT * FROM tbl_name WHERE Name LIKE ‘%string%’ id &gt; 100 LIMIT 10;
+</code></pre>
+        
         </div>
-    
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
 </div>
+
+    <a data-url="http://sunjx93.com/2018/04/10/fenye/" data-id="cjgdezou600088gjh842xi7ud" class="article-share-link"><i class="fa fa-share"></i>Partager</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://sunjx93.com/2018/04/10/fenye/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/10/fenye/">Commentaires</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/11/07/linux_oracle/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Plus récent</strong>
+            <div class="article-nav-title">
+                
+                    Linux 下oracle的数据恢复以及数据库命令行安装
+                
+            </div>
+        </a>
+    
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
 </section>
             
                 <aside id="sidebar">
@@ -446,11 +565,13 @@
     <script>
     var disqus_config = function () {
         
-        this.page.identifier = 'undefined';
+            this.page.url = 'http://sunjx93.com/2018/04/10/fenye/';
+        
+        this.page.identifier = 'fenye';
     };
     (function() { 
         var d = document, s = d.createElement('script');  
-        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/count.js';
+        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();
