@@ -81,7 +81,7 @@
             <div id="search-form-wrap">
 
     <form class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Cari" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
         <button type="submit" class="search-form-submit"></button>
     </form>
     <div class="ins-search">
@@ -100,10 +100,10 @@
 (function (window) {
     var INSIGHT_CONFIG = {
         TRANSLATION: {
-            POSTS: 'pos',
+            POSTS: 'Posts',
             PAGES: 'Pages',
-            CATEGORIES: 'kategori',
-            TAGS: 'tag',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
             UNTITLED: '(Untitled)',
         },
         ROOT_URL: '/',
@@ -134,7 +134,7 @@
                 <td>
                     
     <div class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Cari" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
     </div>
 
                 </td>
@@ -154,16 +154,16 @@
             <h2 id="name">Drazen&#39;</h2>
             <h3 id="title">Java Developer &amp; HandSome</h3>
             <span id="location"><i class="fa fa-map-marker"></i>JiNan, China</span>
-            <a id="follow" target="_blank" href="https://github.com/Drazen08">IKUTI</a>
+            <a id="follow" target="_blank" href="https://github.com/Drazen08">FOLLOW</a>
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
                 9
-                <span>pos</span>
+                <span>posts</span>
             </div>
             <div class="article-info-block">
-                11
-                <span>tag</span>
+                12
+                <span>tags</span>
             </div>
         </div>
         
@@ -209,59 +209,45 @@
     <div class="article-inner">
         
         
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2018/06/03/cas/">Cas 单点登录相关</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/06/03/cas/">
+            <time datetime="2018-06-03T08:52:09.000Z" itemprop="datePublished">2018-06-03</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/CAS/">CAS</a>, <a class="tag-link" href="/tags/Java/">Java</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
         
         <div class="article-entry" itemprop="articleBody">
         
-            
-            <h1 id="Cas-单点登录相关"><a href="#Cas-单点登录相关" class="headerlink" title="Cas 单点登录相关"></a>Cas 单点登录相关</h1><blockquote>
+            <p><blockquote>
 <p>这几天换了工作，事情一下子多了起来，前公司十分给力的只给了我400多的应付职工薪酬，心态炸了。<br>不说别的，这几天重点研究了cas的单点登录，总结一下。</p>
-</blockquote>
-<p><strong> CAS - Central Authentication Service</strong></p>
-<ul>
-<li><p>CAS是一个单点登录框架，通俗理解为一个应用登录了，其他被授权的应用不用再登录。</p>
-<p>比如，A系统登录了之后，B系统就可以跳过登录，转而进入系统内。于是问题来了：在实现cas单点登录之前，我首先要实现两个系统的<strong>多数据源配置</strong>，把登录相关表设为一个共有的数据源。关于多数据源配置我另起了一篇○|￣|_</p>
-</li>
-<li><p>事实上，使用cas单点登录时，相当于跳过原项目的登录过程，把登录的功能<strong>转嫁给cas服务器</strong>来实现。</p>
-</li>
-</ul>
-<h2 id="1-下载"><a href="#1-下载" class="headerlink" title="1.下载"></a>1.下载</h2><p>由于cas是开源的，所以直接在<a href="https://www.apereo.org/projects/cas" target="_blank" rel="external">官网</a> 下载源码就可以。<br>下载下来是这样子的：</p>
-<p><img src="../image/cas1.jpg"></p>
-<p>其实只需要用到一个包，就可以实现简单的单点登录：<code>cas-server-core</code>，并且这个包下源码的编译文件最后是要放到<code>应用服务器</code>里面的。</p>
-<ul>
-<li><p>把<code>\cas-server-4.0.0\modules</code>  文件夹下的<code>cas-server-webapp-4.0.0.war</code>改名为<code>cas.war</code>，并放在tomcat目录下<code>webapps</code>中，并启动tomcat。</p>
-</li>
-<li><p>此时webapps目录下已经解压了<code>cas</code>文件夹，可以进行下一步了。</p>
-</li>
-</ul>
-<h2 id="2-对cas-server-core-源码进行修改"><a href="#2-对cas-server-core-源码进行修改" class="headerlink" title="2.对cas-server-core 源码进行修改"></a>2.对cas-server-core 源码进行修改</h2><p>  由于不同的项目都有着自己的密码加密规则，所以需要对<code>cas-server-core</code>包下的源码进行修改：</p>
-<p>  <strong>上代码：</strong></p>
-<p>  修改<code>\webapps\cas\WEB-INF</code>下的<code>deployerConfigContext.xml</code></p>
-<p><strong> 替换primaryAuthenticationHandler 的 bean</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;bean id=&quot;primaryAuthenticationHandler&quot; class=&quot;com.distinct.cas.jdbc.QueryDatabaseAuthenticationHandler&quot;</div><div class="line">p:dataSource-ref=&quot;dataSource&quot;</div><div class="line">p:passwordEncoder-ref=&quot;passwordEncoder&quot;</div><div class="line">p:sql=&quot;select password from sys_user where username=? and status = 1&quot; /&gt;</div></pre></td></tr></table></figure></p>
-<p><strong> 新增</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;dataSource&quot; class=&quot;org.springframework.jdbc.datasource.DriverManagerDataSource&quot; &gt;</div><div class="line">    &lt;property name=&quot;driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;</div><div class="line">    &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://192.168.0.107:3306/sys_blueroc_db?autoReconnect=true&quot;/&gt;</div><div class="line">    &lt;property name=&quot;username&quot; value=&quot;root&quot;/&gt;</div><div class="line">    &lt;property name=&quot;password&quot; value=&quot;root&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;bean id=&quot;passwordEncoder&quot;</div><div class="line">  class=&quot;org.jasig.cas.authentication.handler.DefaultPasswordEncoder&quot;</div><div class="line">  c:encodingAlgorithm=&quot;MD5&quot;</div><div class="line">  p:characterEncoding=&quot;UTF-8&quot; /&gt;</div></pre></td></tr></table></figure></p>
-<p>bean <code>dataSource</code>主要是定义连接用户表数据库的配置，<code>QueryDatabaseAuthenticationHandler</code>类就是对用户校验的处理类,在server-core 源码包中新增：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line">package com.distinct.cas.jdbc;</div><div class="line"></div><div class="line">import org.jasig.cas.authentication.HandlerResult;</div><div class="line">import org.jasig.cas.authentication.PreventedException;</div><div class="line">import org.jasig.cas.authentication.UsernamePasswordCredential;</div><div class="line">import org.jasig.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;</div><div class="line">import org.jasig.cas.authentication.principal.SimplePrincipal;</div><div class="line">import org.slf4j.Logger;</div><div class="line">import org.slf4j.LoggerFactory;</div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.jdbc.core.JdbcTemplate;</div><div class="line">import org.springframework.jdbc.datasource.DriverManagerDataSource;</div><div class="line">import org.springframework.stereotype.Component;</div><div class="line"></div><div class="line">import javax.security.auth.login.FailedLoginException;</div><div class="line">import java.security.GeneralSecurityException;</div><div class="line"></div><div class="line">/**</div><div class="line"> * @author sunjx</div><div class="line"> * @date 2018/5/28 16:23</div><div class="line"> **/</div><div class="line"></div><div class="line">@Component(value = &quot;primaryAuthenticationHandler&quot;)</div><div class="line">public class QueryDatabaseAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler</div><div class="line">&#123;</div><div class="line"></div><div class="line">    private Logger logger = LoggerFactory.getLogger(QueryDatabaseAuthenticationHandler.class);</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    private DriverManagerDataSource dataSource;</div><div class="line">    // 注入deployerConfigContext.xml 的查询sql</div><div class="line">    @Autowired</div><div class="line">    private String sql;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * Authenticates a username/password credential by an arbitrary strategy.</div><div class="line">     *</div><div class="line">     * @param transformedCredential the credential object bearing the transformed username and password.</div><div class="line">     * @return HandlerResult resolved from credential on authentication success or null if no principal could be resolved</div><div class="line">     * from the credential.</div><div class="line">     * @throws GeneralSecurityException On authentication failure.</div><div class="line">     * @throws PreventedException       On the indeterminate case when authentication is prevented.</div><div class="line">     */</div><div class="line">    protected final HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential transformedCredential) throws GeneralSecurityException, PreventedException &#123;</div><div class="line">        //UsernamePasswordCredential参数包含了前台页面输入的用户信息</div><div class="line">        String username = getPrincipalNameTransformer().transform(transformedCredential.getUsername());</div><div class="line">        String password = transformedCredential.getPassword();</div><div class="line">        //认证用户名和密码是否正确</div><div class="line">        final String encryptedPassword = this.getPasswordEncoder().encode(password,username);</div><div class="line">        logger.info(&quot;pwd:&quot;+encryptedPassword + &quot;////////////////////////////////////&quot;);</div><div class="line">        System.out.println(&quot;pwd:&quot;+encryptedPassword + &quot;////////////////////////////////////&quot;);</div><div class="line">        try &#123;</div><div class="line">            JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);</div><div class="line">            if(encryptedPassword.equals(jdbcTemplate.queryForObject(sql, new Object[]&#123;username&#125;,String.class)))&#123;</div><div class="line">                return createHandlerResult(transformedCredential, new SimplePrincipal(username), null);</div><div class="line">            &#125;</div><div class="line">        &#125;catch (Exception e)&#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        throw new FailedLoginException();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setDataSource(DriverManagerDataSource dataSource) &#123;</div><div class="line">        this.dataSource = dataSource;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public DriverManagerDataSource getDataSource() &#123;</div><div class="line">        return dataSource;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setSql(String sql) &#123;</div><div class="line">        this.sql = sql;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getSql() &#123;</div><div class="line">        return sql;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="服务端创建安全证书："><a href="#服务端创建安全证书：" class="headerlink" title="服务端创建安全证书："></a>服务端创建安全证书：</h3><blockquote>
-<p>cmd 控制台进入某给文件路径（同linux）</p>
-<ol>
-<li>生成证书<br>keytool -genkey -alias  cas(别名) -keyalg RSA -keystore D:/keys/smallkey（证书路径）<br>2.导出证书<br>keytool -export -file d:/keys/small.crt -alias smalllove -keystore d:/keys/smallkey<br>3.导入证书到jdk中<br>keytool -import -keystore C:\Java\jdk1.6.0_21\lib\security\cacerts -file D:/keys/small.crt -alias cas</li>
-</ol>
-</blockquote>
-<ul>
-<li>在客户端shiroConfig中定义cas的服务器路径</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div></pre></td><td class="code"><pre><div class="line">  public static final String loginUrl = &quot;http://localhost:8443/cas/login?service=你的项目路径&quot;;</div><div class="line"></div><div class="line">   /**</div><div class="line">     * 注册单点登出filter</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @Bean</div><div class="line">    public FilterRegistrationBean singleSignOutFilter()&#123;</div><div class="line">        FilterRegistrationBean bean = new FilterRegistrationBean();</div><div class="line">        bean.setName(&quot;singleSignOutFilter&quot;);</div><div class="line">        bean.setFilter(new SingleSignOutFilter());</div><div class="line">        bean.addUrlPatterns(&quot;/*&quot;);</div><div class="line">        bean.setEnabled(true);</div><div class="line">        //bean.setOrder(Ordered.HIGHEST_PRECEDENCE);</div><div class="line">        return bean;</div><div class="line">    &#125;</div><div class="line">  /**</div><div class="line">     * 定义casfilter继承`org.apache.shiro.cas.CasFilter`</div><div class="line">     *</div><div class="line">     * @return</div><div class="line">     * @author</div><div class="line">     * @create</div><div class="line">     */</div><div class="line">    @Bean(name = &quot;casFilter&quot;)</div><div class="line">    public CasFilter getCasFilter() &#123;</div><div class="line">        MyCasFilter casFilter = new MyCasFilter();</div><div class="line">        casFilter.setName(&quot;casFilter&quot;);</div><div class="line">        casFilter.setEnabled(true);</div><div class="line">        casFilter.setLoginUrl(casLoginUrl);</div><div class="line">        casFilter.setSuccessUrl(loginSuccessUrl);</div><div class="line">        // 登录失败后跳转的URL，也就是 Shiro 执行 CasRealm 的 doGetAuthenticationInfo 方法向CasServer验证tiket</div><div class="line">        casFilter.setFailureUrl(loginUrl);// 我们选择认证失败后再打开登录页面</div><div class="line">        return casFilter;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">  /**</div><div class="line">     * 该过滤器负责用户的认证工作，必须启用它</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @Bean</div><div class="line">    public FilterRegistrationBean casAuthenticationFilter() &#123;</div><div class="line">        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();</div><div class="line">        filterRegistrationBean.setFilter(new AuthenticationFilter());</div><div class="line">//        AuthenticationFilter t = new AuthenticationFilter();</div><div class="line">        filterRegistrationBean.addUrlPatterns(&quot;/*&quot;);</div><div class="line">        filterRegistrationBean.addInitParameter(&quot;casServerLoginUrl&quot;,ShiroConfig.casLoginUrl); //cas 服务器登录</div><div class="line">        filterRegistrationBean.addInitParameter(&quot;serverName&quot;,ShiroConfig.shiroServerUrlPrefix); // 客户端服务器地址</div><div class="line">        return filterRegistrationBean;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * 该过滤器负责对Ticket的校验工作，必须启用它</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @Bean</div><div class="line">    public FilterRegistrationBean casFilterRegistrationBean() &#123;</div><div class="line">        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();</div><div class="line">        filterRegistrationBean.addUrlPatterns(&quot;/*&quot;);</div><div class="line">        filterRegistrationBean.setFilter(new Cas20ProxyReceivingTicketValidationFilter());</div><div class="line">        filterRegistrationBean.addInitParameter(&quot;serverName&quot;,ShiroConfig.shiroServerUrlPrefix); // cas 服务器地址</div><div class="line">        filterRegistrationBean.addInitParameter(&quot;casServerUrlPrefix&quot;,ShiroConfig.casServerUrlPrefix); // 客户端服务器地址</div><div class="line">        return filterRegistrationBean;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * 该过滤器负责实现HttpServletRequest请求的包裹，</div><div class="line">     * 比如允许开发者通过HttpServletRequest的getRemoteUser()方法获得SSO登录用户的登录名</div><div class="line">     * 可选配置</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @Bean</div><div class="line">    public FilterRegistrationBean httpServletRequestWrapperFilter() &#123;</div><div class="line">        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();</div><div class="line">        filterRegistrationBean.addUrlPatterns(&quot;/*&quot;);</div><div class="line">        filterRegistrationBean.setFilter(new HttpServletRequestWrapperFilter());</div><div class="line">        return filterRegistrationBean;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 该过滤器使得开发者可以通过org.jasig.cas.client.util.AssertionHolder来获取用户的登录名。</div><div class="line">     * AssertionHolder.getAssertion().getPrincipal().getName()。</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @Bean</div><div class="line">    public FilterRegistrationBean assertionThreadLocalFilter() &#123;</div><div class="line">        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();</div><div class="line">        filterRegistrationBean.addUrlPatterns(&quot;/*&quot;);</div><div class="line">        filterRegistrationBean.setFilter(new AssertionThreadLocalFilter());</div><div class="line">        return filterRegistrationBean;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"> /**</div><div class="line">     * 注册单点登出listener</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @Bean</div><div class="line">    public ServletListenerRegistrationBean singleSignOutHttpSessionListener()&#123;</div><div class="line">        ServletListenerRegistrationBean bean = new ServletListenerRegistrationBean();</div><div class="line">        bean.setListener(new SingleSignOutHttpSessionListener());</div><div class="line">//        bean.setName(&quot;&quot;); //默认为bean name</div><div class="line">        bean.setEnabled(true);</div><div class="line">        //bean.setOrder(Ordered.HIGHEST_PRECEDENCE); //设置优先级</div><div class="line">        return bean;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 然后声明shiro 的cas登录的realm</div><div class="line">     @Bean</div><div class="line">    public MyShiroCasRealm myShiroCasRealm(EhCacheManager cacheManager) &#123;</div><div class="line">        MyShiroCasRealm  realm = new MyShiroCasRealm ();</div><div class="line">        realm.setCacheManager(cacheManager);</div><div class="line">        return realm;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">  // 在返回SecurityManager的bean内加入MyShiroCasRealm：</div><div class="line">  @Bean</div><div class="line">    public SecurityManager securityManager() &#123;</div><div class="line">        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();</div><div class="line"></div><div class="line">        Collection collection = new ArrayList();</div><div class="line">        ((ArrayList) collection).add(userRealm());</div><div class="line">        ((ArrayList) collection).add(myShiroCasRealm(ehCacheManager()));</div><div class="line">      //设置realm.</div><div class="line">        securityManager.setRealms(collection);</div><div class="line">        // 自定义缓存实现 使用redis</div><div class="line">        if (Constant.CACHE_TYPE_REDIS.equals(cacheType)) &#123;</div><div class="line">            securityManager.setCacheManager(cacheManager());</div><div class="line">        &#125; else &#123;</div><div class="line">            securityManager.setCacheManager(ehCacheManager());</div><div class="line">        &#125;</div><div class="line">        securityManager.setSessionManager(sessionManager());</div><div class="line">        return securityManager;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    &lt;!-- 最后，加入上面已经声明的过滤器 --&gt;</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) &#123;</div><div class="line"></div><div class="line">        Map&lt;String, Filter&gt; filters = new HashMap&lt;&gt;();</div><div class="line">        filters.put(&quot;casFilter&quot;, getCasFilter());</div><div class="line">        filters.put(&quot;authenticationFilter&quot;, casAuthenticationFilter().getFilter());</div><div class="line">        filters.put(&quot;cas20ProxyReceivingTicketValidationFilter&quot;, casFilterRegistrationBean().getFilter());</div><div class="line">        filters.put(&quot;httpServletRequestWrapperFilter&quot;, httpServletRequestWrapperFilter().getFilter());</div><div class="line">        filters.put(&quot;assertionThreadLocalFilter&quot;, assertionThreadLocalFilter().getFilter());</div><div class="line"></div><div class="line">        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();</div><div class="line">        shiroFilterFactoryBean.setSecurityManager(securityManager);</div><div class="line">        shiroFilterFactoryBean.setLoginUrl(loginUrl);</div><div class="line">        shiroFilterFactoryBean.setSuccessUrl(loginSuccessUrl);</div><div class="line">        shiroFilterFactoryBean.setUnauthorizedUrl(unauthorizedUrl);</div><div class="line">        shiroFilterFactoryBean.setFilters(filters);</div><div class="line"></div><div class="line"></div><div class="line">        LinkedHashMap&lt;String, String&gt; filterChainDefinitionMap = new LinkedHashMap&lt;&gt;();</div><div class="line">        filterChainDefinitionMap.put(&quot;/css/**&quot;, &quot;anon&quot;);</div><div class="line">        filterChainDefinitionMap.put(&quot;/api/**&quot;, &quot;anon&quot;);</div><div class="line"></div><div class="line"></div><div class="line">        filterChainDefinitionMap.put(&quot;/**&quot;, &quot;authc&quot;);</div><div class="line">        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);</div><div class="line">        return shiroFilterFactoryBean;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<ul>
-<li><p>编译server-core 源码，放在<code>tomcat-8.5.30\webapps\cas\WEB-INF\classes</code>下</p>
-</li>
-<li><p>然后，可以试着运行一下tomcat，期间可能会有依赖包确实，把下载的jar包放到<code>tomcat-8.5.30\webapps\cas\WEB-INF\lib</code> 下。</p>
-</li>
-</ul>
-<p>如果访问<a href="http://localhost:8443/cas/login" target="_blank" rel="external">http://localhost:8443/cas/login</a> 出现如下页面，则证明部署成功了。</p>
-<p> <img src="../image/cas2.jpg"></p>
-<h2 id="2-cas-修改登录样式"><a href="#2-cas-修改登录样式" class="headerlink" title="2.cas 修改登录样式"></a>2.cas 修改登录样式</h2><p>假如，你觉得上面的登录样式太丑了（事实上的确很丑..），那我们可以去修改一下登录的样式：</p>
-<p>算了，贴个链接吧，我太懒了QAQ</p>
-<p><a href="https://blog.csdn.net/pucao_cug/article/details/69488281" target="_blank" rel="external">cas4.2.7定制登录页面样式(并且让页面默认使用中文提示)</a></p>
-
+</blockquote></p>
+            <p class="article-more-link">
+                <a href="/2018/06/03/cas/#more">Read More</a>
+            </p>
         
         </div>
         <footer class="article-footer">
@@ -271,7 +257,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2018/06/03/cas/" data-id="cjhy83vgy0000yojhbmwyp5te" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
+    <a data-url="http://sunjx93.com/2018/06/03/cas/" data-id="cjhy9ggym000144jh3ivpjxcb" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -339,7 +325,7 @@
 
             
     
-        <a href="http://sunjx93.com/2018/06/03/cas/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/06/03/cas/">Komentar</a>
+        <a href="http://sunjx93.com/2018/06/03/cas/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/06/03/cas/">Comments</a>
     
 
         </footer>
@@ -400,7 +386,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2018/04/10/fenye/" data-id="cjhy83vhg0002yojhvzaxdtld" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
+    <a data-url="http://sunjx93.com/2018/04/10/fenye/" data-id="cjhy9ggze000544jhgt22nhem" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -468,137 +454,7 @@
 
             
     
-        <a href="http://sunjx93.com/2018/04/10/fenye/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/10/fenye/">Komentar</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-annotation" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2018/04/07/annotation/">自定义注解</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2018/04/07/annotation/">
-            <time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time>
-        </a>
-    </div>
-
-
-                        
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Annotation/">Annotation</a>, <a class="tag-link" href="/tags/Java/">Java</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><blockquote>
-<p>自定义注解的用法，会了的话定义一个@Override同名注解什么的…</p>
-</blockquote></p>
-            <p class="article-more-link">
-                <a href="/2018/04/07/annotation/#more">Read More</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-
-</div>
-
-    <a data-url="http://sunjx93.com/2018/04/07/annotation/" data-id="cjhy83vha0001yojhgs0t79z1" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
-<script>
-    (function ($) {
-        // Prevent duplicate binding
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-</script>
-
-            
-    
-        <a href="http://sunjx93.com/2018/04/07/annotation/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/annotation/">Komentar</a>
+        <a href="http://sunjx93.com/2018/04/10/fenye/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/10/fenye/">Comments</a>
     
 
         </footer>
@@ -660,7 +516,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2018/04/07/LifeBean/" data-id="cjhy83vhx0005yojhrsuku5af" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
+    <a data-url="http://sunjx93.com/2018/04/07/LifeBean/" data-id="cjhy9ggya000044jhto6rk0qr" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -728,7 +584,137 @@
 
             
     
-        <a href="http://sunjx93.com/2018/04/07/LifeBean/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/LifeBean/">Komentar</a>
+        <a href="http://sunjx93.com/2018/04/07/LifeBean/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/LifeBean/">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-annotation" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2018/04/07/annotation/">自定义注解</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/04/07/annotation/">
+            <time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Annotation/">Annotation</a>, <a class="tag-link" href="/tags/Java/">Java</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><blockquote>
+<p>自定义注解的用法，会了的话定义一个@Override同名注解什么的…</p>
+</blockquote></p>
+            <p class="article-more-link">
+                <a href="/2018/04/07/annotation/#more">Read More</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://sunjx93.com/2018/04/07/annotation/" data-id="cjhy9ggzi000744jh688ivv72" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://sunjx93.com/2018/04/07/annotation/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/annotation/">Comments</a>
     
 
         </footer>
@@ -791,7 +777,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/11/07/linux_oracle/" data-id="cjhy83vjj000iyojhj7d15q0j" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
+    <a data-url="http://sunjx93.com/2017/11/07/linux_oracle/" data-id="cjhy9ggzm000844jhzrxl7ib1" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -859,7 +845,7 @@
 
             
     
-        <a href="http://sunjx93.com/2017/11/07/linux_oracle/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/11/07/linux_oracle/">Komentar</a>
+        <a href="http://sunjx93.com/2017/11/07/linux_oracle/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/11/07/linux_oracle/">Comments</a>
     
 
         </footer>
@@ -920,7 +906,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cjhy83vht0004yojhkebjj9io" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
+    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cjhy9ggz2000344jh833tm2u4" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -988,7 +974,7 @@
 
             
     
-        <a href="http://sunjx93.com/2017/07/07/Quartz/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/07/07/Quartz/">Komentar</a>
+        <a href="http://sunjx93.com/2017/07/07/Quartz/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/07/07/Quartz/">Comments</a>
     
 
         </footer>
@@ -1050,7 +1036,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/27/sd/" data-id="cjhy83vjq000jyojhsb2xdfrx" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
+    <a data-url="http://sunjx93.com/2017/05/27/sd/" data-id="cjhy9ggzv000a44jh7fltkg2j" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1118,7 +1104,7 @@
 
             
     
-        <a href="http://sunjx93.com/2017/05/27/sd/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/27/sd/">Komentar</a>
+        <a href="http://sunjx93.com/2017/05/27/sd/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/27/sd/">Comments</a>
     
 
         </footer>
@@ -1180,7 +1166,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cjhy83vju000lyojh9a5zp6nv" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
+    <a data-url="http://sunjx93.com/2017/05/10/jquery_log1/" data-id="cjhy9ggz9000444jhmid18jmu" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1248,7 +1234,7 @@
 
             
     
-        <a href="http://sunjx93.com/2017/05/10/jquery_log1/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/10/jquery_log1/">Komentar</a>
+        <a href="http://sunjx93.com/2017/05/10/jquery_log1/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/05/10/jquery_log1/">Comments</a>
     
 
         </footer>
@@ -1310,7 +1296,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/04/18/终于搞定了/" data-id="cjhy83vk1000myojh1m8jk8v6" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
+    <a data-url="http://sunjx93.com/2017/04/18/终于搞定了/" data-id="cjhy9ggzz000c44jh5u3j70ir" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1378,7 +1364,7 @@
 
             
     
-        <a href="http://sunjx93.com/2017/04/18/终于搞定了/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/04/18/终于搞定了/">Komentar</a>
+        <a href="http://sunjx93.com/2017/04/18/终于搞定了/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/04/18/终于搞定了/">Comments</a>
     
 
         </footer>
@@ -1393,7 +1379,7 @@
    
         
     <div class="widget-wrap">
-        <h3 class="widget-title">terbaru</h3>
+        <h3 class="widget-title">recent</h3>
         <div class="widget">
             <ul id="recent-post" class="">
                 
@@ -1411,8 +1397,8 @@
                         
                         <div class="item-inner">
                             <p class="item-category"></p>
-                            <p class="item-title"><a href="/2018/06/03/cas/" class="title"></a></p>
-                            <p class="item-date"><time datetime="2018-06-03T02:10:54.931Z" itemprop="datePublished">2018-06-03</time></p>
+                            <p class="item-title"><a href="/2018/06/03/cas/" class="title">Cas 单点登录相关</a></p>
+                            <p class="item-date"><time datetime="2018-06-03T08:52:09.000Z" itemprop="datePublished">2018-06-03</time></p>
                         </div>
                     </li>
                 
@@ -1438,25 +1424,6 @@
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2018/04/07/annotation/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"></p>
-                            <p class="item-title"><a href="/2018/04/07/annotation/" class="title">自定义注解</a></p>
-                            <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
                             <a href="/2018/04/07/LifeBean/" class="thumbnail">
     
     
@@ -1469,6 +1436,25 @@
                         <div class="item-inner">
                             <p class="item-category"></p>
                             <p class="item-title"><a href="/2018/04/07/LifeBean/" class="title">Bean 生命周期</a></p>
+                            <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/04/07/annotation/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2018/04/07/annotation/" class="title">自定义注解</a></p>
                             <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
                         </div>
                     </li>
@@ -1501,7 +1487,7 @@
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">arsip</h3>
+        <h3 class="widget-title">archives</h3>
         <div class="widget">
             <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
         </div>
@@ -1510,25 +1496,25 @@
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tag</h3>
+        <h3 class="widget-title">tags</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/">Quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Timer/">Timer</a><span class="tag-list-count">1</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS/">CAS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/">Quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Timer/">Timer</a><span class="tag-list-count">1</span></li></ul>
         </div>
     </div>
 
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">awan tag</h3>
+        <h3 class="widget-title">tag cloud</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Annotation/" style="font-size: 10px;">Annotation</a> <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/Quartz/" style="font-size: 10px;">Quartz</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a> <a href="/tags/Timer/" style="font-size: 10px;">Timer</a>
+            <a href="/tags/Annotation/" style="font-size: 10px;">Annotation</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/Quartz/" style="font-size: 10px;">Quartz</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a> <a href="/tags/Timer/" style="font-size: 10px;">Timer</a>
         </div>
     </div>
 
     
         
     <div class="widget-wrap widget-list">
-        <h3 class="widget-title">tautan</h3>
+        <h3 class="widget-title">links</h3>
         <div class="widget">
             <ul>
                 
