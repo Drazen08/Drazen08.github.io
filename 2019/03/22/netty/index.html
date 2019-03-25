@@ -3,19 +3,21 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Mysql 分页整理 | Drazen</title>
+    <title>netty 总结一下 | Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="轻量数据与大量数据的分页完全是两回事，如果没有很好地进行优化，很可能会导致性能的直线下降。现在对mysql分页做一个简单的小整理…">
-<meta name="keywords" content="Mysql">
+    <meta name="description" content="自己有个毛病，写笔记的时候不知道从哪里开始说起…以工作中用到的tcp为例子，总结一下netty的用法和坑。">
+<meta name="keywords" content="Java,netty">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql 分页整理">
-<meta property="og:url" content="http://sunjx93.com/2018/04/10/fenye/index.html">
+<meta property="og:title" content="netty 总结一下">
+<meta property="og:url" content="http://sunjx93.com/2019/03/22/netty/index.html">
 <meta property="og:site_name" content="Drazen">
-<meta property="og:description" content="轻量数据与大量数据的分页完全是两回事，如果没有很好地进行优化，很可能会导致性能的直线下降。现在对mysql分页做一个简单的小整理…">
-<meta property="og:updated_time" content="2018-04-24T08:39:10.201Z">
+<meta property="og:description" content="自己有个毛病，写笔记的时候不知道从哪里开始说起…以工作中用到的tcp为例子，总结一下netty的用法和坑。">
+<meta property="og:image" content="http://sunjx93.com/2019/03/22/image/giao2.jpg">
+<meta property="og:updated_time" content="2019-03-25T01:54:43.271Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql 分页整理">
-<meta name="twitter:description" content="轻量数据与大量数据的分页完全是两回事，如果没有很好地进行优化，很可能会导致性能的直线下降。现在对mysql分页做一个简单的小整理…">
+<meta name="twitter:title" content="netty 总结一下">
+<meta name="twitter:description" content="自己有个毛病，写笔记的时候不知道从哪里开始说起…以工作中用到的tcp为例子，总结一下netty的用法和坑。">
+<meta name="twitter:image" content="http://sunjx93.com/2019/03/22/image/giao2.jpg">
     
 
     
@@ -206,7 +208,7 @@
 </aside>
 
             
-            <section id="main"><article id="post-fenye" class="article article-type-post" itemscope itemprop="blogPost">
+            <section id="main"><article id="post-netty" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -214,7 +216,7 @@
                 
     
         <h1 class="article-title" itemprop="name">
-            Mysql 分页整理
+            netty 总结一下
         </h1>
     
 
@@ -223,8 +225,8 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2018/04/10/fenye/">
-            <time datetime="2018-04-10T05:52:09.000Z" itemprop="datePublished">2018-04-10</time>
+        <a href="/2019/03/22/netty/">
+            <time datetime="2019-03-22T08:00:09.000Z" itemprop="datePublished">2019-03-22</time>
         </a>
     </div>
 
@@ -233,7 +235,7 @@
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Mysql/">Mysql</a>
+        <a class="tag-link" href="/tags/Java/">Java</a>, <a class="tag-link" href="/tags/netty/">netty</a>
     </div>
 
                     </div>
@@ -245,40 +247,150 @@
         
             
             <blockquote>
-<p>轻量数据与大量数据的分页完全是两回事，如果没有很好地进行优化，很可能会导致性能的直线下降。现在对mysql分页做一个简单的小整理…<br><a id="more"></a></p>
-<h2 id="最简单的分页"><a href="#最简单的分页" class="headerlink" title="最简单的分页"></a>最简单的分页</h2></blockquote>
-<pre><code>select * from content order by id desc limit 0, 10
-</code></pre><h2 id="当数据量多了一些的时候："><a href="#当数据量多了一些的时候：" class="headerlink" title="当数据量多了一些的时候："></a>当数据量多了一些的时候：</h2><pre><code>select * from content order by id desc limit 1000000, 10
-</code></pre><p>当数据量比较大的时候，这样分页的方案会导致最后几页的查询速度下降。</p>
-<h4 id="所以"><a href="#所以" class="headerlink" title="所以"></a>所以</h4><pre><code>SELECT * FROM table WHERE id &gt;= (SELECT id FROM table
-  LIMIT 1000000, 1) LIMIT 10;
-</code></pre><p>  因为id是拥有索引的主键，所以，效率会比纯limit高一些</p>
-<h3 id="什么是更优解？"><a href="#什么是更优解？" class="headerlink" title="什么是更优解？"></a>什么是更优解？</h3><pre><code>SELECT * FROM table WHERE id BETWEEN 1000000 AND 1000010;
-</code></pre><h4 id="另："><a href="#另：" class="headerlink" title="另："></a>另：</h4><p>如果找寻的id并不连续，可以先找出id，再用<code>in</code>的方式查询：</p>
-<pre><code>SELECT * FROM table WHERE id IN(10000, 100000, 1000000...);
-</code></pre><h2 id="另一种方式：-FOUND-ROWS"><a href="#另一种方式：-FOUND-ROWS" class="headerlink" title="另一种方式： FOUND_ROWS()"></a>另一种方式： FOUND_ROWS()</h2><blockquote>
-<p>使用MySql中的函数FOUND_ROWS()，在SELECT中可以得到两个结果：</p>
-<ol>
-<li>得到Limit的内容</li>
-<li>得到去除Limit以后所有行数</li>
-</ol>
+<p>自己有个毛病，写笔记的时候不知道从哪里开始说起…<br>以工作中用到的tcp为例子，总结一下netty的用法和坑。<br><a id="more"></a></p>
 </blockquote>
-<p>SELECT语句中经常可能用<code>LIMIT</code>限制返回行数。有时候可能想要知道如果没有LIMIT会返回多少行，但又不想再执行一次相同语句。那么，在SELECT查询中包含<code>SQL_CALC_FOUND_ROWS</code>选项，然后执行<code>FOUND_ROWS()</code>就可以了：</p>
-<pre><code>select SQL_CALC_FOUND_ROWS * FROM tbl_name WHERE id &gt; 100 LIMIT 10;
-SELECT FOUND_ROWS();
-</code></pre><ul>
-<li>如果在前一条语句中使用SQL_CALC_FOUND_ROWS选项，FOUND_ROWS()将返回第一条语句没有LIMIT时返回的行数。</li>
-<li>如果在前一条语句中没有使用SQL_CALC_FOUND_ROWS选项，FOUND_ROWS()将返回前一条语句实际返回的行数。</li>
-<li>如果使用 SELECT SQL_CALC_FOUND_ROWS，MySQL必须计算所有结果集的行数。尽管这样，总比再执行一次不使用LIMIT的查询要快多了吧，因为那样结果集要返回客户端滴。（另外：应该不单是没有将结果集返回的原因，还有原因可能是比如LIKE之类比较费劲的SQL不需要再去劳累一次。）</li>
+<h4 id="Giao-哥镇楼"><a href="#Giao-哥镇楼" class="headerlink" title="Giao 哥镇楼"></a>Giao 哥镇楼</h4><p><img src="../image/giao2.jpg" alt="Giao 哥镇楼"></p>
+<h4 id="我是假的目录-0-0"><a href="#我是假的目录-0-0" class="headerlink" title="我是假的目录 0.0 :"></a>我是假的目录 0.0 :</h4><ul>
+<li>服务端启动</li>
+<li>怎么写逻辑处理类<code>handler</code></li>
+<li>持有合法channel以及发送消息</li>
+<li>超时策略的处理方式及注意事项</li>
+<li>拆包/粘包处理思路</li>
+<li>客户端异常情况的重连方式</li>
+<li>如何使用netty开发websocket端</li>
+<li>如何用客户端代码搞jmeter测试高访问量下服务端抗压能力</li>
+<li>netty 多服务端的开发思路</li>
+<li>剩下的一些坑（crc8 ）</li>
 </ul>
-<hr>
-<p>– 注意下面语句中的条件 LIKE</p>
-<pre><code>SELECT SQL_CALC_FOUND_ROWS * FROM tbl_name WHERE Name LIKE ‘%string%’ id &gt; 100 LIMIT 10;
-SELECT FOUND_ROWS();
-</code></pre><p>– 上面语句等价于下面语句，但性能方面应该提升非常非常的明显：</p>
-<pre><code>SELECT COUNT(*) FROM tbl_name WHERE Name LIKE ‘%string%’ ;
-SELECT * FROM tbl_name WHERE Name LIKE ‘%string%’ id &gt; 100 LIMIT 10;
-</code></pre>
+<h2 id="1-服务端启动"><a href="#1-服务端启动" class="headerlink" title="1.服务端启动"></a>1.服务端启动</h2><ul>
+<li><code>ServerBootstrap</code>这个类代表一个socket服务，创建它，然后把它放在服务端的容器中。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">ServerBootstrap b = new ServerBootstrap();</div><div class="line">// 这里的EventLoopGroup 可以设置数量</div><div class="line">b.group(new EventLoopGroup(),new EventLoopGroup())</div><div class="line">        .channel(NioServerSocketChannel.class)</div><div class="line">        // 放置自己的channelHandler,如果想使用spring 上下文也可以autowired</div><div class="line">        .childHandler(new MyChannelHandler());</div><div class="line">        // 这里是netty的配置属性</div><div class="line">Map&lt;ChannelOption&lt;?&gt;, Object&gt; tcpChannelOptions = (...);</div><div class="line">Set&lt;ChannelOption&lt;?&gt;&gt; keySet = tcpChannelOptions.keySet();</div><div class="line">for (@SuppressWarnings(&quot;rawtypes&quot;)</div><div class="line">        ChannelOption option : keySet) &#123;</div><div class="line">    b.option(option, tcpChannelOptions.get(option));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>服务端的配置属性我用的不多，大概是三个<blockquote>
+<p>属性放置在ChannelOption作为key的Map中，在声名<code>ServerBootstrap</code>时放入<code>ServerBootstrap.option(?)</code> 方法中</p>
+</blockquote>
+</li>
+</ul>
+<p>我的channelOption:</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>value</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ChannelOption.SO_KEEPALIVE</td>
+<td>true</td>
+<td>Socket参数，连接保活，默认值为False。启用该功能时，TCP会主动探测空闲连接的有效性。可以将此功能视为TCP的心跳机制，需要注意的是：默认的心跳间隔是7200s即2小时。Netty默认关闭该功能。</td>
+</tr>
+<tr>
+<td>ChannelOption.SO_BACKLOG</td>
+<td>1</td>
+<td>  Socket参数，服务端接受连接的队列长度，如果队列已满，客户端连接将被拒绝。默认值，Windows为200，其他为128。</td>
+</tr>
+<tr>
+<td>ChannelOption.TCP_NODELAY</td>
+<td>true</td>
+<td>  TCP参数，立即发送数据，默认值为Ture（Netty默认为True而操作系统默认为False）。该值设置Nagle算法的启用，改算法将小的碎片数据连接成更大的报文来最小化所发送的报文的数量，如果需要发送一些较小的报文，则需要禁用该算法。Netty默认禁用该算法，从而最小化报文传输延时。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>具体的配置可以看Api文档，或者看这篇文章：</strong><br>      <a href="https://www.jianshu.com/p/0bff7c020af2" target="_blank" rel="external">netty Channel Option</a></p>
+<h2 id="2-怎么写逻辑处理类handler"><a href="#2-怎么写逻辑处理类handler" class="headerlink" title="2.怎么写逻辑处理类handler"></a>2.怎么写逻辑处理类<code>handler</code></h2><blockquote>
+<p>先介绍一下我们项目中的通信规则：<br>数据消息是一串byte数组，校验方式用的CRC8，分割符是十六进制的<code>FFFF</code>,占据两个byte<br>格式是这样的：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>头部</th>
+<th>内容</th>
+<th>crc8</th>
+<th>结尾</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>长度(byte)：</td>
+<td>1</td>
+<td>x</td>
+<td>1</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><strong>简单的ChannelHandler 代码：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">@ChannelHandler.Sharable // 这个注解的意思是handler可以被多个channel安全的共享</div><div class="line">public class MyChannelHandler extends ChannelInboundHandlerAdapter&#123;</div><div class="line">    // 主要的消息接收的方法，所有的消息都走的这个方法</div><div class="line">    @Override</div><div class="line">    public void channelRead(ChannelHandlerContext ctx, Object msg) &#123;&#125;</div><div class="line"></div><div class="line">    // 字面意思，代表消息接收完毕时调用的方法</div><div class="line">    @Override</div><div class="line">    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception &#123;&#125;</div><div class="line"></div><div class="line">    // 发生异常时调用该方法</div><div class="line">    @Override</div><div class="line">    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) &#123;&#125;</div><div class="line"></div><div class="line">    // socket最初连接的方法</div><div class="line">    @Override</div><div class="line">    public void channelActive(ChannelHandlerContext ctx) throws Exception &#123;&#125;</div><div class="line"></div><div class="line">    // socket断开时调用该方法</div><div class="line">    @Override</div><div class="line">    public void channelInactive(ChannelHandlerContext ctx) &#123;&#125;</div><div class="line"></div><div class="line">    // socket 通信超时时调用该方法</div><div class="line">     @Override</div><div class="line">    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="GIAO！一个简单的channelHandler-大概就是上面这个样子，这里有几个需要注意的地方："><a href="#GIAO！一个简单的channelHandler-大概就是上面这个样子，这里有几个需要注意的地方：" class="headerlink" title="GIAO！一个简单的channelHandler 大概就是上面这个样子，这里有几个需要注意的地方："></a>GIAO！一个简单的channelHandler 大概就是上面这个样子，这里有几个需要注意的地方：</h4><ul>
+<li>ChannelHandler可以继承<code>ChannelInboundHandlerAdapter</code>，或者是它的子类<code>SimpleChannelInboundHandler&lt;T&gt;</code><ul>
+<li><code>SimpleChannelInboundHandler</code>对父类进行了简单的封装，当使用<code>SimpleChannelInboundHandler</code>时需要规范消息类型<code>&lt;T&gt;</code>，一般是<code>ByteBuf</code>。</li>
+<li>当使用<code>ChannelInboundHandlerAdapter</code>时要注意在接受完消息后，应该把<code>msg</code>手动释放掉，而<code>SimpleChannelInboundHandler</code>已经帮助你做了这个事情。<ul>
+<li>使用方法:<code>ReferenceCountUtil.release(msg);</code>进行释放，其实只要是使用了ByteBuf，都要进行这个操作，这里的原因主要涉及netty对于堆外内存的使用了，有兴趣的可以自行百度。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>我们可以根据头部区分消息类型，根据类型不同进行不同的逻辑处理方法。</p>
+</li>
+<li><p>假如你有类似数组、Hash表存取的操作，最好把逻辑处理这部分操作放到内存队列中去处理。</p>
+<ul>
+<li>netty虽然是全异步的，但是你的服务端却并不是，假如你有类似数组、Hash表存取的操作，还是应该放到队列中去，或者你应该把这里所有操作Jvm内存数据结构的操作都改成线程安全的。<ul>
+<li>ps:这里用的内存队列是Disruptor,还挺好用的，以后会写一篇关于disruptor的总结。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>所有处理逻辑放入队列有好处也有坏处，当你真的这么干的时候，有可能线上服务器环境会显示你的netty很稳定，cpu开销等等都比较理想，然而事实上很可能并非如此。</li>
+</ul>
+</li>
+<li><p>一个channel从注册到断开的顺序到底是怎样的</p>
+<ul>
+<li>1) channelRegistered</li>
+<li>2) channelActive</li>
+<li>3) channelInactive</li>
+<li>4) channelUnregistered</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>超时处理<code>userEventTriggered</code> 到底应该咋处理：<blockquote>
+<p>超时策略可以处理一些客户端网络突然断开时的问题<br>netty可以设置客户端通信时间——读超时，写超时以及读写超时<br>当发生该类超时的时候，我们就可以在服务端进行主动把channel踢掉线的这种操作。<br>下文中详细写~</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="3-持有合法channel以及发送消息"><a href="#3-持有合法channel以及发送消息" class="headerlink" title="3.持有合法channel以及发送消息"></a>3.持有合法channel以及发送消息</h2><ul>
+<li>当客户端在建立连接之后，经过了一系列认证判断啥的过程，一个合法的长连接应该被合理的引用起来，方便进行下一步的业务逻辑操作。<ul>
+<li><code>ChannelHandlerContext</code>可以被理解为一个socket的上下文，拿到了它，就掌握了这个连接的通信。</li>
+<li>so，可以放到hash中，数组中，或者跟其他客户端属性一起封装到一个类中，都可以。。。。</li>
+</ul>
+</li>
+</ul>
+<h3 id="单发消息"><a href="#单发消息" class="headerlink" title="单发消息"></a>单发消息</h3><p>  <code>ChannelHandlerContext.writeAndFlush()</code></p>
+<h3 id="单发消息回调"><a href="#单发消息回调" class="headerlink" title="单发消息回调"></a>单发消息回调</h3><p>  可能有些聪明的小朋友发现<code>ChannelHandlerContext.writeAndFlush()</code>返回的结果是一个channelFuture 回调类，<br>  就天真的以为可以使用<code>channelFuture.isSuccess()</code> 方法验证这条消息是否真的给对方发送过去了。</p>
+<p>  <strong>NO</strong>,isSuccess只回调<strong>成功放置消息至<code>tcp缓冲区</code>！！！</strong><br>  也就是说即便是客户端直接断网，服务端这里发送消息后拿到的 success 依旧是 true</p>
+<p>  那特么怎么判断发送消息是否成功？</p>
+<ul>
+<li>一种思路是通过判断 Channel 上绑定的时间与当前时间只差是否超过了阈值，具体的实现我会以后整理一下。</li>
+</ul>
+<h3 id="群发消息广播"><a href="#群发消息广播" class="headerlink" title="群发消息广播"></a>群发消息广播</h3><blockquote>
+<p>有的时候业务并不单单仅仅要求点对点发送，而是很多人同时收到某个消息，比如游戏中位置的移动，这是要同时告知所有场景内用户的。</p>
+<ul>
+<li>使用 ChannelGroup</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ChannelGroup channels =new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);</div><div class="line">// 这相当于把这个连接放置到这个场景中</div><div class="line">channels.add(你自己的channel)</div><div class="line">channels.writeAndFlush();</div></pre></td></tr></table></figure>
+<p>就酱</p>
+<h2 id="4-超时策略的处理方式及注意事项"><a href="#4-超时策略的处理方式及注意事项" class="headerlink" title="4.超时策略的处理方式及注意事项"></a>4.超时策略的处理方式及注意事项</h2><ul>
+<li>使用<code>IdleStateHandler</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public class TcpProtocolInitalizer extends ChannelInitializer&lt;SocketChannel&gt; &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void initChannel(SocketChannel ch) throws Exception &#123;</div><div class="line">        ChannelPipeline pipeline = ch.pipeline();</div><div class="line">            // 这里的“30,30，60”分别代表读超时，写超时以及读写超时时间，单位是秒</div><div class="line">            pipeline.addLast(&quot;ping&quot;, new IdleStateHandler(30, 30, 60, TimeUnit.SECONDS));</div><div class="line">            // 这段代码主要是声名结尾关键字，这样netty方便对多条指令进行拆包</div><div class="line">        byte[] bytes = new byte[2];</div><div class="line">        bytes[0] = (byte)0xFF;</div><div class="line">        bytes[1] = (byte)0xFF;</div><div class="line">        ByteBuf delimeter = Unpooled.copiedBuffer(bytes);</div><div class="line">        try &#123;</div><div class="line">          // 这里使用了DelimiterBasedFrameDecoder这个拆包器，也有String类型的等等</div><div class="line">            pipeline.addLast(new DelimiterBasedFrameDecoder(1024, delimeter));</div><div class="line">            int port = ch.localAddress().getPort();</div><div class="line">            System.out.println(&quot;ch.localAddress().getPort()==&quot; + port);</div><div class="line">            if (port == tcpConfig.getTcpPort()) &#123;</div><div class="line">                // 我们在这里关联自己的逻辑channelHandler业务</div><div class="line">                pipeline.addLast(&quot;handler&quot;, serverHandler);</div><div class="line">            &#125;</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个类要在<code>ServerBootstrap</code> 启动之前注入<code>initChannel()</code>方法里，这样就会在handler中在<code>userEventTriggered</code>中收到超时的回调了。</p>
+<h2 id="5-拆包-粘包-处理思路"><a href="#5-拆包-粘包-处理思路" class="headerlink" title="5.拆包/粘包 处理思路"></a>5.拆包/粘包 处理思路</h2><h2 id="6-客户端异常情况的重连方式"><a href="#6-客户端异常情况的重连方式" class="headerlink" title="6.客户端异常情况的重连方式"></a>6.客户端异常情况的重连方式</h2><h2 id="7-如何使用netty开发websocket端"><a href="#7-如何使用netty开发websocket端" class="headerlink" title="7.如何使用netty开发websocket端"></a>7.如何使用netty开发websocket端</h2><h2 id="8-如何用客户端代码搞jmeter测试高访问量下服务端抗压能力"><a href="#8-如何用客户端代码搞jmeter测试高访问量下服务端抗压能力" class="headerlink" title="8.如何用客户端代码搞jmeter测试高访问量下服务端抗压能力"></a>8.如何用客户端代码搞jmeter测试高访问量下服务端抗压能力</h2><h2 id="9-netty-多服务端的开发思路"><a href="#9-netty-多服务端的开发思路" class="headerlink" title="9.netty 多服务端的开发思路"></a>9.netty 多服务端的开发思路</h2><h2 id="10-剩下的一些坑（crc8）"><a href="#10-剩下的一些坑（crc8）" class="headerlink" title="10.剩下的一些坑（crc8）"></a>10.剩下的一些坑（crc8）</h2>
         
         </div>
         <footer class="article-footer">
@@ -288,7 +400,7 @@ SELECT * FROM tbl_name WHERE Name LIKE ‘%string%’ id &gt; 100 LIMIT 10;
 
 </div>
 
-    <a data-url="http://sunjx93.com/2018/04/10/fenye/" data-id="cjtnp9l9x000c6gjhcok07477" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2019/03/22/netty/" data-id="cjtnp9l9k00056gjh27fdewwv" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -356,7 +468,7 @@ SELECT * FROM tbl_name WHERE Name LIKE ‘%string%’ id &gt; 100 LIMIT 10;
 
             
     
-        <a href="http://sunjx93.com/2018/04/10/fenye/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/10/fenye/">Comments</a>
+        <a href="http://sunjx93.com/2019/03/22/netty/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2019/03/22/netty/">Comments</a>
     
 
         </footer>
@@ -365,20 +477,15 @@ SELECT * FROM tbl_name WHERE Name LIKE ‘%string%’ id &gt; 100 LIMIT 10;
         
 <nav id="article-nav">
     
-        <a href="/2018/04/07/annotation/" id="article-nav-newer" class="article-nav-link-wrap">
+        <a href="/2018/06/03/cas/" id="article-nav-newer" class="article-nav-link-wrap">
             <strong class="article-nav-caption">Newer</strong>
             <div class="article-nav-title">
                 
-                    自定义注解
+                    Cas 单点登录相关
                 
             </div>
         </a>
     
-    
-        <a href="/2018/06/03/cas/" id="article-nav-older" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Older</strong>
-            <div class="article-nav-title">Cas 单点登录相关</div>
-        </a>
     
 </nav>
 
@@ -570,9 +677,9 @@ SELECT * FROM tbl_name WHERE Name LIKE ‘%string%’ id &gt; 100 LIMIT 10;
     <script>
     var disqus_config = function () {
         
-            this.page.url = 'http://sunjx93.com/2018/04/10/fenye/';
+            this.page.url = 'http://sunjx93.com/2019/03/22/netty/';
         
-        this.page.identifier = 'fenye';
+        this.page.identifier = 'netty';
     };
     (function() { 
         var d = document, s = d.createElement('script');  

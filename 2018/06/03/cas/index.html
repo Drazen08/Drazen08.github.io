@@ -6,7 +6,7 @@
     <title>Cas 单点登录相关 | Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="这几天换了工作，事情一下子多了起来，前公司十分给力的只给了我400多的应付职工薪酬，心态炸了。不说别的，这几天重点研究了cas的单点登录，总结一下。">
-<meta name="keywords" content="Java,CAS">
+<meta name="keywords" content="Java,CAS单点登录">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Cas 单点登录相关">
 <meta property="og:url" content="http://sunjx93.com/2018/06/03/cas/index.html">
@@ -14,7 +14,7 @@
 <meta property="og:description" content="这几天换了工作，事情一下子多了起来，前公司十分给力的只给了我400多的应付职工薪酬，心态炸了。不说别的，这几天重点研究了cas的单点登录，总结一下。">
 <meta property="og:image" content="http://sunjx93.com/2018/06/03/image/cas1.jpg">
 <meta property="og:image" content="http://sunjx93.com/2018/06/03/image/cas2.jpg">
-<meta property="og:updated_time" content="2018-06-03T03:22:25.733Z">
+<meta property="og:updated_time" content="2019-03-25T01:51:03.779Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cas 单点登录相关">
 <meta name="twitter:description" content="这几天换了工作，事情一下子多了起来，前公司十分给力的只给了我400多的应付职工薪酬，心态炸了。不说别的，这几天重点研究了cas的单点登录，总结一下。">
@@ -163,11 +163,11 @@
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                9
+                10
                 <span>posts</span>
             </div>
             <div class="article-info-block">
-                12
+                13
                 <span>tags</span>
             </div>
         </div>
@@ -236,7 +236,7 @@
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/CAS/">CAS</a>, <a class="tag-link" href="/tags/Java/">Java</a>
+        <a class="tag-link" href="/tags/CAS单点登录/">CAS单点登录</a>, <a class="tag-link" href="/tags/Java/">Java</a>
     </div>
 
                     </div>
@@ -259,8 +259,7 @@
 <li><p>事实上，使用cas单点登录时，相当于跳过原项目的登录过程，把登录的功能<strong>转嫁给cas服务器</strong>来实现。</p>
 </li>
 </ul>
-<h2 id="1-下载"><a href="#1-下载" class="headerlink" title="1.下载"></a>1.下载</h2><p>由于cas是开源的，所以直接在<a href="https://www.apereo.org/projects/cas" target="_blank" rel="external">官网</a> 下载源码就可以。<br>下载下来是这样子的：</p>
-<p><img src="../image/cas1.jpg"></p>
+<h2 id="1-下载"><a href="#1-下载" class="headerlink" title="1.下载"></a>1.下载</h2><p>由于cas是开源的，所以直接在<a href="https://www.apereo.org/projects/cas" target="_blank" rel="external">官网</a> 下载源码就可以。<br>下载下来是这样子的：<br><img src="../image/cas1.jpg" alt="源码解压后"></p>
 <p>其实只需要用到一个包，就可以实现简单的单点登录：<code>cas-server-core</code>，并且这个包下源码的编译文件最后是要放到<code>应用服务器</code>里面的。</p>
 <ul>
 <li><p>把<code>\cas-server-4.0.0\modules</code>  文件夹下的<code>cas-server-webapp-4.0.0.war</code>改名为<code>cas.war</code>，并放在tomcat目录下<code>webapps</code>中，并启动tomcat。</p>
@@ -274,7 +273,7 @@
 <p><strong> 替换primaryAuthenticationHandler 的 bean</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;bean id=&quot;primaryAuthenticationHandler&quot; class=&quot;com.distinct.cas.jdbc.QueryDatabaseAuthenticationHandler&quot;</div><div class="line">p:dataSource-ref=&quot;dataSource&quot;</div><div class="line">p:passwordEncoder-ref=&quot;passwordEncoder&quot;</div><div class="line">p:sql=&quot;select password from sys_user where username=? and status = 1&quot; /&gt;</div></pre></td></tr></table></figure></p>
 <p><strong> 新增</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;dataSource&quot; class=&quot;org.springframework.jdbc.datasource.DriverManagerDataSource&quot; &gt;</div><div class="line">    &lt;property name=&quot;driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;</div><div class="line">    &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://192.168.0.107:3306/sys_blueroc_db?autoReconnect=true&quot;/&gt;</div><div class="line">    &lt;property name=&quot;username&quot; value=&quot;root&quot;/&gt;</div><div class="line">    &lt;property name=&quot;password&quot; value=&quot;root&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;bean id=&quot;passwordEncoder&quot;</div><div class="line">  class=&quot;org.jasig.cas.authentication.handler.DefaultPasswordEncoder&quot;</div><div class="line">  c:encodingAlgorithm=&quot;MD5&quot;</div><div class="line">  p:characterEncoding=&quot;UTF-8&quot; /&gt;</div></pre></td></tr></table></figure></p>
 <p>bean <code>dataSource</code>主要是定义连接用户表数据库的配置，<code>QueryDatabaseAuthenticationHandler</code>类就是对用户校验的处理类,在server-core 源码包中新增：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line">package com.distinct.cas.jdbc;</div><div class="line"></div><div class="line">import org.jasig.cas.authentication.HandlerResult;</div><div class="line">import org.jasig.cas.authentication.PreventedException;</div><div class="line">import org.jasig.cas.authentication.UsernamePasswordCredential;</div><div class="line">import org.jasig.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;</div><div class="line">import org.jasig.cas.authentication.principal.SimplePrincipal;</div><div class="line">import org.slf4j.Logger;</div><div class="line">import org.slf4j.LoggerFactory;</div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.jdbc.core.JdbcTemplate;</div><div class="line">import org.springframework.jdbc.datasource.DriverManagerDataSource;</div><div class="line">import org.springframework.stereotype.Component;</div><div class="line"></div><div class="line">import javax.security.auth.login.FailedLoginException;</div><div class="line">import java.security.GeneralSecurityException;</div><div class="line"></div><div class="line">/**</div><div class="line"> * @author sunjx</div><div class="line"> * @date 2018/5/28 16:23</div><div class="line"> **/</div><div class="line"></div><div class="line">@Component(value = &quot;primaryAuthenticationHandler&quot;)</div><div class="line">public class QueryDatabaseAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler</div><div class="line">&#123;</div><div class="line"></div><div class="line">    private Logger logger = LoggerFactory.getLogger(QueryDatabaseAuthenticationHandler.class);</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    private DriverManagerDataSource dataSource;</div><div class="line">    // 注入deployerConfigContext.xml 的查询sql</div><div class="line">    @Autowired</div><div class="line">    private String sql;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * Authenticates a username/password credential by an arbitrary strategy.</div><div class="line">     *</div><div class="line">     * @param transformedCredential the credential object bearing the transformed username and password.</div><div class="line">     * @return HandlerResult resolved from credential on authentication success or null if no principal could be resolved</div><div class="line">     * from the credential.</div><div class="line">     * @throws GeneralSecurityException On authentication failure.</div><div class="line">     * @throws PreventedException       On the indeterminate case when authentication is prevented.</div><div class="line">     */</div><div class="line">    protected final HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential transformedCredential) throws GeneralSecurityException, PreventedException &#123;</div><div class="line">        //UsernamePasswordCredential参数包含了前台页面输入的用户信息</div><div class="line">        String username = getPrincipalNameTransformer().transform(transformedCredential.getUsername());</div><div class="line">        String password = transformedCredential.getPassword();</div><div class="line">        //认证用户名和密码是否正确</div><div class="line">        final String encryptedPassword = this.getPasswordEncoder().encode(password,username);</div><div class="line">        logger.info(&quot;pwd:&quot;+encryptedPassword + &quot;////////////////////////////////////&quot;);</div><div class="line">        System.out.println(&quot;pwd:&quot;+encryptedPassword + &quot;////////////////////////////////////&quot;);</div><div class="line">        try &#123;</div><div class="line">            JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);</div><div class="line">            if(encryptedPassword.equals(jdbcTemplate.queryForObject(sql, new Object[]&#123;username&#125;,String.class)))&#123;</div><div class="line">                return createHandlerResult(transformedCredential, new SimplePrincipal(username), null);</div><div class="line">            &#125;</div><div class="line">        &#125;catch (Exception e)&#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        throw new FailedLoginException();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setDataSource(DriverManagerDataSource dataSource) &#123;</div><div class="line">        this.dataSource = dataSource;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public DriverManagerDataSource getDataSource() &#123;</div><div class="line">        return dataSource;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setSql(String sql) &#123;</div><div class="line">        this.sql = sql;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getSql() &#123;</div><div class="line">        return sql;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line">package com.distinct.cas.jdbc;</div><div class="line"></div><div class="line">import org.jasig.cas.authentication.HandlerResult;</div><div class="line">import org.jasig.cas.authentication.PreventedException;</div><div class="line">import org.jasig.cas.authentication.UsernamePasswordCredential;</div><div class="line">import org.jasig.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;</div><div class="line">import org.jasig.cas.authentication.principal.SimplePrincipal;</div><div class="line">import org.slf4j.Logger;</div><div class="line">import org.slf4j.LoggerFactory;</div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.jdbc.core.JdbcTemplate;</div><div class="line">import org.springframework.jdbc.datasource.DriverManagerDataSource;</div><div class="line">import org.springframework.stereotype.Component;</div><div class="line"></div><div class="line">import javax.security.auth.login.FailedLoginException;</div><div class="line">import java.security.GeneralSecurityException;</div><div class="line"></div><div class="line">/**</div><div class="line"> * @author sunjx</div><div class="line"> * @date 2018/5/28 16:23</div><div class="line"> **/</div><div class="line"></div><div class="line">@Component(value = &quot;primaryAuthenticationHandler&quot;)</div><div class="line">public class QueryDatabaseAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler</div><div class="line">&#123;</div><div class="line"></div><div class="line">    private Logger logger = LoggerFactory.getLogger(QueryDatabaseAuthenticationHandler.class);</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    private DriverManagerDataSource dataSource;</div><div class="line">    // 注入deployerConfigContext.xml 的查询sql</div><div class="line">    @Autowired</div><div class="line">    private String sql;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Authenticates a username/password credential by an arbitrary strategy.</div><div class="line">     *</div><div class="line">     * @param transformedCredential the credential object bearing the transformed username and password.</div><div class="line">     * @return HandlerResult resolved from credential on authentication success or null if no principal could be resolved</div><div class="line">     * from the credential.</div><div class="line">     * @throws GeneralSecurityException On authentication failure.</div><div class="line">     * @throws PreventedException       On the indeterminate case when authentication is prevented.</div><div class="line">     */</div><div class="line">    protected final HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential transformedCredential) throws GeneralSecurityException, PreventedException &#123;</div><div class="line">        //UsernamePasswordCredential参数包含了前台页面输入的用户信息</div><div class="line">        String username = getPrincipalNameTransformer().transform(transformedCredential.getUsername());</div><div class="line">        String password = transformedCredential.getPassword();</div><div class="line">        //认证用户名和密码是否正确</div><div class="line">        final String encryptedPassword = this.getPasswordEncoder().encode(password,username);</div><div class="line">        logger.info(&quot;pwd:&quot;+encryptedPassword + &quot;////////////////////////////////////&quot;);</div><div class="line">        System.out.println(&quot;pwd:&quot;+encryptedPassword + &quot;////////////////////////////////////&quot;);</div><div class="line">        try &#123;</div><div class="line">            JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);</div><div class="line">            if(encryptedPassword.equals(jdbcTemplate.queryForObject(sql, new Object[]&#123;username&#125;,String.class)))&#123;</div><div class="line">                return createHandlerResult(transformedCredential, new SimplePrincipal(username), null);</div><div class="line">            &#125;</div><div class="line">        &#125;catch (Exception e)&#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        throw new FailedLoginException();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setDataSource(DriverManagerDataSource dataSource) &#123;</div><div class="line">        this.dataSource = dataSource;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public DriverManagerDataSource getDataSource() &#123;</div><div class="line">        return dataSource;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setSql(String sql) &#123;</div><div class="line">        this.sql = sql;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getSql() &#123;</div><div class="line">        return sql;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="服务端创建安全证书："><a href="#服务端创建安全证书：" class="headerlink" title="服务端创建安全证书："></a>服务端创建安全证书：</h3><blockquote>
 <p>cmd 控制台进入某给文件路径（同linux）</p>
 <ol>
@@ -292,7 +291,7 @@
 </li>
 </ul>
 <p>如果访问<a href="http://localhost:8443/cas/login" target="_blank" rel="external">http://localhost:8443/cas/login</a> 出现如下页面，则证明部署成功了。</p>
-<p> <img src="../image/cas2.jpg"></p>
+<p><img src="../image/cas2.jpg" alt="初始登录页"></p>
 <h2 id="2-cas-修改登录样式"><a href="#2-cas-修改登录样式" class="headerlink" title="2.cas 修改登录样式"></a>2.cas 修改登录样式</h2><p>假如，你觉得上面的登录样式太丑了（事实上的确很丑..），那我们可以去修改一下登录的样式：</p>
 <p>算了，贴个链接吧，我太懒了QAQ</p>
 <p><a href="https://blog.csdn.net/pucao_cug/article/details/69488281" target="_blank" rel="external">cas4.2.7定制登录页面样式(并且让页面默认使用中文提示)</a></p>
@@ -306,7 +305,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2018/06/03/cas/" data-id="cjhy9hsil0005v4jhoisxsrdg" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2018/06/03/cas/" data-id="cjtnp9l9800016gjh7uozkyt7" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -393,6 +392,11 @@
         </a>
     
     
+        <a href="/2019/03/22/netty/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">netty 总结一下</div>
+        </a>
+    
 </nav>
 
 
@@ -420,6 +424,25 @@
         <h3 class="widget-title">recent</h3>
         <div class="widget">
             <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2019/03/22/netty/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2019/03/22/netty/" class="title">netty 总结一下</a></p>
+                            <p class="item-date"><time datetime="2019-03-22T08:00:09.000Z" itemprop="datePublished">2019-03-22</time></p>
+                        </div>
+                    </li>
                 
                     <li>
                         
@@ -462,25 +485,6 @@
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2018/04/07/annotation/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"></p>
-                            <p class="item-title"><a href="/2018/04/07/annotation/" class="title">自定义注解</a></p>
-                            <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
                             <a href="/2018/04/07/LifeBean/" class="thumbnail">
     
     
@@ -500,7 +504,7 @@
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/11/07/linux_oracle/" class="thumbnail">
+                            <a href="/2018/04/07/annotation/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -511,8 +515,8 @@
                         
                         <div class="item-inner">
                             <p class="item-category"></p>
-                            <p class="item-title"><a href="/2017/11/07/linux_oracle/" class="title">Linux 下oracle的数据恢复以及数据库命令行安装</a></p>
-                            <p class="item-date"><time datetime="2017-11-07T08:52:09.000Z" itemprop="datePublished">2017-11-07</time></p>
+                            <p class="item-title"><a href="/2018/04/07/annotation/" class="title">自定义注解</a></p>
+                            <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
                         </div>
                     </li>
                 
@@ -527,7 +531,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">archives</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -536,7 +540,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">tags</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS/">CAS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/">Quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Timer/">Timer</a><span class="tag-list-count">1</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS单点登录/">CAS单点登录</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/">Quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Timer/">Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty/">netty</a><span class="tag-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -545,7 +549,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">tag cloud</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Annotation/" style="font-size: 10px;">Annotation</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/Quartz/" style="font-size: 10px;">Quartz</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a> <a href="/tags/Timer/" style="font-size: 10px;">Timer</a>
+            <a href="/tags/Annotation/" style="font-size: 10px;">Annotation</a> <a href="/tags/CAS单点登录/" style="font-size: 10px;">CAS单点登录</a> <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/Quartz/" style="font-size: 10px;">Quartz</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a> <a href="/tags/Timer/" style="font-size: 10px;">Timer</a> <a href="/tags/netty/" style="font-size: 10px;">netty</a>
         </div>
     </div>
 
@@ -573,7 +577,7 @@
         <footer id="footer">
     <div class="outer">
         <div id="footer-info" class="inner">
-            &copy; 2018 JFuncnovic<br>
+            &copy; 2019 JFuncnovic<br>
             Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
         </div>
     </div>
