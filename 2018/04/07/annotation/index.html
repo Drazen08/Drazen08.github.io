@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://sunjx93.com/2018/04/07/annotation/index.html">
 <meta property="og:site_name" content="Drazen">
 <meta property="og:description" content="自定义注解的用法，会了的话定义一个@Override同名注解什么的…">
-<meta property="og:updated_time" content="2018-04-24T09:16:34.535Z">
+<meta property="og:updated_time" content="2019-03-29T05:30:07.675Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自定义注解">
 <meta name="twitter:description" content="自定义注解的用法，会了的话定义一个@Override同名注解什么的…">
@@ -83,7 +83,7 @@
             <div id="search-form-wrap">
 
     <form class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
         <button type="submit" class="search-form-submit"></button>
     </form>
     <div class="ins-search">
@@ -102,10 +102,10 @@
 (function (window) {
     var INSIGHT_CONFIG = {
         TRANSLATION: {
-            POSTS: 'Entradas',
+            POSTS: 'Posts',
             PAGES: 'Pages',
-            CATEGORIES: 'Categorias',
-            TAGS: 'Etiquetas',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
             UNTITLED: '(Untitled)',
         },
         ROOT_URL: '/',
@@ -136,7 +136,7 @@
                 <td>
                     
     <div class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
     </div>
 
                 </td>
@@ -156,16 +156,16 @@
             <h2 id="name">Drazen&#39;</h2>
             <h3 id="title">Java Developer &amp; HandSome</h3>
             <span id="location"><i class="fa fa-map-marker"></i>JiNan, China</span>
-            <a id="follow" target="_blank" href="https://github.com/Drazen08">SEGUIR</a>
+            <a id="follow" target="_blank" href="https://github.com/Drazen08">FOLLOW</a>
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
                 10
-                <span>Entradas</span>
+                <span>posts</span>
             </div>
             <div class="article-info-block">
                 13
-                <span>Etiquetas</span>
+                <span>tags</span>
             </div>
         </div>
         
@@ -327,12 +327,23 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
         }
     }
 }
-</code></pre><h5 id="d-运行"><a href="#d-运行" class="headerlink" title="d.运行"></a>d.运行</h5><pre><code> public static void main(String[] args) {
-    AnnotationUtilDemo.getFruitInfo(AnnotationPriv.class);
-}
-</code></pre><h5 id="e-得出结果"><a href="#e-得出结果" class="headerlink" title="e.得出结果"></a>e.得出结果</h5><pre><code>名称：Tom   
+</code></pre><h5 id="d-运行"><a href="#d-运行" class="headerlink" title="d.运行"></a>d.运行</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) &#123;</div><div class="line">    AnnotationUtilDemo.getFruitInfo(AnnotationPriv.class);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="e-得出结果"><a href="#e-得出结果" class="headerlink" title="e.得出结果"></a>e.得出结果</h5><pre><code>名称：Tom   
 年龄19
-</code></pre>
+</code></pre><h3 id="花式注解"><a href="#花式注解" class="headerlink" title="花式注解"></a>花式注解</h3><blockquote>
+<p>现在我有个奇葩需求，两个类同时实现了一个interface,蓝后我要在这两个类上声明一个带值的注解，通过指定值来指定具体的实现类。</p>
+</blockquote>
+<p>谁知道当时我闲的蛋疼的什么奇葩脑洞，可能真实开发中用不到这个玩意，但是开展一下总是好的。</p>
+<h3 id="a-声明一个注解"><a href="#a-声明一个注解" class="headerlink" title="a.声明一个注解"></a>a.声明一个注解</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Target(ElementType.TYPE)</div><div class="line">@Retention(RetentionPolicy.RUNTIME)</div><div class="line">public @interface ModeCode &#123;</div><div class="line">    int value() default 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="b-新建一个interface，两个实现类"><a href="#b-新建一个interface，两个实现类" class="headerlink" title="b.新建一个interface，两个实现类"></a>b.新建一个interface，两个实现类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public interface SayHi&#123;</div><div class="line">  String SayHi();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@ModeCode(1)</div><div class="line">public class sayHiA implements SayHi&#123;</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@ModeCode(2)</div><div class="line">public class sayHiB implements SayHi&#123;</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个时候应该怎么搞啊我需要获取这个interface的全部实现类啊！！</p>
+<ul>
+<li>google 有一个工具包 <code>auto-service</code><br>这个第三方工具可以找到interface下的所有实现类</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ServiceLoader&lt;S&gt; loader = ServiceLoader.load(SayHi.class);</div><div class="line"> for (S s : loader) &#123;</div><div class="line">     if (s.getClass().getAnnotation(ModeCode.class).value() == getMode()) &#123;</div><div class="line">         return (S) ApplicationContextRegister.getBean(s.getClass());</div><div class="line">     &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+
         
         </div>
         <footer class="article-footer">
@@ -342,7 +353,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
 </div>
 
-    <a data-url="http://sunjx93.com/2018/04/07/annotation/" data-id="cjtnpfbwi000168jhsay91c8n" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
+    <a data-url="http://sunjx93.com/2018/04/07/annotation/" data-id="cjttmokbz0000tgjhw8kxqx1b" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -410,7 +421,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
             
     
-        <a href="http://sunjx93.com/2018/04/07/annotation/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/annotation/">Comentarios</a>
+        <a href="http://sunjx93.com/2018/04/07/annotation/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/annotation/">Comments</a>
     
 
         </footer>
@@ -419,19 +430,19 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
         
 <nav id="article-nav">
     
-        <a href="/2018/04/07/LifeBean/" id="article-nav-newer" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Más nuevo</strong>
+        <a href="/2017/11/07/linux_oracle/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
             <div class="article-nav-title">
                 
-                    Bean 生命周期
+                    Linux 下oracle的数据恢复以及数据库命令行安装
                 
             </div>
         </a>
     
     
-        <a href="/2018/04/10/fenye/" id="article-nav-older" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Más viejo</strong>
-            <div class="article-nav-title">Mysql 分页整理</div>
+        <a href="/2018/04/07/LifeBean/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">Bean 生命周期</div>
         </a>
     
 </nav>
@@ -458,7 +469,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
    
         
     <div class="widget-wrap">
-        <h3 class="widget-title">Recientes</h3>
+        <h3 class="widget-title">recent</h3>
         <div class="widget">
             <ul id="recent-post" class="">
                 
@@ -522,25 +533,6 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2018/04/07/LifeBean/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"></p>
-                            <p class="item-title"><a href="/2018/04/07/LifeBean/" class="title">Bean 生命周期</a></p>
-                            <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
                             <a href="/2018/04/07/annotation/" class="thumbnail">
     
     
@@ -557,6 +549,25 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
                         </div>
                     </li>
                 
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/04/07/LifeBean/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2018/04/07/LifeBean/" class="title">Bean 生命周期</a></p>
+                            <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
+                        </div>
+                    </li>
+                
             </ul>
         </div>
     </div>
@@ -566,7 +577,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">Archivos</h3>
+        <h3 class="widget-title">archives</h3>
         <div class="widget">
             <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
         </div>
@@ -575,7 +586,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">Etiquetas</h3>
+        <h3 class="widget-title">tags</h3>
         <div class="widget">
             <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS单点登录/">CAS单点登录</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/">Quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Timer/">Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty/">netty</a><span class="tag-list-count">1</span></li></ul>
         </div>
@@ -584,7 +595,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">Nube de etiquetas</h3>
+        <h3 class="widget-title">tag cloud</h3>
         <div class="widget tagcloud">
             <a href="/tags/Annotation/" style="font-size: 10px;">Annotation</a> <a href="/tags/CAS单点登录/" style="font-size: 10px;">CAS单点登录</a> <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/Quartz/" style="font-size: 10px;">Quartz</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a> <a href="/tags/Timer/" style="font-size: 10px;">Timer</a> <a href="/tags/netty/" style="font-size: 10px;">netty</a>
         </div>
@@ -593,7 +604,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
     
         
     <div class="widget-wrap widget-list">
-        <h3 class="widget-title">Links</h3>
+        <h3 class="widget-title">links</h3>
         <div class="widget">
             <ul>
                 
