@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Drazen">
 <meta property="og:description" content="自己有个毛病，写笔记的时候不知道从哪里开始说起…以工作中用到的tcp为例子，总结一下netty的用法和坑。">
 <meta property="og:image" content="http://sunjx93.com/image/giao2.jpg">
-<meta property="og:updated_time" content="2019-04-26T15:12:39.188Z">
+<meta property="og:updated_time" content="2019-05-05T06:13:36.545Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="netty 总结一下">
 <meta name="twitter:description" content="自己有个毛病，写笔记的时候不知道从哪里开始说起…以工作中用到的tcp为例子，总结一下netty的用法和坑。">
@@ -162,7 +162,7 @@
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                11
+                12
                 <span>posts</span>
             </div>
             <div class="article-info-block">
@@ -393,7 +393,33 @@
 <h2 id="5-拆包-粘包-处理思路"><a href="#5-拆包-粘包-处理思路" class="headerlink" title="5.拆包/粘包 处理思路"></a>5.拆包/粘包 处理思路</h2><blockquote>
 <p>其实主要思路还是如何让netty知道一段指令到哪里才是结束~~~</p>
 </blockquote>
-<h2 id="6-客户端异常情况的重连方式"><a href="#6-客户端异常情况的重连方式" class="headerlink" title="6.客户端异常情况的重连方式"></a>6.客户端异常情况的重连方式</h2><h2 id="7-如何使用netty开发websocket端"><a href="#7-如何使用netty开发websocket端" class="headerlink" title="7.如何使用netty开发websocket端"></a>7.如何使用netty开发websocket端</h2><h2 id="8-如何用客户端代码搞jmeter测试高访问量下服务端抗压能力"><a href="#8-如何用客户端代码搞jmeter测试高访问量下服务端抗压能力" class="headerlink" title="8.如何用客户端代码搞jmeter测试高访问量下服务端抗压能力"></a>8.如何用客户端代码搞jmeter测试高访问量下服务端抗压能力</h2><h2 id="9-netty-多服务端的开发思路"><a href="#9-netty-多服务端的开发思路" class="headerlink" title="9.netty 多服务端的开发思路"></a>9.netty 多服务端的开发思路</h2><h2 id="10-剩下的一些坑（crc8）"><a href="#10-剩下的一些坑（crc8）" class="headerlink" title="10.剩下的一些坑（crc8）"></a>10.剩下的一些坑（crc8）</h2>
+<ul>
+<li>定长消息</li>
+<li>关键字作为结束符，要注意关键字需要避免重复 ——保证唯一性</li>
+<li>自定义消息格式，需要自己实现解码器</li>
+</ul>
+<p><strong> 拆包器在初始化serverbootstrap 时生效 </strong></p>
+<h2 id="6-客户端异常情况的重连方式"><a href="#6-客户端异常情况的重连方式" class="headerlink" title="6.客户端异常情况的重连方式"></a>6.客户端异常情况的重连方式</h2><p>  几种思路：</p>
+<ul>
+<li>客户端主动发起连接请求，复用eventloopgroup, <code>Bootstrap</code> 创建新对象并覆盖到老的引用上，<ul>
+<li>然后 <code>Bootstrap</code> 重新进行连接 ，该动作可以不限制重连次数<br>-</li>
+</ul>
+</li>
+</ul>
+<h2 id="7-如何使用netty开发websocket端"><a href="#7-如何使用netty开发websocket端" class="headerlink" title="7.如何使用netty开发websocket端"></a>7.如何使用netty开发websocket端</h2><ul>
+<li>不想写了，偷懒了</li>
+</ul>
+<h2 id="8-如何用客户端代码搞jmeter测试高访问量下服务端抗压能力"><a href="#8-如何用客户端代码搞jmeter测试高访问量下服务端抗压能力" class="headerlink" title="8.如何用客户端代码搞jmeter测试高访问量下服务端抗压能力"></a>8.如何用客户端代码搞jmeter测试高访问量下服务端抗压能力</h2><blockquote>
+<p>利用jmeter进行代码测试在开发中还是很重要的，我临时写了一套代码放在git上了：<br><a href="https://github.com/Drazen08/clientDemo.git" target="_blank" rel="external">https://github.com/Drazen08/clientDemo.git</a></p>
+</blockquote>
+<h3 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h3><ul>
+<li><p>引入依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;!-- https://mvnrepository.com/artifact/org.apache.jmeter/ApacheJMeter_core --&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.apache.jmeter&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;ApacheJMeter_core&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;5.0&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line"></div><div class="line">&lt;!-- https://mvnrepository.com/artifact/org.apache.jmeter/ApacheJMeter_java --&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.apache.jmeter&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;ApacheJMeter_java&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;5.0&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>声明主程序,继承<code>AbstractJavaSamplerClient</code>的一个类</p>
+</li>
+</ul>
+<h2 id="9-netty-多服务端的开发思路"><a href="#9-netty-多服务端的开发思路" class="headerlink" title="9.netty 多服务端的开发思路"></a>9.netty 多服务端的开发思路</h2><h2 id="10-剩下的一些坑（crc8）"><a href="#10-剩下的一些坑（crc8）" class="headerlink" title="10.剩下的一些坑（crc8）"></a>10.剩下的一些坑（crc8）</h2>
         
         </div>
         <footer class="article-footer">
@@ -403,7 +429,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2019/03/22/netty/" data-id="cjuy7uq2s000ajgjhv13k7ctj" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2019/03/22/netty/" data-id="cjvaoaqup0008bkjh49fkk6fy" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -526,6 +552,25 @@
                     <li>
                         
                         <div class="item-thumbnail">
+                            <a href="/2019/05/05/prometheus/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2019/05/05/prometheus/" class="title"></a></p>
+                            <p class="item-date"><time datetime="2019-05-05T05:42:19.681Z" itemprop="datePublished">2019-05-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
                             <a href="/2019/04/26/docker/" class="thumbnail">
     
     
@@ -599,25 +644,6 @@
                         </div>
                     </li>
                 
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2018/04/07/annotation/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"></p>
-                            <p class="item-title"><a href="/2018/04/07/annotation/" class="title">自定义注解及拓展</a></p>
-                            <p class="item-date"><time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time></p>
-                        </div>
-                    </li>
-                
             </ul>
         </div>
     </div>
@@ -629,7 +655,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">archives</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 
