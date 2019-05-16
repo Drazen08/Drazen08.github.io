@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://sunjx93.com/2019/05/10/prometheus/index.html">
 <meta property="og:site_name" content="Drazen">
 <meta property="og:description" content="入职了新公司，需要我去了解prometheus，这东西先前我可听都没听过，真的是咣叽给了我一下…这里不打算打太多字，就不贴那些baidu的介绍啥的了">
-<meta property="og:updated_time" content="2019-05-11T14:58:11.540Z">
+<meta property="og:updated_time" content="2019-05-16T02:25:02.219Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="prometheus 划水">
 <meta name="twitter:description" content="入职了新公司，需要我去了解prometheus，这东西先前我可听都没听过，真的是咣叽给了我一下…这里不打算打太多字，就不贴那些baidu的介绍啥的了">
@@ -250,31 +250,46 @@
 <p><a href="https://prometheus.io" target="_blank" rel="external">先挂官网镇 https://prometheus.io</a></p>
 <h3 id="比较重要的点："><a href="#比较重要的点：" class="headerlink" title="比较重要的点："></a>比较重要的点：</h3><ul>
 <li>创建prometheus 服务及配置</li>
-<li>alertmanager 配置</li>
-<li>remote read &amp; remote remote_write</li>
-<li>grafana</li>
+<li>remote read &amp; remote remote_write<ul>
+<li>remote read (write) 思考 以及一些小坑</li>
+<li>如何获取remote write 消息，并把它转成可以使用的数据</li>
+<li>remote write 持久化指标数据至influx db</li>
+</ul>
+</li>
 <li>PushGateway &amp; push clint (这里贴java client)</li>
 <li>exporter 相关：snmp,node,StatsD等…</li>
+<li>alertmanager 配置</li>
 </ul>
-<h2 id="1-创建prometheus服务"><a href="#1-创建prometheus服务" class="headerlink" title="1. 创建prometheus服务"></a>1. 创建prometheus服务</h2><h3 id="1-remote-read"><a href="#1-remote-read" class="headerlink" title="1. remote_read"></a>1. remote_read</h3><blockquote>
-<p>假如采用一主prometheus读取多个prometheus 的形式</p>
+<h2 id="1-创建prometheus服务"><a href="#1-创建prometheus服务" class="headerlink" title="1. 创建prometheus服务"></a>1. 创建prometheus服务</h2><blockquote>
+<p>网上有现成的，不想写…</p>
 </blockquote>
-<p><strong>配置 remote_read</strong></p>
-<p>注意事项：</p>
+<h2 id="2-remote-read-amp-remote-write"><a href="#2-remote-read-amp-remote-write" class="headerlink" title="2. remote_read &amp; remote_write"></a>2. remote_read &amp; remote_write</h2><blockquote>
+<p>prometheus 提供了两个功能，用于监控指标的数据拉取以及存储</p>
+</blockquote>
+<h3 id="a-remote-read-write-思考"><a href="#a-remote-read-write-思考" class="headerlink" title="a.remote read (write) 思考"></a>a.remote read (write) 思考</h3><ul>
+<li>注意：<ul>
+<li><code>remote_read</code> 必须置于顶层，且<code>read_recent</code> 应当为true</li>
+</ul>
 <ul>
-<li><code>remote_read</code> 必须置于顶层</li>
-<li><code>read_recent</code> 应当为true</li>
+<li><code>remote_read</code> 可以配置<code>prometheus server</code>,也可以配置 influxdb （1.7+）</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">remote_read:</div><div class="line">  - url: http://host:9090/api/v1/read</div><div class="line">    read_recent: true</div></pre></td></tr></table></figure>
-<p>根据<code>remote_read</code> 进行读写分离，即A prometheus服务进行读，不负责写，B prometheus 负责写，不负责读。</p>
-<p>且读prometheus 会产生本地数据，可以手动设置清除频率高一点</p>
-<h3 id="2-remote-write"><a href="#2-remote-write" class="headerlink" title="2. remote_write"></a>2. remote_write</h3><ul>
-<li><p>声明remote_write url</p>
-</li>
-<li><p>url 须支持 <code>application/x-protobuf</code> (content-type) 格式</p>
-</li>
-<li>java端可以尝试使用avro反序列化请求数据 （目前还没有成功）</li>
+<ul>
+<li><code>remote_write</code> 可以配置 自己的<code>prometheus remote adapter</code>,也可以配置 1.7版本以上的influxdb</li>
 </ul>
+</li>
+</ul>
+<p><strong>如何配置 remote_read</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">remote_read:</div><div class="line">  - url: http://host:9090/api/v1/read</div><div class="line">    read_recent: true</div><div class="line">remote_write:</div><div class="line">  - url: http://host:port/xx</div></pre></td></tr></table></figure></p>
+<p><strong>思考 ：</strong><br>  根据<code>remote_read</code> 进行读写分离，即A prometheus服务进行读，不负责写，B prometheus 负责写，不负责读。<br>且读prometheus 会产生本地数据，可以手动设置清除频率高一点</p>
+<h3 id="b-如何获取remote-write-消息，并把它转成可以使用的数据"><a href="#b-如何获取remote-write-消息，并把它转成可以使用的数据" class="headerlink" title="b.如何获取remote write 消息，并把它转成可以使用的数据"></a>b.如何获取remote write 消息，并把它转成可以使用的数据</h3><blockquote>
+<p>首先,prometheus自身的remote_write 数据格式其实并不通用————<code>application/x-protobuf</code>，而且官方并没有给出基于java的适配器(adapter)————大多数是用go语言写的，所以假如是想二次开发什么的就多了一些成本…</p>
+</blockquote>
+<ul>
+<li>首先你可以滚去学go语言…</li>
+<li>或者自己实现一套java版本的adapter ———— <a href="">记获取prometheus remote_write 踩坑记</a></li>
+</ul>
+<h4 id="influxdb"><a href="#influxdb" class="headerlink" title="influxdb"></a>influxdb</h4><blockquote>
+<p>记一个influxdb 坑</p>
+</blockquote>
 <h3 id="pushgate-way"><a href="#pushgate-way" class="headerlink" title="pushgate way"></a>pushgate way</h3><blockquote>
 <p> push gate way 推送到固定地址 ，最后由prometheus 收集<br>该操作需要有自己的PushGateWay 节点,PushGateway 相当于一个prometheus 的缓存buffer</p>
 </blockquote>
@@ -290,6 +305,18 @@
 <li>对带监控机器开启snmp协议</li>
 </ul>
 <h4 id="2-snmp"><a href="#2-snmp" class="headerlink" title="2.snmp"></a>2.snmp</h4><p><code>http://host:9116/snmp?target=1.2.3.4&amp;module=if_mib</code> 疑似修改配置文件</p>
+<h3 id="Alert-Manager"><a href="#Alert-Manager" class="headerlink" title="Alert Manager"></a>Alert Manager</h3><blockquote>
+<p>Alertmanager can reload its configuration at runtime. If the new configuration is not well-formed, the changes will not be applied and an error is logged.</p>
+</blockquote>
+<ul>
+<li>alertmanager 在运行时可以加载配置 ，若新的配置不正确，则仍运行上一个版本的配置，且报告错误</li>
+</ul>
+<h4 id="保存历史指标数据"><a href="#保存历史指标数据" class="headerlink" title="保存历史指标数据"></a>保存历史指标数据</h4><ul>
+<li><code>--storage.tsdb.path</code>, Defaults to <code>data/</code></li>
+<li><code>--storage.tsdb.retention.time</code> ,保存几天的历史数据， Defaults to <code>15d</code></li>
+<li><code>--storage.tsdb.retention.size</code> max 存量，实验性质的配置</li>
+<li><code>--storage.tsdb.retention</code></li>
+</ul>
 
         
         </div>
@@ -300,7 +327,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2019/05/10/prometheus/" data-id="cjvjmwzf70005gcjh523e6kc4" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
+    <a data-url="http://sunjx93.com/2019/05/10/prometheus/" data-id="cjvq19u7e0007xwjh6i7jd3vo" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
