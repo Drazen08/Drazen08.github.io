@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://sunjx93.com/2019/06/05/etcd-install/index.html">
 <meta property="og:site_name" content="Drazen">
 <meta property="og:description" content="一个关于etcd集群部署的总结">
-<meta property="og:updated_time" content="2019-06-05T07:37:57.586Z">
+<meta property="og:updated_time" content="2019-06-05T08:37:58.625Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="etcd 集群的部署">
 <meta name="twitter:description" content="一个关于etcd集群部署的总结">
@@ -83,7 +83,7 @@
             <div id="search-form-wrap">
 
     <form class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Cari" />
         <button type="submit" class="search-form-submit"></button>
     </form>
     <div class="ins-search">
@@ -102,10 +102,10 @@
 (function (window) {
     var INSIGHT_CONFIG = {
         TRANSLATION: {
-            POSTS: 'Posts',
+            POSTS: 'pos',
             PAGES: 'Pages',
-            CATEGORIES: 'Categories',
-            TAGS: 'Tags',
+            CATEGORIES: 'kategori',
+            TAGS: 'tag',
             UNTITLED: '(Untitled)',
         },
         ROOT_URL: '/',
@@ -136,7 +136,7 @@
                 <td>
                     
     <div class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Cari" />
     </div>
 
                 </td>
@@ -156,16 +156,16 @@
             <h2 id="name">Drazen&#39;</h2>
             <h3 id="title">Java Developer &amp; HandSome</h3>
             <span id="location"><i class="fa fa-map-marker"></i>JiNan, China</span>
-            <a id="follow" target="_blank" href="https://github.com/Drazen08">FOLLOW</a>
+            <a id="follow" target="_blank" href="https://github.com/Drazen08">IKUTI</a>
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
                 13
-                <span>posts</span>
+                <span>pos</span>
             </div>
             <div class="article-info-block">
                 17
-                <span>tags</span>
+                <span>tag</span>
             </div>
         </div>
         
@@ -276,7 +276,7 @@
 </ol>
 </li>
 <li><ol>
-<li>第一步的应答值保存下来，是一个etcd官网提供的url，该url用来以后写入配置文件，如：<br><a href="https://discovery.etcd.io/1650a7f1567ef46c4599b1489c025f47" target="_blank" rel="external">https://discovery.etcd.io/1650a7f1567ef46c4599b1489c025f47</a></li>
+<li>第一步的应答值保存下来，是一个etcd官网提供的url，该url用来以后写入配置文件，如：<br><a href="https://discovery.etcd.io/XXXX" target="_blank" rel="external">https://discovery.etcd.io/XXXX</a></li>
 </ol>
 </li>
 <li><ol>
@@ -294,7 +294,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl enable etcd</div><div class="line">systemctl start etcd</div><div class="line">systemctl status etcd</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<p><strong>注意，上述步骤是对etcd.conf进行操作，我们也可以放弃conf,直接用命令进行服务发现：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">etcd --name &lt;etcd node name&gt; --data-dir &lt;your data dir&gt; \</div><div class="line">--initial-advertise-peer-urls &lt;node-ip:2379&gt; \</div><div class="line">--listen-peer-urls  &lt;node-ip:2380&gt;\</div><div class="line">--listen-client-urls  &lt;node-ip:2379&gt;,http://127.0.0.1:2379 \</div><div class="line">--advertise-client-urls  &lt;node-ip:2379&gt; \</div><div class="line">--discovery https://discovery.etcd.io/1650a7f1567ef46c4599b1489c025f47</div><div class="line">--cert-file=/etc/etcd/etcdSSL/etcd.pem \</div><div class="line">--key-file=/etc/etcd/etcdSSL/etcd-key.pem \</div><div class="line">--peer-cert-file=/etc/etcd/etcdSSL/etcd.pem \</div><div class="line">--peer-key-file=/etc/etcd/etcdSSL/etcd-key.pem \</div><div class="line">--trusted-ca-file=/etc/etcd/etcdSSL/ca.pem \</div><div class="line">--peer-trusted-ca-file=/etc/etcd/etcdSSL/ca.pem \</div></pre></td></tr></table></figure></p>
+<p><strong>注意，上述步骤是对etcd.conf进行操作，我们也可以放弃conf,直接用命令进行服务发现：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">etcd --name &lt;etcd node name&gt; --data-dir &lt;your data dir&gt; \</div><div class="line">--initial-advertise-peer-urls &lt;node-ip:2379&gt; \</div><div class="line">--listen-peer-urls  &lt;node-ip:2380&gt;\</div><div class="line">--listen-client-urls  &lt;node-ip:2379&gt;,http://127.0.0.1:2379 \</div><div class="line">--advertise-client-urls  &lt;node-ip:2379&gt; \</div><div class="line">--discovery https://discovery.etcd.io/XXXX</div><div class="line">--cert-file=/etc/etcd/etcdSSL/etcd.pem \</div><div class="line">--key-file=/etc/etcd/etcdSSL/etcd-key.pem \</div><div class="line">--peer-cert-file=/etc/etcd/etcdSSL/etcd.pem \</div><div class="line">--peer-key-file=/etc/etcd/etcdSSL/etcd-key.pem \</div><div class="line">--trusted-ca-file=/etc/etcd/etcdSSL/ca.pem \</div><div class="line">--peer-trusted-ca-file=/etc/etcd/etcdSSL/ca.pem \</div></pre></td></tr></table></figure></p>
 <ul>
 <li>如果你没有证书，则去掉<code>--discovery</code> 项之后的配置，该命令每个节点执行一次</li>
 </ul>
@@ -317,7 +317,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2019/06/05/etcd-install/" data-id="cjwixwg9k0000c4jhmo0qd4y6" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2019/06/05/etcd-install/" data-id="cjwizc54n00071ojh0x5z75f5" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -385,7 +385,7 @@
 
             
     
-        <a href="http://sunjx93.com/2019/06/05/etcd-install/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2019/06/05/etcd-install/">Comments</a>
+        <a href="http://sunjx93.com/2019/06/05/etcd-install/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2019/06/05/etcd-install/">Komentar</a>
     
 
         </footer>
@@ -395,7 +395,7 @@
 <nav id="article-nav">
     
         <a href="/2019/05/10/prometheus/" id="article-nav-newer" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Newer</strong>
+            <strong class="article-nav-caption">Lebih baru</strong>
             <div class="article-nav-title">
                 
                     prometheus 划水
@@ -428,7 +428,7 @@
    
         
     <div class="widget-wrap">
-        <h3 class="widget-title">recent</h3>
+        <h3 class="widget-title">terbaru</h3>
         <div class="widget">
             <ul id="recent-post" class="">
                 
@@ -536,7 +536,7 @@
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">archives</h3>
+        <h3 class="widget-title">arsip</h3>
         <div class="widget">
             <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
         </div>
@@ -545,7 +545,7 @@
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tags</h3>
+        <h3 class="widget-title">tag</h3>
         <div class="widget">
             <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS单点登录/">CAS单点登录</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/">Quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Timer/">Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/etcd/">etcd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty/">netty</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/prometheus/">prometheus</a><span class="tag-list-count">1</span></li></ul>
         </div>
@@ -554,7 +554,7 @@
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tag cloud</h3>
+        <h3 class="widget-title">awan tag</h3>
         <div class="widget tagcloud">
             <a href="/tags/Annotation/" style="font-size: 10px;">Annotation</a> <a href="/tags/CAS单点登录/" style="font-size: 10px;">CAS单点登录</a> <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/Quartz/" style="font-size: 10px;">Quartz</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a> <a href="/tags/Timer/" style="font-size: 10px;">Timer</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/etcd/" style="font-size: 10px;">etcd</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/netty/" style="font-size: 10px;">netty</a> <a href="/tags/prometheus/" style="font-size: 10px;">prometheus</a>
         </div>
@@ -563,7 +563,7 @@
     
         
     <div class="widget-wrap widget-list">
-        <h3 class="widget-title">links</h3>
+        <h3 class="widget-title">tautan</h3>
         <div class="widget">
             <ul>
                 
