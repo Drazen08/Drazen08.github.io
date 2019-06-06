@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>k8s configmap 的使用 | Drazen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="一个关于k8s configmap的小总结~~~">
+<meta name="keywords" content="k8s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s configmap 的使用">
+<meta property="og:url" content="http://sunjx93.com/2019/06/05/configmap的使用&prometheus/index.html">
+<meta property="og:site_name" content="Drazen">
+<meta property="og:description" content="一个关于k8s configmap的小总结~~~">
+<meta property="og:updated_time" content="2019-06-06T03:05:21.797Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="k8s configmap 的使用">
+<meta name="twitter:description" content="一个关于k8s configmap的小总结~~~">
+    
+
+    
+        <link rel="alternate" href="/" title="Drazen" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/images/123.jpeg" />
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Drazen</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/2.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/2.png" />
+            <h2 id="name">Drazen&#39;</h2>
+            <h3 id="title">Java Developer &amp; HandSome</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>JiNan, China</span>
+            <a id="follow" target="_blank" href="https://github.com/Drazen08">FOLLOW</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                14
+                <span>posts</span>
+            </div>
+            <div class="article-info-block">
+                18
+                <span>tags</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/Drazen08" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class=tooltip>
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class=tooltip>
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class=tooltip>
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-configmap的使用&amp;prometheus" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            k8s configmap 的使用
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2019/06/05/configmap的使用&prometheus/">
+            <time datetime="2019-06-05T07:34:09.000Z" itemprop="datePublished">2019-06-05</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/k8s/">k8s</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <blockquote>
+<p>一个关于k8s configmap的小总结~~~</p>
+</blockquote>
+<a id="more"></a>
+<p>configmap是k8s的一个重要的组件，顾名思义，configmap是一个关于配置的集合组件，事实上，有点像基于kv对的形式进行存储和使用的。</p>
+<h3 id="1、一个configmap的例子"><a href="#1、一个configmap的例子" class="headerlink" title="1、一个configmap的例子"></a>1、一个configmap的例子</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">apiVersion: v1</div><div class="line">kind: ConfigMap</div><div class="line">metadata:</div><div class="line">  name: prometheus-config</div><div class="line">  namespace: kube-system</div><div class="line">  labels:</div><div class="line">    kubernetes.io/cluster-service: &quot;true&quot;</div><div class="line">    addonmanager.kubernetes.io/mode: EnsureExists</div><div class="line">data:</div><div class="line">  prometheus.yml: |</div><div class="line">    .......</div></pre></td></tr></table></figure>
+<p>以上是prometheus的configmap配置文件，与<code>prometheus.yml</code> 对应的就是该yml文件内的所有内容，当这个configmap创建之后，configmap会生成一个虚拟的文件夹，由别的container来挂载configmap中<code>prometheus.yml</code>这个配置文件。</p>
+<h3 id="2、configmap的创建"><a href="#2、configmap的创建" class="headerlink" title="2、configmap的创建"></a>2、configmap的创建</h3><p>configmap创建拥有多种形式，可以通过命令行，文件、文件夹、或者直接通过k8s client的api进行创建。</p>
+<ul>
+<li><code>kubectl create -f configmap-demo.yml</code>:这种方式会把上面的yml文件创建为configmap</li>
+<li><code>kubectl create configmap &lt;name&gt; --from-file=prometheus.yml</code>: 这种方式会把<code>prometheus.yml</code>作为configmap的data进行创建</li>
+<li><code>kubectl  create  configmap  my -config  --from-file=/path/to/dir</code>:当采用这种方式时，k8s会寻找这个文件夹下面所有符合规范的文件，把所有文件作为configmap的data来创建configmap</li>
+<li>还有一种根据api来修改configmap的方法，最后说</li>
+</ul>
+<h3 id="3-configmap的使用"><a href="#3-configmap的使用" class="headerlink" title="3.configmap的使用"></a>3.configmap的使用</h3><p>configmap有三种使用的方式:</p>
+<ul>
+<li>环境变量</li>
+<li>使用configmap将条目暴露为文件</li>
+<li>挂载configmap的特定文件</li>
+</ul>
+<h4 id="3-1-环境变量形式-valueFrom"><a href="#3-1-环境变量形式-valueFrom" class="headerlink" title="3.1 环境变量形式 valueFrom"></a>3.1 环境变量形式 <code>valueFrom</code></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">apiVers ion:  vl</div><div class="line">kind:  Pod</div><div class="line">metadata:</div><div class="line">  name: xx</div><div class="line">spec:</div><div class="line">  containers:</div><div class="line">  - image: xx</div><div class="line">    env:</div><div class="line">    - name: ENV_NAME</div><div class="line">      valueFrom:</div><div class="line">        configMapKeyRef:</div><div class="line">          name: &lt;configmap name&gt;</div><div class="line">          key: &lt;configmap data key&gt;</div></pre></td></tr></table></figure>
+<h4 id="3-2-使用configmap将条目暴露为文件"><a href="#3-2-使用configmap将条目暴露为文件" class="headerlink" title="3.2  使用configmap将条目暴露为文件"></a>3.2  使用configmap将条目暴露为文件</h4><blockquote>
+<p>configmap 会把符合条件的配置生成为虚拟目录，生成到pod指定的目录下，如下文就是在<code>/etc/config/xx</code>目录下</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">apiVers ion:  vl</div><div class="line">kind:  Pod</div><div class="line">metadata:</div><div class="line">  name: xx</div><div class="line">spec:</div><div class="line">  containers:</div><div class="line">  - image: xx</div><div class="line">    volumeMounts:</div><div class="line">    - name: config</div><div class="line">      mountPath: /etc/config/xx</div><div class="line">      readOnly:true</div><div class="line">  volumes:</div><div class="line">  - name: config</div><div class="line">    configMap:</div><div class="line">      name: &lt;configmap name&gt;</div></pre></td></tr></table></figure>
+<h4 id="3-3-使用configmap的特定文件"><a href="#3-3-使用configmap的特定文件" class="headerlink" title="3.3 使用configmap的特定文件"></a>3.3 使用configmap的特定文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">apiVers ion:  vl</div><div class="line">kind:  Pod</div><div class="line">metadata:</div><div class="line">  name: xx</div><div class="line">spec:</div><div class="line">  containers:</div><div class="line">  - image: some/image</div><div class="line">  volumeMounts:</div><div class="line">  - name: myvolume</div><div class="line">  mountPath: /etc/someconfig.conf # 要挂载的目标文件</div><div class="line">  subPath: myconfig.conf # configmap 内的文件名</div></pre></td></tr></table></figure>
+<h3 id="4-configmap-与prometheus-结合"><a href="#4-configmap-与prometheus-结合" class="headerlink" title="4.configmap 与prometheus 结合"></a>4.configmap 与prometheus 结合</h3><p>贴一个k8s 官方提供的prometheus 配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div></pre></td><td class="code"><pre><div class="line">apiVersion: apps/v1</div><div class="line">kind: StatefulSet</div><div class="line">metadata:</div><div class="line">  name: prometheus</div><div class="line">  namespace: kube-system</div><div class="line">  labels:</div><div class="line">    k8s-app: prometheus</div><div class="line">    kubernetes.io/cluster-service: &quot;true&quot;</div><div class="line">    addonmanager.kubernetes.io/mode: Reconcile</div><div class="line">    version: v2.8.1</div><div class="line">spec:</div><div class="line">  serviceName: &quot;prometheus&quot;</div><div class="line">  replicas: 1</div><div class="line">  podManagementPolicy: &quot;Parallel&quot;</div><div class="line">  updateStrategy:</div><div class="line">   type: &quot;RollingUpdate&quot;</div><div class="line">  selector:</div><div class="line">    matchLabels:</div><div class="line">      k8s-app: prometheus</div><div class="line">  template:</div><div class="line">    metadata:</div><div class="line">      labels:</div><div class="line">        k8s-app: prometheus</div><div class="line">      annotations:</div><div class="line">        scheduler.alpha.kubernetes.io/critical-pod: &apos;&apos;</div><div class="line">    spec:</div><div class="line">      priorityClassName: system-cluster-critical</div><div class="line">      serviceAccountName: prometheus</div><div class="line">      initContainers:</div><div class="line">      - name: &quot;init-chown-data&quot;</div><div class="line">        image: &quot;busybox:latest&quot;</div><div class="line">        imagePullPolicy: &quot;IfNotPresent&quot;</div><div class="line">        command: [&quot;chown&quot;, &quot;-R&quot;, &quot;65534:65534&quot;, &quot;/data&quot;]</div><div class="line">        volumeMounts:</div><div class="line">        - name: prometheus-data</div><div class="line">          mountPath: /data</div><div class="line">          subPath: &quot;&quot;</div><div class="line">      containers:</div><div class="line">        - name: prometheus-server-configmap-reload</div><div class="line">          image: &quot;jimmidyson/configmap-reload:v0.1&quot;</div><div class="line">          imagePullPolicy: &quot;IfNotPresent&quot;</div><div class="line">          args:</div><div class="line">            - --volume-dir=/etc/config</div><div class="line">            - --webhook-url=http://localhost:9090/-/reload</div><div class="line">          volumeMounts:</div><div class="line">            - name: config-volume</div><div class="line">              mountPath: /etc/config</div><div class="line">              readOnly: true</div><div class="line">          resources:</div><div class="line">            limits:</div><div class="line">              cpu: 10m</div><div class="line">              memory: 10Mi</div><div class="line">            requests:</div><div class="line">              cpu: 10m</div><div class="line">              memory: 10Mi</div><div class="line">        - name: prometheus-server</div><div class="line">          image: &quot;prom/prometheus:v2.8.1&quot;</div><div class="line">          imagePullPolicy: &quot;IfNotPresent&quot;</div><div class="line">          args:</div><div class="line">            - --config.file=/etc/config/prometheus.yml</div><div class="line">            - --storage.tsdb.path=/data</div><div class="line">            - --web.console.libraries=/etc/prometheus/console_libraries</div><div class="line">            - --web.console.templates=/etc/prometheus/consoles</div><div class="line">            - --web.enable-lifecycle</div><div class="line">          ports:</div><div class="line">            - containerPort: 9090</div><div class="line">          readinessProbe:</div><div class="line">            httpGet:</div><div class="line">              path: /-/ready</div><div class="line">              port: 9090</div><div class="line">            initialDelaySeconds: 30</div><div class="line">            timeoutSeconds: 30</div><div class="line">          livenessProbe:</div><div class="line">            httpGet:</div><div class="line">              path: /-/healthy</div><div class="line">              port: 9090</div><div class="line">            initialDelaySeconds: 30</div><div class="line">            timeoutSeconds: 30</div><div class="line">          # based on 10 running nodes with 30 pods each</div><div class="line">          resources:</div><div class="line">            limits:</div><div class="line">              cpu: 200m</div><div class="line">              memory: 1000Mi</div><div class="line">            requests:</div><div class="line">              cpu: 200m</div><div class="line">              memory: 1000Mi</div><div class="line">          volumeMounts:</div><div class="line">            - name: config-volume</div><div class="line">              mountPath: /etc/config</div><div class="line">            - name: prometheus-data</div><div class="line">              mountPath: /data</div><div class="line">              subPath: &quot;&quot;</div><div class="line">      terminationGracePeriodSeconds: 300</div><div class="line">      volumes:</div><div class="line">        - name: config-volume</div><div class="line">          configMap:</div><div class="line">            name: prometheus-config</div><div class="line">  volumeClaimTemplates:</div><div class="line">  - metadata:</div><div class="line">      name: prometheus-data</div><div class="line">    spec:</div><div class="line">      storageClassName: slow</div><div class="line">      accessModes:</div><div class="line">        - ReadWriteOnce</div><div class="line">      resources:</div><div class="line">        requests:</div><div class="line">          storage: &quot;16Gi&quot;</div></pre></td></tr></table></figure>
+<p>在上面的配置中，k8s官方利用了prometheus的热加载特性，内置了一个<code>jimmidyson/configmap-reload:v0.1</code>的container，它的作用就是在configmap发生变化时通过配置好的url来通知prometheus进行热加载。所以下文我们需要讲讲怎么通过k8s client 来进行configmap的更新。</p>
+<h3 id="5-k8s-client-java版本"><a href="#5-k8s-client-java版本" class="headerlink" title="5.k8s client java版本"></a>5.k8s client java版本</h3><blockquote>
+<p>k8s 官方提供了很多不同语言、不同种类的k8s客户端<br><a href="https://kubernetes.io/docs/reference/using-api/client-libraries/" target="_blank" rel="external">k8s 官网client列表</a></p>
+</blockquote>
+<p>在这里选择的是<code>fabric8io</code>,一个对于Java友好的开源微服务管理平台。</p>
+<ul>
+<li>引入依赖: 由于节点的k8s版本是1.13+,所以要使用最新版本</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;io.fabric8&lt;/groupId&gt;x`</div><div class="line">    &lt;artifactId&gt;kubernetes-client&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;4.2.2&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>建立与k8s服务端的连接：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Config config = new ConfigBuilder().withMasterUrl(MASTER_URL)</div><div class="line">                .withTrustCerts(true)</div><div class="line">                .withCaCertFile(&quot;/ca.crt&quot;) // 在这里的参数都是文件路径</div><div class="line">                .withClientKeyFile(&quot;/kubecfg.key&quot;) // 在这里的参数都是文件路径</div><div class="line">                .withClientCertFile(&quot;/kubecfg.crt&quot;) // 在这里的参数都是文件路径</div><div class="line">                .removeFromTlsVersions(TlsVersion.TLS_1_0)</div><div class="line">                .removeFromTlsVersions(TlsVersion.TLS_1_1)</div><div class="line">                .removeFromTlsVersions(TlsVersion.TLS_1_2)</div><div class="line">                .withRequestTimeout(REQUEST_TIMEOUT)</div><div class="line">                .withConnectionTimeout(CONNECTION_TIMEOUT)</div><div class="line">                .build();</div></pre></td></tr></table></figure>
+<p>在这里需要强调，如果你的k8s集群需要证书认证，则在创建config实例时需要生成双向认证证书，并把证书放入指定目录，如果不需要证书的话，则可以去掉大部分配置。</p>
+<ul>
+<li>如何生成双向认证的证书：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"># 生成client crt</div><div class="line">grep &apos;client-certificate-data&apos; ~/.kube/config | head -n 1 | awk &apos;&#123;print $2&#125;&apos; | base64 -d &gt;&gt; kubecfg.crt</div><div class="line"></div><div class="line"># 生成client key</div><div class="line">grep &apos;client-key-data&apos; ~/.kube/config | head -n 1 | awk &apos;&#123;print $2&#125;&apos; | base64 -d &gt;&gt; kubecfg.key</div></pre></td></tr></table></figure>
+<p>执行上述两条命令后，把生成的<code>kubecfg.crt</code> 与 <code>kubecfg.key</code> 保存到指定目录下即可。</p>
+<ul>
+<li>如何获取configmap的详细数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">KubernetesClient client = new DefaultKubernetesClient(config);</div><div class="line">Resource&lt;ConfigMap, DoneableConfigMap&gt; configMapResource.client.configMaps().inNamespace(namespace).</div><div class="line">                withName(name);</div><div class="line"> ConfigMap configMap = configMapResource.get();</div><div class="line"> Map&lt;String, String&gt; data = configMap.getData();</div></pre></td></tr></table></figure>
+<p>在这里<code>data</code>就是configmap的data属性，内部就是文件名-文件内容的kv对，所有对configmap的修改都是在<code>configmapresource</code>内进行的。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://sunjx93.com/2019/06/05/configmap的使用&prometheus/" data-id="cjwk2wecn0001jojhds78yg6w" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://sunjx93.com/2019/06/05/configmap的使用&prometheus/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2019/06/05/configmap的使用&amp;prometheus/">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2019/05/10/prometheus/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    prometheus 划水
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2019/06/05/etcd-install/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">etcd 集群的部署</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">recent</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2019/06/05/etcd-install/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2019/06/05/etcd-install/" class="title">etcd 集群的部署</a></p>
+                            <p class="item-date"><time datetime="2019-06-05T07:34:09.000Z" itemprop="datePublished">2019-06-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2019/06/05/configmap的使用&prometheus/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2019/06/05/configmap的使用&prometheus/" class="title">k8s configmap 的使用</a></p>
+                            <p class="item-date"><time datetime="2019-06-05T07:34:09.000Z" itemprop="datePublished">2019-06-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2019/05/10/prometheus/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2019/05/10/prometheus/" class="title">prometheus 划水</a></p>
+                            <p class="item-date"><time datetime="2019-05-10T03:13:09.000Z" itemprop="datePublished">2019-05-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2019/04/26/docker/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2019/04/26/docker/" class="title">docker 非专业记录</a></p>
+                            <p class="item-date"><time datetime="2019-04-26T15:08:09.000Z" itemprop="datePublished">2019-04-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2019/03/22/netty/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2019/03/22/netty/" class="title">netty 总结一下</a></p>
+                            <p class="item-date"><time datetime="2019-03-22T08:00:09.000Z" itemprop="datePublished">2019-03-22</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tags</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS单点登录/">CAS单点登录</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/">Quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Timer/">Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/etcd/">etcd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/">k8s</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty/">netty</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/prometheus/">prometheus</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Annotation/" style="font-size: 10px;">Annotation</a> <a href="/tags/CAS单点登录/" style="font-size: 10px;">CAS单点登录</a> <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/Quartz/" style="font-size: 10px;">Quartz</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a> <a href="/tags/Timer/" style="font-size: 10px;">Timer</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/etcd/" style="font-size: 10px;">etcd</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/netty/" style="font-size: 10px;">netty</a> <a href="/tags/prometheus/" style="font-size: 10px;">prometheus</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2019 JFuncnovic<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_config = function () {
+        
+            this.page.url = 'http://sunjx93.com/2019/06/05/configmap的使用&amp;prometheus/';
+        
+        this.page.identifier = 'configmap的使用&amp;prometheus';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+        </script>
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
