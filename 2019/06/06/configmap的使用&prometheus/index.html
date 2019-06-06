@@ -3,19 +3,19 @@
 <head>
     <meta charset="utf-8">
     
-    <title>自定义注解及拓展 | Drazen</title>
+    <title>k8s configmap 的使用 | Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="自定义注解的用法，会了的话定义一个@Override同名注解什么的…">
-<meta name="keywords" content="Java,Annotation">
+    <meta name="description" content="一个关于k8s configmap的小总结~~~">
+<meta name="keywords" content="k8s">
 <meta property="og:type" content="article">
-<meta property="og:title" content="自定义注解及拓展">
-<meta property="og:url" content="http://sunjx93.com/2018/04/07/annotation/index.html">
+<meta property="og:title" content="k8s configmap 的使用">
+<meta property="og:url" content="http://sunjx93.com/2019/06/06/configmap的使用&prometheus/index.html">
 <meta property="og:site_name" content="Drazen">
-<meta property="og:description" content="自定义注解的用法，会了的话定义一个@Override同名注解什么的…">
-<meta property="og:updated_time" content="2019-03-29T05:31:33.516Z">
+<meta property="og:description" content="一个关于k8s configmap的小总结~~~">
+<meta property="og:updated_time" content="2019-06-06T03:08:09.659Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="自定义注解及拓展">
-<meta name="twitter:description" content="自定义注解的用法，会了的话定义一个@Override同名注解什么的…">
+<meta name="twitter:title" content="k8s configmap 的使用">
+<meta name="twitter:description" content="一个关于k8s configmap的小总结~~~">
     
 
     
@@ -206,7 +206,7 @@
 </aside>
 
             
-            <section id="main"><article id="post-annotation" class="article article-type-post" itemscope itemprop="blogPost">
+            <section id="main"><article id="post-configmap的使用&amp;prometheus" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -214,7 +214,7 @@
                 
     
         <h1 class="article-title" itemprop="name">
-            自定义注解及拓展
+            k8s configmap 的使用
         </h1>
     
 
@@ -223,8 +223,8 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2018/04/07/annotation/">
-            <time datetime="2018-04-07T08:52:09.000Z" itemprop="datePublished">2018-04-07</time>
+        <a href="/2019/06/06/configmap的使用&prometheus/">
+            <time datetime="2019-06-06T02:34:09.000Z" itemprop="datePublished">2019-06-06</time>
         </a>
     </div>
 
@@ -233,7 +233,7 @@
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Annotation/">Annotation</a>, <a class="tag-link" href="/tags/Java/">Java</a>
+        <a class="tag-link" href="/tags/k8s/">k8s</a>
     </div>
 
                     </div>
@@ -245,104 +245,57 @@
         
             
             <blockquote>
-<p>自定义注解的用法，会了的话定义一个@Override同名注解什么的…</p>
+<p>一个关于k8s configmap的小总结~~~</p>
 </blockquote>
 <a id="more"></a>
-<h4 id="1-首先要了解自定义注解的两个元素（元注解）"><a href="#1-首先要了解自定义注解的两个元素（元注解）" class="headerlink" title="1.首先要了解自定义注解的两个元素（元注解）"></a>1.首先要了解自定义注解的两个元素（元注解）</h4><blockquote>
-<p>用来声明注解本身的行为</p>
+<p>configmap是k8s的一个重要的组件，顾名思义，configmap是一个关于配置的集合组件，事实上，有点像基于kv对的形式进行存储和使用的。</p>
+<h3 id="1、一个configmap的例子"><a href="#1、一个configmap的例子" class="headerlink" title="1、一个configmap的例子"></a>1、一个configmap的例子</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">apiVersion: v1</div><div class="line">kind: ConfigMap</div><div class="line">metadata:</div><div class="line">  name: prometheus-config</div><div class="line">  namespace: kube-system</div><div class="line">  labels:</div><div class="line">    kubernetes.io/cluster-service: &quot;true&quot;</div><div class="line">    addonmanager.kubernetes.io/mode: EnsureExists</div><div class="line">data:</div><div class="line">  prometheus.yml: |</div><div class="line">    .......</div></pre></td></tr></table></figure>
+<p>以上是prometheus的configmap配置文件，与<code>prometheus.yml</code> 对应的就是该yml文件内的所有内容，当这个configmap创建之后，configmap会生成一个虚拟的文件夹，由别的container来挂载configmap中<code>prometheus.yml</code>这个配置文件。</p>
+<h3 id="2、configmap的创建"><a href="#2、configmap的创建" class="headerlink" title="2、configmap的创建"></a>2、configmap的创建</h3><p>configmap创建拥有多种形式，可以通过命令行，文件、文件夹、或者直接通过k8s client的api进行创建。</p>
+<ul>
+<li><code>kubectl create -f configmap-demo.yml</code>:这种方式会把上面的yml文件创建为configmap</li>
+<li><code>kubectl create configmap &lt;name&gt; --from-file=prometheus.yml</code>: 这种方式会把<code>prometheus.yml</code>作为configmap的data进行创建</li>
+<li><code>kubectl  create  configmap  my -config  --from-file=/path/to/dir</code>:当采用这种方式时，k8s会寻找这个文件夹下面所有符合规范的文件，把所有文件作为configmap的data来创建configmap</li>
+<li>还有一种根据api来修改configmap的方法，最后说</li>
+</ul>
+<h3 id="3-configmap的使用"><a href="#3-configmap的使用" class="headerlink" title="3.configmap的使用"></a>3.configmap的使用</h3><p>configmap有三种使用的方式:</p>
+<ul>
+<li>环境变量</li>
+<li>使用configmap将条目暴露为文件</li>
+<li>挂载configmap的特定文件</li>
+</ul>
+<h4 id="3-1-环境变量形式-valueFrom"><a href="#3-1-环境变量形式-valueFrom" class="headerlink" title="3.1 环境变量形式 valueFrom"></a>3.1 环境变量形式 <code>valueFrom</code></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">apiVers ion:  vl</div><div class="line">kind:  Pod</div><div class="line">metadata:</div><div class="line">  name: xx</div><div class="line">spec:</div><div class="line">  containers:</div><div class="line">  - image: xx</div><div class="line">    env:</div><div class="line">    - name: ENV_NAME</div><div class="line">      valueFrom:</div><div class="line">        configMapKeyRef:</div><div class="line">          name: &lt;configmap name&gt;</div><div class="line">          key: &lt;configmap data key&gt;</div></pre></td></tr></table></figure>
+<h4 id="3-2-使用configmap将条目暴露为文件"><a href="#3-2-使用configmap将条目暴露为文件" class="headerlink" title="3.2  使用configmap将条目暴露为文件"></a>3.2  使用configmap将条目暴露为文件</h4><blockquote>
+<p>configmap 会把符合条件的配置生成为虚拟目录，生成到pod指定的目录下，如下文就是在<code>/etc/config/xx</code>目录下</p>
 </blockquote>
-<ul>
-<li><p><code>@Target</code></p>
-<ul>
-<li><p>用来声明注解可以被添加在哪些类型的元素上,如类型、方法和域等。</p>
-<p>传入参数|描述<br>–|–<br>TYPE|<br>METHOD|<br>CONSTRUCTOR    |<br>FIELD|</p>
-</li>
-</ul>
-</li>
-<li><p><code>@Retention</code> : 声明注解的保留策略</p>
-<p>  关键字|描述<br>  –|–<br>  CLASS|声明注解保存在类文件<br>  RUNTIME|声明注解保存在JVM运行时<br>  SOURCE|声明注解保存在源码中</p>
-</li>
-<li><p><code>@Documented</code></p>
-<ul>
-<li>指明拥有这个注解的元素可以被javadoc此类的工具文档化。这种类型应该用于注解那些影响客户使用带注释的元素声明的类型。如果一种声明使用Documented进行注解，这种类型的注解被作为被标注的程序成员的公共API。</li>
-</ul>
-</li>
-<li><p><code>@Inherited</code></p>
-<ul>
-<li>指明该注解类型被自动继承。如果用户在当前类中查询这个元注解类型并且当前类的声明中不包含这个元注解类型，那么也将自动查询当前类的父类是否存在Inherited元注解，这个动作将被重复执行知道这个标注类型被找到，或者是查询到顶层的父类。</li>
-</ul>
-</li>
-</ul>
-<h4 id="Java内建注解"><a href="#Java内建注解" class="headerlink" title="Java内建注解"></a>Java内建注解</h4><p>Java提供了三种内建注解。</p>
-<ul>
-<li><p>@Override</p>
-<ul>
-<li>当我们想要复写父类中的方法时，我们需要使用该注解去告知编译器我们想要复写这个方法。这样一来当父类中的方法移除或者发生更改时编译器将提示错误信息。</li>
-</ul>
-</li>
-<li><p>@Deprecated</p>
-<ul>
-<li>当我们希望编译器知道某一方法不建议使用时，我们应该使用这个注解。Java在javadoc 中推荐使用该注解，我们应该提供为什么该方法不推荐使用以及替代的方法。</li>
-</ul>
-<ul>
-<li>@SuppressWarnings<ul>
-<li>这个仅仅是告诉编译器忽略特定的警告信息，例如在泛型中使用原生数据类型。它的保留策略是SOURCE,并且被编译器丢弃。<h4 id="2-开始"><a href="#2-开始" class="headerlink" title="2.开始"></a>2.开始</h4></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h5 id="a-以此在类中声明一个自定义注解"><a href="#a-以此在类中声明一个自定义注解" class="headerlink" title="a.以此在类中声明一个自定义注解"></a>a.以此在类中声明一个自定义注解</h5><pre><code>@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface AnnotationDemo {
-    // 声明一个注解
-     String name();
-    int age() default 0;
-
-}
-</code></pre><p>其中，<code>finished</code>这个注解的默认值是0,也就是<strong>可以设置默认值！</strong></p>
-<h5 id="b-在某项中注入值"><a href="#b-在某项中注入值" class="headerlink" title="b.在某项中注入值"></a>b.在某项中注入值</h5><pre><code>public class AnnotationPriv {
-
-
-    @AnnotationDemo(name = &quot;Tom&quot;,age = 19)
-    private String id;
-}
-</code></pre><h5 id="c-设置注解的逻辑处理"><a href="#c-设置注解的逻辑处理" class="headerlink" title="c.设置注解的逻辑处理"></a>c.设置注解的逻辑处理</h5><pre><code>public class AnnotationUtilDemo {
-public static void getFruitInfo(Class&lt;?&gt; clazz){
-
-    String personName =&quot;名称：&quot;;
-    String personAge = &quot;年龄&quot;;
-
-    Field[] fields = clazz.getDeclaredFields();
-
-    for(Field field :fields){
-        if(field.isAnnotationPresent(AnnotationDemo.class)){
-            AnnotationDemo annotationDemo = (AnnotationDemo) field.getAnnotation(AnnotationDemo.class);
-            personName = personName+annotationDemo.name();
-            personAge = personAge + annotationDemo.age();
-            System.out.println(personName);
-            System.out.println(personAge);
-            }
-
-        }
-    }
-}
-</code></pre><h5 id="d-运行"><a href="#d-运行" class="headerlink" title="d.运行"></a>d.运行</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) &#123;</div><div class="line">    AnnotationUtilDemo.getFruitInfo(AnnotationPriv.class);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="e-得出结果"><a href="#e-得出结果" class="headerlink" title="e.得出结果"></a>e.得出结果</h5><pre><code>名称：Tom   
-年龄19
-</code></pre><h3 id="花式注解"><a href="#花式注解" class="headerlink" title="花式注解"></a>花式注解</h3><blockquote>
-<p>现在我有个奇葩需求，两个类同时实现了一个interface,蓝后我要在这两个类上声明一个带值的注解，通过指定值来指定具体的实现类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">apiVers ion:  vl</div><div class="line">kind:  Pod</div><div class="line">metadata:</div><div class="line">  name: xx</div><div class="line">spec:</div><div class="line">  containers:</div><div class="line">  - image: xx</div><div class="line">    volumeMounts:</div><div class="line">    - name: config</div><div class="line">      mountPath: /etc/config/xx</div><div class="line">      readOnly:true</div><div class="line">  volumes:</div><div class="line">  - name: config</div><div class="line">    configMap:</div><div class="line">      name: &lt;configmap name&gt;</div></pre></td></tr></table></figure>
+<h4 id="3-3-使用configmap的特定文件"><a href="#3-3-使用configmap的特定文件" class="headerlink" title="3.3 使用configmap的特定文件"></a>3.3 使用configmap的特定文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">apiVers ion:  vl</div><div class="line">kind:  Pod</div><div class="line">metadata:</div><div class="line">  name: xx</div><div class="line">spec:</div><div class="line">  containers:</div><div class="line">  - image: some/image</div><div class="line">  volumeMounts:</div><div class="line">  - name: myvolume</div><div class="line">  mountPath: /etc/someconfig.conf # 要挂载的目标文件</div><div class="line">  subPath: myconfig.conf # configmap 内的文件名</div></pre></td></tr></table></figure>
+<h3 id="4-configmap-与prometheus-结合"><a href="#4-configmap-与prometheus-结合" class="headerlink" title="4.configmap 与prometheus 结合"></a>4.configmap 与prometheus 结合</h3><p>贴一个k8s 官方提供的prometheus 配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div></pre></td><td class="code"><pre><div class="line">apiVersion: apps/v1</div><div class="line">kind: StatefulSet</div><div class="line">metadata:</div><div class="line">  name: prometheus</div><div class="line">  namespace: kube-system</div><div class="line">  labels:</div><div class="line">    k8s-app: prometheus</div><div class="line">    kubernetes.io/cluster-service: &quot;true&quot;</div><div class="line">    addonmanager.kubernetes.io/mode: Reconcile</div><div class="line">    version: v2.8.1</div><div class="line">spec:</div><div class="line">  serviceName: &quot;prometheus&quot;</div><div class="line">  replicas: 1</div><div class="line">  podManagementPolicy: &quot;Parallel&quot;</div><div class="line">  updateStrategy:</div><div class="line">   type: &quot;RollingUpdate&quot;</div><div class="line">  selector:</div><div class="line">    matchLabels:</div><div class="line">      k8s-app: prometheus</div><div class="line">  template:</div><div class="line">    metadata:</div><div class="line">      labels:</div><div class="line">        k8s-app: prometheus</div><div class="line">      annotations:</div><div class="line">        scheduler.alpha.kubernetes.io/critical-pod: &apos;&apos;</div><div class="line">    spec:</div><div class="line">      priorityClassName: system-cluster-critical</div><div class="line">      serviceAccountName: prometheus</div><div class="line">      initContainers:</div><div class="line">      - name: &quot;init-chown-data&quot;</div><div class="line">        image: &quot;busybox:latest&quot;</div><div class="line">        imagePullPolicy: &quot;IfNotPresent&quot;</div><div class="line">        command: [&quot;chown&quot;, &quot;-R&quot;, &quot;65534:65534&quot;, &quot;/data&quot;]</div><div class="line">        volumeMounts:</div><div class="line">        - name: prometheus-data</div><div class="line">          mountPath: /data</div><div class="line">          subPath: &quot;&quot;</div><div class="line">      containers:</div><div class="line">        - name: prometheus-server-configmap-reload</div><div class="line">          image: &quot;jimmidyson/configmap-reload:v0.1&quot;</div><div class="line">          imagePullPolicy: &quot;IfNotPresent&quot;</div><div class="line">          args:</div><div class="line">            - --volume-dir=/etc/config</div><div class="line">            - --webhook-url=http://localhost:9090/-/reload</div><div class="line">          volumeMounts:</div><div class="line">            - name: config-volume</div><div class="line">              mountPath: /etc/config</div><div class="line">              readOnly: true</div><div class="line">          resources:</div><div class="line">            limits:</div><div class="line">              cpu: 10m</div><div class="line">              memory: 10Mi</div><div class="line">            requests:</div><div class="line">              cpu: 10m</div><div class="line">              memory: 10Mi</div><div class="line">        - name: prometheus-server</div><div class="line">          image: &quot;prom/prometheus:v2.8.1&quot;</div><div class="line">          imagePullPolicy: &quot;IfNotPresent&quot;</div><div class="line">          args:</div><div class="line">            - --config.file=/etc/config/prometheus.yml</div><div class="line">            - --storage.tsdb.path=/data</div><div class="line">            - --web.console.libraries=/etc/prometheus/console_libraries</div><div class="line">            - --web.console.templates=/etc/prometheus/consoles</div><div class="line">            - --web.enable-lifecycle</div><div class="line">          ports:</div><div class="line">            - containerPort: 9090</div><div class="line">          readinessProbe:</div><div class="line">            httpGet:</div><div class="line">              path: /-/ready</div><div class="line">              port: 9090</div><div class="line">            initialDelaySeconds: 30</div><div class="line">            timeoutSeconds: 30</div><div class="line">          livenessProbe:</div><div class="line">            httpGet:</div><div class="line">              path: /-/healthy</div><div class="line">              port: 9090</div><div class="line">            initialDelaySeconds: 30</div><div class="line">            timeoutSeconds: 30</div><div class="line">          # based on 10 running nodes with 30 pods each</div><div class="line">          resources:</div><div class="line">            limits:</div><div class="line">              cpu: 200m</div><div class="line">              memory: 1000Mi</div><div class="line">            requests:</div><div class="line">              cpu: 200m</div><div class="line">              memory: 1000Mi</div><div class="line">          volumeMounts:</div><div class="line">            - name: config-volume</div><div class="line">              mountPath: /etc/config</div><div class="line">            - name: prometheus-data</div><div class="line">              mountPath: /data</div><div class="line">              subPath: &quot;&quot;</div><div class="line">      terminationGracePeriodSeconds: 300</div><div class="line">      volumes:</div><div class="line">        - name: config-volume</div><div class="line">          configMap:</div><div class="line">            name: prometheus-config</div><div class="line">  volumeClaimTemplates:</div><div class="line">  - metadata:</div><div class="line">      name: prometheus-data</div><div class="line">    spec:</div><div class="line">      storageClassName: slow</div><div class="line">      accessModes:</div><div class="line">        - ReadWriteOnce</div><div class="line">      resources:</div><div class="line">        requests:</div><div class="line">          storage: &quot;16Gi&quot;</div></pre></td></tr></table></figure>
+<p>在上面的配置中，k8s官方利用了prometheus的热加载特性，内置了一个<code>jimmidyson/configmap-reload:v0.1</code>的container，它的作用就是在configmap发生变化时通过配置好的url来通知prometheus进行热加载。所以下文我们需要讲讲怎么通过k8s client 来进行configmap的更新。</p>
+<h3 id="5-k8s-client-java版本"><a href="#5-k8s-client-java版本" class="headerlink" title="5.k8s client java版本"></a>5.k8s client java版本</h3><blockquote>
+<p>k8s 官方提供了很多不同语言、不同种类的k8s客户端<br><a href="https://kubernetes.io/docs/reference/using-api/client-libraries/" target="_blank" rel="external">k8s 官网client列表</a></p>
 </blockquote>
-<p>谁知道当时我闲的蛋疼的什么奇葩脑洞，可能真实开发中用不到这个玩意，但是开展一下总是好的。</p>
-<h3 id="a-声明一个注解"><a href="#a-声明一个注解" class="headerlink" title="a.声明一个注解"></a>a.声明一个注解</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Target(ElementType.TYPE)</div><div class="line">@Retention(RetentionPolicy.RUNTIME)</div><div class="line">public @interface ModeCode &#123;</div><div class="line">    int value() default 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="b-新建一个interface，两个实现类"><a href="#b-新建一个interface，两个实现类" class="headerlink" title="b.新建一个interface，两个实现类"></a>b.新建一个interface，两个实现类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public interface SayHi&#123;</div><div class="line">  String SayHi();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@ModeCode(1)</div><div class="line">public class sayHiA implements SayHi&#123;</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@ModeCode(2)</div><div class="line">public class sayHiB implements SayHi&#123;</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这个时候应该怎么搞啊我需要获取这个interface的全部实现类啊！！</p>
+<p>在这里选择的是<code>fabric8io</code>,一个对于Java友好的开源微服务管理平台。</p>
 <ul>
-<li>google 有一个工具包 <code>auto-service</code><br>这个第三方工具可以找到interface下的所有实现类</li>
+<li>引入依赖: 由于节点的k8s版本是1.13+,所以要使用最新版本</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ServiceLoader&lt;S&gt; loader = ServiceLoader.load(SayHi.class);</div><div class="line"> for (S s : loader) &#123;</div><div class="line">     if (s.getClass().getAnnotation(ModeCode.class).value() == getMode()) &#123;</div><div class="line">         return (S) ApplicationContextRegister.getBean(s.getClass());</div><div class="line">     &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;io.fabric8&lt;/groupId&gt;x`</div><div class="line">    &lt;artifactId&gt;kubernetes-client&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;4.2.2&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>建立与k8s服务端的连接：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Config config = new ConfigBuilder().withMasterUrl(MASTER_URL)</div><div class="line">                .withTrustCerts(true)</div><div class="line">                .withCaCertFile(&quot;/ca.crt&quot;) // 在这里的参数都是文件路径</div><div class="line">                .withClientKeyFile(&quot;/kubecfg.key&quot;) // 在这里的参数都是文件路径</div><div class="line">                .withClientCertFile(&quot;/kubecfg.crt&quot;) // 在这里的参数都是文件路径</div><div class="line">                .removeFromTlsVersions(TlsVersion.TLS_1_0)</div><div class="line">                .removeFromTlsVersions(TlsVersion.TLS_1_1)</div><div class="line">                .removeFromTlsVersions(TlsVersion.TLS_1_2)</div><div class="line">                .withRequestTimeout(REQUEST_TIMEOUT)</div><div class="line">                .withConnectionTimeout(CONNECTION_TIMEOUT)</div><div class="line">                .build();</div></pre></td></tr></table></figure>
+<p>在这里需要强调，如果你的k8s集群需要证书认证，则在创建config实例时需要生成双向认证证书，并把证书放入指定目录，如果不需要证书的话，则可以去掉大部分配置。</p>
+<ul>
+<li>如何生成双向认证的证书：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"># 生成client crt</div><div class="line">grep &apos;client-certificate-data&apos; ~/.kube/config | head -n 1 | awk &apos;&#123;print $2&#125;&apos; | base64 -d &gt;&gt; kubecfg.crt</div><div class="line"></div><div class="line"># 生成client key</div><div class="line">grep &apos;client-key-data&apos; ~/.kube/config | head -n 1 | awk &apos;&#123;print $2&#125;&apos; | base64 -d &gt;&gt; kubecfg.key</div></pre></td></tr></table></figure>
+<p>执行上述两条命令后，把生成的<code>kubecfg.crt</code> 与 <code>kubecfg.key</code> 保存到指定目录下即可。</p>
+<ul>
+<li>如何获取configmap的详细数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">KubernetesClient client = new DefaultKubernetesClient(config);</div><div class="line">Resource&lt;ConfigMap, DoneableConfigMap&gt; configMapResource.client.configMaps().inNamespace(namespace).</div><div class="line">                withName(name);</div><div class="line"> ConfigMap configMap = configMapResource.get();</div><div class="line"> Map&lt;String, String&gt; data = configMap.getData();</div></pre></td></tr></table></figure>
+<p>在这里<code>data</code>就是configmap的data属性，内部就是文件名-文件内容的kv对，所有对configmap的修改都是在<code>configmapresource</code>内进行的。</p>
 
         
         </div>
@@ -353,7 +306,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
 </div>
 
-    <a data-url="http://sunjx93.com/2018/04/07/annotation/" data-id="cjwk2zq8g0001gsjhixqiz0q5" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2019/06/06/configmap的使用&prometheus/" data-id="cjwk2zq9d0008gsjhvd2znu6o" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -421,7 +374,7 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
 
             
     
-        <a href="http://sunjx93.com/2018/04/07/annotation/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2018/04/07/annotation/">Comments</a>
+        <a href="http://sunjx93.com/2019/06/06/configmap的使用&prometheus/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2019/06/06/configmap的使用&amp;prometheus/">Comments</a>
     
 
         </footer>
@@ -430,20 +383,15 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
         
 <nav id="article-nav">
     
-        <a href="/2018/04/07/LifeBean/" id="article-nav-newer" class="article-nav-link-wrap">
+        <a href="/2019/06/05/etcd-install/" id="article-nav-newer" class="article-nav-link-wrap">
             <strong class="article-nav-caption">Newer</strong>
             <div class="article-nav-title">
                 
-                    Bean 生命周期
+                    etcd 集群的部署
                 
             </div>
         </a>
     
-    
-        <a href="/2018/04/10/fenye/" id="article-nav-older" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Older</strong>
-            <div class="article-nav-title">Mysql 分页整理</div>
-        </a>
     
 </nav>
 
@@ -635,9 +583,9 @@ public static void getFruitInfo(Class&lt;?&gt; clazz){
     <script>
     var disqus_config = function () {
         
-            this.page.url = 'http://sunjx93.com/2018/04/07/annotation/';
+            this.page.url = 'http://sunjx93.com/2019/06/06/configmap的使用&amp;prometheus/';
         
-        this.page.identifier = 'annotation';
+        this.page.identifier = 'configmap的使用&amp;prometheus';
     };
     (function() { 
         var d = document, s = d.createElement('script');  
