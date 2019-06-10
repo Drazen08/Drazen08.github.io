@@ -3,19 +3,19 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Quartz实现定时任务 | Drazen</title>
+    <title>prometheus 的remote write | Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz">
-<meta name="keywords" content="Quartz,Timer">
+    <meta name="description" content="论如何通过java adapter获取prometheus remote write数据">
+<meta name="keywords" content="prometheus">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Quartz实现定时任务">
-<meta property="og:url" content="http://sunjx93.com/2017/07/07/Quartz/index.html">
+<meta property="og:title" content="prometheus 的remote write">
+<meta property="og:url" content="http://sunjx93.com/2019/06/10/prometheus 的remote write/index.html">
 <meta property="og:site_name" content="Drazen">
-<meta property="og:description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz">
-<meta property="og:updated_time" content="2018-04-24T09:17:11.840Z">
+<meta property="og:description" content="论如何通过java adapter获取prometheus remote write数据">
+<meta property="og:updated_time" content="2019-06-10T06:13:44.193Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Quartz实现定时任务">
-<meta name="twitter:description" content="Quartz 最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz">
+<meta name="twitter:title" content="prometheus 的remote write">
+<meta name="twitter:description" content="论如何通过java adapter获取prometheus remote write数据">
     
 
     
@@ -206,7 +206,7 @@
 </aside>
 
             
-            <section id="main"><article id="post-Quartz" class="article article-type-post" itemscope itemprop="blogPost">
+            <section id="main"><article id="post-prometheus 的remote write" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -214,7 +214,7 @@
                 
     
         <h1 class="article-title" itemprop="name">
-            Quartz实现定时任务
+            prometheus 的remote write
         </h1>
     
 
@@ -223,8 +223,8 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/07/07/Quartz/">
-            <time datetime="2017-07-07T08:52:09.000Z" itemprop="datePublished">2017-07-07</time>
+        <a href="/2019/06/10/prometheus 的remote write/">
+            <time datetime="2019-06-10T03:13:09.000Z" itemprop="datePublished">2019-06-10</time>
         </a>
     </div>
 
@@ -233,7 +233,7 @@
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Quartz/">Quartz</a>, <a class="tag-link" href="/tags/Timer/">Timer</a>
+        <a class="tag-link" href="/tags/prometheus/">prometheus</a>
     </div>
 
                     </div>
@@ -244,150 +244,49 @@
         <div class="article-entry" itemprop="articleBody">
         
             
-            <h1 id="Quartz"><a href="#Quartz" class="headerlink" title="Quartz"></a>Quartz</h1><blockquote>
-<p>最近公司项目中用到了定时任务提醒的功能，Timer在功能上已经无法很好的满足业务，来学习一下Quartz<br><a id="more"></a></p>
-<h2 id="Quartz-的生命周期"><a href="#Quartz-的生命周期" class="headerlink" title="Quartz 的生命周期"></a>Quartz 的生命周期</h2><ul>
-<li>Job接口<br>在execute（JobExecation…）{}中编写逻辑</li>
-</ul>
+            <blockquote>
+<p>论如何通过java adapter获取prometheus remote write数据<br><a id="more"></a></p>
 </blockquote>
+<h1 id="1-如何实现prometheus-remote-write-adapter-java版本"><a href="#1-如何实现prometheus-remote-write-adapter-java版本" class="headerlink" title="1.如何实现prometheus remote write adapter java版本"></a>1.如何实现prometheus remote write adapter java版本</h1><blockquote>
+<p>prometheus 的remote write 与remote read 功能很强大，根据这两个功能，可以完全脱离对本地文件存储的依赖，并把数据存储变为可自定义的，现在来调研一下这个功能。</p>
+</blockquote>
+<p>prometheus 官方提供各种remote write 的适配器，但唯独没有java语言的。<br><a href="https://prometheus.io/docs/operating/integrations/#remote-endpoints-and-storage" target="_blank" rel="external">prometheus 官方remote write 版本</a></p>
+<p>所以现在想解析prometheus 指标数据。</p>
+<h2 id="1-remote-write"><a href="#1-remote-write" class="headerlink" title="1.remote write"></a>1.remote write</h2><p>根据prometheus 的配置文件可以得知，remote_write 后面跟一个url路径，prometheus 会把每次刮取到的数据推到这个url上，于是我实现了一个简单的http接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@PostMapping(&quot;/xx&quot;)</div><div class="line">public void getmsg(@RequestBody String msg)&#123;</div><div class="line">  xxx</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但是发现报了一堆提示无法解析的错误，百度了一下发现是prometheus 的remote write格式比较特殊。<br>于是：</p>
 <ul>
-<li>调用器<blockquote>
-<p>执行Job时创建的Job实例，调用完成时，job实例会被释放并回收</p>
-</blockquote>
+<li>翻到prometheus github 源码，找到remote write 的文件格式：<code>https://github.com/prometheus/prometheus/blob/master/prompb/remote.proto</code>，并下载下来</li>
+</ul>
+<p>同时需要下载同路径文件<code>type.proto</code>,这两个文件互为依赖，最后把其他的依赖删掉</p>
+<ul>
+<li><p><code>remote.proto</code>的头部</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line">package prometheus;</div><div class="line">option go_package = &quot;prompb&quot;;</div><div class="line">import &quot;types.proto&quot;;</div><div class="line">import &quot;gogoproto/gogo.proto&quot;; // 删掉</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>types.proto</code>的头部</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line">package prometheus;</div><div class="line">option go_package = &quot;prompb&quot;;</div><div class="line">import &quot;gogoproto/gogo.proto&quot;; // 删掉</div></pre></td></tr></table></figure>
+</li>
+<li><p>至于为什么删掉，因为该依赖对于java来说没什么用处： <a href="https://github.com/prometheus/prometheus/issues/3270" target="_blank" rel="external">相关issue</a></p>
 </li>
 </ul>
-<h2 id="JobDetail"><a href="#JobDetail" class="headerlink" title="JobDetail"></a>JobDetail</h2><p><strong>属性</strong></p>
-<pre><code>name          任务名称
-group         任务组 默认DEFAULT
-jobclass      
-jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
-......
-</code></pre><p><strong>JobDataMap&amp;TriggerDataMap:</strong><br>  强力的map型参数，由quzrtz封装，同时实现了map接口</p>
-<h2 id="关于Quzrtz的Trigger"><a href="#关于Quzrtz的Trigger" class="headerlink" title="关于Quzrtz的Trigger"></a>关于Quzrtz的Trigger</h2><ul>
-<li>作为Quartz的触发器来执行Job<h3 id="Trigger的通用属性"><a href="#Trigger的通用属性" class="headerlink" title="Trigger的通用属性"></a>Trigger的通用属性</h3></li>
-<li>Job Key： 获取JobDetail的key值</li>
-<li>startTime： 触发器首次触发的时间</li>
-<li>endTime： …停止时间</li>
+<h3 id="1-1-引入依赖"><a href="#1-1-引入依赖" class="headerlink" title="1.1 引入依赖"></a>1.1 引入依赖</h3><ul>
+<li>a.引入protobuf</li>
 </ul>
-<h2 id="SimpleTrigger-amp-CronTrigger"><a href="#SimpleTrigger-amp-CronTrigger" class="headerlink" title="SimpleTrigger&amp; CronTrigger"></a>SimpleTrigger&amp; CronTrigger</h2><h3 id="SimpleTrigger："><a href="#SimpleTrigger：" class="headerlink" title="SimpleTrigger："></a>SimpleTrigger：</h3><p>   SimpleTrigge有点类似Java中<code>Timer</code>的一个变体，但是个人觉得在逻辑上比<code>Timer</code>要来的简便</p>
-<h3 id="CronTrigger："><a href="#CronTrigger：" class="headerlink" title="CronTrigger："></a>CronTrigger：</h3><p>  <code>CronTrigger</code>是<strong>Quartz</strong>的核心，是一种<strong>基于日历</strong>的作业调度器</p>
-<p>  <strong>重点：</strong><br>    cron表达式：用来配置CronTrigger实例</p>
-<p>由<code>7个子表达式组成</code>,描述了<code>时间表</code>的详细信息</p>
-<h4 id="格式："><a href="#格式：" class="headerlink" title="格式："></a>格式：</h4><p>  <strong>[秒] [分] [小时] [日] [月] [年]</strong><br>  <strong>注意</strong> <code>[]</code>之间有空格符</p>
-<p><code>事例</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">JobDetail jobDetail = JobBuilder.newJob(QuartzJob.class)</div><div class="line">        .withIdentity(&quot;myJob&quot;).build();</div><div class="line">CronTrigger trigger = (CronTrigger) TriggerBuilder</div><div class="line">        .newTrigger()</div><div class="line">        .withIdentity(&quot;myTrigger&quot;, &quot;group1&quot;)</div><div class="line">        .withSchedule(</div><div class="line">                CronScheduleBuilder.cronSchedule(&quot;* * * * * ?&quot;))</div><div class="line">        .build();</div><div class="line">// 创建Scheduler实例</div><div class="line">SchedulerFactory sfact = new StdSchedulerFactory();</div><div class="line">Scheduler scheduler = sfact.getScheduler();</div><div class="line">scheduler.start();</div><div class="line">System.out.println(&quot;scheduled time is :&quot;</div><div class="line">        + sf.format(scheduler.scheduleJob(jobDetail, trigger)));</div><div class="line">//scheduler执行两秒后挂起</div><div class="line">Thread.sleep(2000L);</div><div class="line">//shutdown(true)表示等待所有正在执行的job执行完毕之后，再关闭scheduler</div><div class="line">//shutdown(false)即shutdown()表示直接关闭scheduler</div><div class="line">scheduler.shutdown(false);</div><div class="line">System.out.println(&quot;scheduler is shut down? &quot; + scheduler.isShutdown());</div></pre></td></tr></table></figure>
-<p>其中<code>CronScheduleBuilder.cronSchedule(&quot;* * * * * ?&quot;))</code>这句就是Cron表达式的用法</p>
-<h4 id="关于Cron表达式的字符含义"><a href="#关于Cron表达式的字符含义" class="headerlink" title="关于Cron表达式的字符含义:"></a>关于Cron表达式的字符含义:</h4><table>
-<thead>
-<tr>
-<th>字段</th>
-<th>是否必填</th>
-<th>允许值</th>
-<th>允许的特殊字符</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>秒</td>
-<td>是</td>
-<td>0-59</td>
-<td>, - * /</td>
-</tr>
-<tr>
-<td>分</td>
-<td>是</td>
-<td>0-59</td>
-<td>, - * /</td>
-</tr>
-<tr>
-<td>小时</td>
-<td>是</td>
-<td>0-23</td>
-<td>, - * /</td>
-</tr>
-<tr>
-<td>日</td>
-<td>是</td>
-<td>1-31</td>
-<td>, - *  ? / L W C</td>
-</tr>
-<tr>
-<td>月</td>
-<td>是</td>
-<td>1-12或者JAN-DEC</td>
-<td>, - * /</td>
-</tr>
-<tr>
-<td>周</td>
-<td>是</td>
-<td>1-7或者SUN-SAT</td>
-<td>,- * ? / L C #</td>
-</tr>
-<tr>
-<td>年</td>
-<td>否</td>
-<td>empty,1970-2099</td>
-<td>, - * /  </td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>特殊字符</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>,</code></td>
-<td>表示或  的意思</td>
-</tr>
-<tr>
-<td><code>-</code></td>
-<td>至某事某刻，between的关系</td>
-</tr>
-<tr>
-<td><code>*</code></td>
-<td>表示每，</td>
-</tr>
-<tr>
-<td><code>/</code></td>
-<td>表示每隔某时间段触发，比如分的写法:<code>0/5</code> 表示每隔5分钟触发，<code>5/20</code>代表每五分钟触发一次，25,45各触发一次</td>
-</tr>
-<tr>
-<td><code>?</code></td>
-<td>表示无所谓，不关注，无关紧要</td>
-</tr>
-<tr>
-<td><code>#</code></td>
-<td><code>第</code>的意思，如<code>6#3</code>每月第三周星期五触发，<code>6</code>代表周五</td>
-</tr>
-<tr>
-<td><code>L</code></td>
-<td>代表最后一  的意思</td>
-</tr>
-<tr>
-<td><code>W</code></td>
-<td>表示有效工作日（周一到周五）， <code>L</code>与<code>W</code>可连用，表示某月最后一个工作日</td>
-</tr>
-</tbody>
-</table>
-<p><strong>关于周的换算：1代表周日，6代表周五，以此类推类推</strong></p>
-<p>如：<br><code>0 15 10 ? * 6L 2016-2017</code>: 2016-2017年每月最后一周的周五10点15分执行</p>
-<p>年可以不填QAQ</p>
-<p>###SchedulerFactory</p>
-<p>用来工厂模式来创建Schedular</p>
-<h3 id="StdSchedulerFactory"><a href="#StdSchedulerFactory" class="headerlink" title="StdSchedulerFactory"></a>StdSchedulerFactory</h3><p>利用<code>.getScheduler();</code>方法初始创建调度器，参数配置可以采用<code>quartz。properties</code>方法</p>
-<h3 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h3><h4 id="Timer"><a href="#Timer" class="headerlink" title="Timer"></a>Timer</h4><p>1.无法并发执行：Timer不怎么支持并发</p>
-<p>2.因为Timer有且仅有一个后台执行的线程，若一旦爆出RunTimeException，则会停止<code>所有</code>的任务执行</p>
-<h4 id="瓶颈："><a href="#瓶颈：" class="headerlink" title="瓶颈："></a>瓶颈：</h4><p>a) 对时效性要求较高的多任务并发作业，虽然支持多任务，但是毕竟是串行接口</p>
-<p>b) 对复杂任务的调度不足，不支持定时任务</p>
-<h4 id="Quartz-1"><a href="#Quartz-1" class="headerlink" title="Quartz"></a>Quartz</h4><p>1.精细控制流程</p>
-<p>2.支持若干任务在上面执行</p>
-<p>a)调度功能</p>
-<p>b) 持久化机制，数据不会丢失</p>
-<p>c) 分布&amp;集群功能</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">&lt;properties&gt;</div><div class="line">    &lt;grpc.version&gt;1.7.0&lt;/grpc.version&gt;</div><div class="line">    &lt;protobuf.version&gt;3.4.0&lt;/protobuf.version&gt;</div><div class="line">    &lt;snappy.version&gt;1.1.4&lt;/snappy.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line"></div><div class="line">&lt;!--protobuf  &amp; java --&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;io.grpc&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;grpc-netty&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;$&#123;grpc.version&#125;&lt;/version&gt;</div><div class="line">    &lt;scope&gt;provided&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;io.grpc&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;grpc-protobuf&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;$&#123;grpc.version&#125;&lt;/version&gt;</div><div class="line">    &lt;scope&gt;provided&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;io.grpc&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;grpc-stub&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;$&#123;grpc.version&#125;&lt;/version&gt;</div><div class="line">    &lt;scope&gt;provided&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;com.google.protobuf&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;protobuf-java&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;$&#123;protobuf.version&#125;&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.xerial.snappy&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;snappy-java&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;$&#123;snappy.version&#125;&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<h4 id="1-2-引入maven插件，用于把-proto-文件转化为-java-文件"><a href="#1-2-引入maven插件，用于把-proto-文件转化为-java-文件" class="headerlink" title="1.2 引入maven插件，用于把.proto 文件转化为.java 文件"></a>1.2 引入maven插件，用于把<code>.proto</code> 文件转化为<code>.java</code> 文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">&lt;build&gt;</div><div class="line">    &lt;extensions&gt;</div><div class="line">        &lt;extension&gt;</div><div class="line">            &lt;groupId&gt;kr.motd.maven&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;os-maven-plugin&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;1.5.0.Final&lt;/version&gt;</div><div class="line">        &lt;/extension&gt;</div><div class="line">    &lt;/extensions&gt;</div><div class="line">    &lt;plugins&gt;</div><div class="line">        &lt;plugin&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</div><div class="line">        &lt;/plugin&gt;</div><div class="line">        &lt;plugin&gt;</div><div class="line">            &lt;groupId&gt;org.xolstice.maven.plugins&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;protobuf-maven-plugin&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;0.5.0&lt;/version&gt;</div><div class="line">            &lt;configuration&gt;</div><div class="line">                &lt;protocArtifact&gt;com.google.protobuf:protoc:$&#123;protobuf.version&#125;:exe:$&#123;os.detected.classifier&#125;</div><div class="line">                &lt;/protocArtifact&gt;</div><div class="line">                &lt;pluginId&gt;grpc-java&lt;/pluginId&gt;</div><div class="line">                &lt;pluginArtifact&gt;io.grpc:protoc-gen-grpc-java:$&#123;grpc.version&#125;:exe:$&#123;os.detected.classifier&#125;</div><div class="line">                &lt;/pluginArtifact&gt;</div><div class="line">            &lt;/configuration&gt;</div><div class="line">            &lt;executions&gt;</div><div class="line">                &lt;execution&gt;</div><div class="line">                    &lt;goals&gt;</div><div class="line">                        &lt;goal&gt;compile&lt;/goal&gt;</div><div class="line">                        &lt;goal&gt;compile-custom&lt;/goal&gt;</div><div class="line">                    &lt;/goals&gt;</div><div class="line">                &lt;/execution&gt;</div><div class="line">            &lt;/executions&gt;</div><div class="line">        &lt;/plugin&gt;</div><div class="line">    &lt;/plugins&gt;</div><div class="line">&lt;/build&gt;</div></pre></td></tr></table></figure>
+<h4 id="1-3-重新编译项目，生成-java-文件"><a href="#1-3-重新编译项目，生成-java-文件" class="headerlink" title="1.3 重新编译项目，生成.java 文件"></a>1.3 重新编译项目，生成<code>.java</code> 文件</h4><p><strong> 注意：</strong></p>
+<ul>
+<li>新生成的文件路径参照<code>.proto</code>文件内<code>package</code>的具体值。</li>
+<li>文件不是源码形式，而是编译后的.class文件，在target目录下</li>
+</ul>
+<h4 id="1-4-重写rest-api"><a href="#1-4-重写rest-api" class="headerlink" title="1.4 重写rest api"></a>1.4 重写rest api</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">@PostMapping(value = &quot;write&quot;)</div><div class="line">public void metrics(@RequestBody byte[] data) throws Exception &#123;</div><div class="line">  byte[] compressed;</div><div class="line">    Remote.WriteRequest writeRequest=null;</div><div class="line">    try &#123;</div><div class="line">        compressed = Snappy.uncompress(data);</div><div class="line">        writeRequest = Remote.WriteRequest.parseFrom(compressed);</div><div class="line">        log.debug(&quot;info from Prometheus:&#123;&#125;&quot;, writeRequest);</div><div class="line">    &#125; catch (IOException e) &#123;</div><div class="line">        log.error(&quot;receive msg from Prometheus error&quot;, e);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="1-5-最后"><a href="#1-5-最后" class="headerlink" title="1.5 最后"></a>1.5 最后</h4><p>至此，得出的writerequest 就是prometheus remote write 经处理后的数据。</p>
+<h3 id="2-prometheus-向influxdb存储数据"><a href="#2-prometheus-向influxdb存储数据" class="headerlink" title="2. prometheus 向influxdb存储数据"></a>2. prometheus 向influxdb存储数据</h3><blockquote>
+<p>prometheus 大多与时序数据库一起结合使用，比较好的时序数据库有<code>influxdb</code>,<code>OpenTSDB</code>,<code>Druid</code>等等。<br>这里使用<code>influxdb</code>进行调研</p>
+</blockquote>
+<p><a href="https://docs.influxdata.com/influxdb/v1.7/supported_protocols/prometheus" target="_blank" rel="external">influxdb 关于prometheus的支持</a></p>
+<p>可以看到：influxdb 1.7+ 天然支持prometheus的remote read，以及remote write功能，也就是说，上文的java adapter是没有什么卵用的。。</p>
+<p>不过至少了解了prometheus api的通信格式，也可以在以后进行脱离influxdb 的定制自开发。</p>
 
         
         </div>
@@ -398,7 +297,7 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
 
 </div>
 
-    <a data-url="http://sunjx93.com/2017/07/07/Quartz/" data-id="cjwpze86n0001xcjhhk0ep6a3" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
+    <a data-url="http://sunjx93.com/2019/06/10/prometheus 的remote write/" data-id="cjwpze895000ixcjhyg0mpj5k" class="article-share-link"><i class="fa fa-share"></i>Bagikan</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -466,7 +365,7 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
 
             
     
-        <a href="http://sunjx93.com/2017/07/07/Quartz/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2017/07/07/Quartz/">Komentar</a>
+        <a href="http://sunjx93.com/2019/06/10/prometheus 的remote write/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2019/06/10/prometheus 的remote write/">Komentar</a>
     
 
         </footer>
@@ -475,20 +374,15 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
         
 <nav id="article-nav">
     
-        <a href="/2017/05/27/sd/" id="article-nav-newer" class="article-nav-link-wrap">
+        <a href="/2019/06/06/configmap的使用&prometheus/" id="article-nav-newer" class="article-nav-link-wrap">
             <strong class="article-nav-caption">Lebih baru</strong>
             <div class="article-nav-title">
                 
-                    SpringData相关
+                    k8s configmap 的使用
                 
             </div>
         </a>
     
-    
-        <a href="/2017/11/07/linux_oracle/" id="article-nav-older" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Lebih Tua</strong>
-            <div class="article-nav-title">Linux 下oracle的数据恢复以及数据库命令行安装</div>
-        </a>
     
 </nav>
 
@@ -680,9 +574,9 @@ jobDetailMap  作用是在execute中传递参数，一般为基本数据类型
     <script>
     var disqus_config = function () {
         
-            this.page.url = 'http://sunjx93.com/2017/07/07/Quartz/';
+            this.page.url = 'http://sunjx93.com/2019/06/10/prometheus 的remote write/';
         
-        this.page.identifier = 'Quartz';
+        this.page.identifier = 'prometheus 的remote write';
     };
     (function() { 
         var d = document, s = d.createElement('script');  
