@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8">
     
-    <title>timescaledb 压缩调研 | Drazen</title>
+    <title>Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="timescaledb 压缩调研支持版本 pg10+ &amp;amp; timescale version 1.5+  压缩方式 必须是 超表 压缩之后，就无法进行增删改操作（除非解压）  自动压缩1234567891011121314ALTER TABLE point_history_0 SET (  timescaledb.compress,  timescaledb.compress_segmen">
-<meta name="keywords" content="Hexo_Github">
+<meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="timescaledb 压缩调研">
+<meta property="og:title" content="Drazen">
 <meta property="og:url" content="http://sunjx93.com/2020/05/27/timescale-compression/index.html">
 <meta property="og:site_name" content="Drazen">
 <meta property="og:description" content="timescaledb 压缩调研支持版本 pg10+ &amp;amp; timescale version 1.5+  压缩方式 必须是 超表 压缩之后，就无法进行增删改操作（除非解压）  自动压缩1234567891011121314ALTER TABLE point_history_0 SET (  timescaledb.compress,  timescaledb.compress_segmen">
-<meta property="og:updated_time" content="2020-05-27T07:48:49.702Z">
+<meta property="og:updated_time" content="2020-05-27T09:08:44.656Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="timescaledb 压缩调研">
+<meta name="twitter:title" content="Drazen">
 <meta name="twitter:description" content="timescaledb 压缩调研支持版本 pg10+ &amp;amp; timescale version 1.5+  压缩方式 必须是 超表 压缩之后，就无法进行增删改操作（除非解压）  自动压缩1234567891011121314ALTER TABLE point_history_0 SET (  timescaledb.compress,  timescaledb.compress_segmen">
     
 
@@ -83,7 +83,7 @@
             <div id="search-form-wrap">
 
     <form class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
         <button type="submit" class="search-form-submit"></button>
     </form>
     <div class="ins-search">
@@ -102,10 +102,10 @@
 (function (window) {
     var INSIGHT_CONFIG = {
         TRANSLATION: {
-            POSTS: 'Posts',
+            POSTS: 'Entradas',
             PAGES: 'Pages',
-            CATEGORIES: 'Categories',
-            TAGS: 'Tags',
+            CATEGORIES: 'Categorias',
+            TAGS: 'Etiquetas',
             UNTITLED: '(Untitled)',
         },
         ROOT_URL: '/',
@@ -136,7 +136,7 @@
                 <td>
                     
     <div class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
     </div>
 
                 </td>
@@ -156,16 +156,16 @@
             <h2 id="name">Drazen&#39;</h2>
             <h3 id="title">Java Developer &amp; HandSome</h3>
             <span id="location"><i class="fa fa-map-marker"></i>JiNan, China</span>
-            <a id="follow" target="_blank" href="https://github.com/Drazen08">FOLLOW</a>
+            <a id="follow" target="_blank" href="https://github.com/Drazen08">SEGUIR</a>
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
                 16
-                <span>posts</span>
+                <span>Entradas</span>
             </div>
             <div class="article-info-block">
                 18
-                <span>tags</span>
+                <span>Etiquetas</span>
             </div>
         </div>
         
@@ -209,36 +209,6 @@
             <section id="main"><article id="post-timescale-compression" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
-        
-            <header class="article-header">
-                
-    
-        <h1 class="article-title" itemprop="name">
-            timescaledb 压缩调研
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2020/05/27/timescale-compression/">
-            <time datetime="2020-05-27T08:52:09.000Z" itemprop="datePublished">2020-05-27</time>
-        </a>
-    </div>
-
-
-                        
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/Hexo-Github/">Hexo_Github</a>
-    </div>
-
-                    </div>
-                
-            </header>
         
         
         <div class="article-entry" itemprop="articleBody">
@@ -303,6 +273,15 @@
 </li>
 <li><p>暂未调研<code>timescale/timescaledb:latest-pg11</code>镜像更换<code>timescale version 1.5+</code>的方式，以及可能存在的适配问题</p>
 </li>
+<li><p>docker 升级：</p>
+<ul>
+<li>docker stop container</li>
+<li>保持挂载目录一致，镜像换成 <code>timescale/timescaledb</code> 其他不变，启动新容器</li>
+<li>sudo docker exec -it testdbupdate1 psql -U postgres -X</li>
+<li>ALTER EXTENSION timescaledb UPDATE;</li>
+<li><code>\dx</code></li>
+</ul>
+</li>
 </ul>
 
         
@@ -314,7 +293,7 @@
 
 </div>
 
-    <a data-url="http://sunjx93.com/2020/05/27/timescale-compression/" data-id="ckap2i40z000l44jhxxwxvi73" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://sunjx93.com/2020/05/27/timescale-compression/" data-id="ckap4roev001jvcjhlefb2tbz" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -382,7 +361,7 @@
 
             
     
-        <a href="http://sunjx93.com/2020/05/27/timescale-compression/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2020/05/27/timescale-compression/">Comments</a>
+        <a href="http://sunjx93.com/2020/05/27/timescale-compression/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://sunjx93.com/2020/05/27/timescale-compression/">Comentarios</a>
     
 
         </footer>
@@ -392,7 +371,7 @@
 <nav id="article-nav">
     
         <a href="/2019/06/10/prometheus 的remote write/" id="article-nav-newer" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Newer</strong>
+            <strong class="article-nav-caption">Más nuevo</strong>
             <div class="article-nav-title">
                 
                     prometheus 的remote write
@@ -425,7 +404,7 @@
    
         
     <div class="widget-wrap">
-        <h3 class="widget-title">recent</h3>
+        <h3 class="widget-title">Recientes</h3>
         <div class="widget">
             <ul id="recent-post" class="">
                 
@@ -443,8 +422,8 @@
                         
                         <div class="item-inner">
                             <p class="item-category"></p>
-                            <p class="item-title"><a href="/2020/05/27/timescale-compression/" class="title">timescaledb 压缩调研</a></p>
-                            <p class="item-date"><time datetime="2020-05-27T08:52:09.000Z" itemprop="datePublished">2020-05-27</time></p>
+                            <p class="item-title"><a href="/2020/05/27/timescale-compression/" class="title"></a></p>
+                            <p class="item-date"><time datetime="2020-05-27T07:48:18.345Z" itemprop="datePublished">2020-05-27</time></p>
                         </div>
                     </li>
                 
@@ -533,7 +512,7 @@
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">archives</h3>
+        <h3 class="widget-title">Archivos</h3>
         <div class="widget">
             <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
         </div>
@@ -542,25 +521,25 @@
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tags</h3>
+        <h3 class="widget-title">Etiquetas</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS单点登录/">CAS单点登录</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/">Quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Timer/">Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/etcd/">etcd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/">k8s</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty/">netty</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/prometheus/">prometheus</a><span class="tag-list-count">2</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS单点登录/">CAS单点登录</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/">Quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Timer/">Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/etcd/">etcd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/">k8s</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty/">netty</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/prometheus/">prometheus</a><span class="tag-list-count">2</span></li></ul>
         </div>
     </div>
 
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tag cloud</h3>
+        <h3 class="widget-title">Nube de etiquetas</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Annotation/" style="font-size: 10px;">Annotation</a> <a href="/tags/CAS单点登录/" style="font-size: 10px;">CAS单点登录</a> <a href="/tags/Hexo-Github/" style="font-size: 15px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/Quartz/" style="font-size: 10px;">Quartz</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a> <a href="/tags/Timer/" style="font-size: 10px;">Timer</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/etcd/" style="font-size: 10px;">etcd</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/netty/" style="font-size: 10px;">netty</a> <a href="/tags/prometheus/" style="font-size: 15px;">prometheus</a>
+            <a href="/tags/Annotation/" style="font-size: 10px;">Annotation</a> <a href="/tags/CAS单点登录/" style="font-size: 10px;">CAS单点登录</a> <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/Quartz/" style="font-size: 10px;">Quartz</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a> <a href="/tags/Timer/" style="font-size: 10px;">Timer</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/etcd/" style="font-size: 10px;">etcd</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/netty/" style="font-size: 10px;">netty</a> <a href="/tags/prometheus/" style="font-size: 15px;">prometheus</a>
         </div>
     </div>
 
     
         
     <div class="widget-wrap widget-list">
-        <h3 class="widget-title">links</h3>
+        <h3 class="widget-title">Links</h3>
         <div class="widget">
             <ul>
                 
