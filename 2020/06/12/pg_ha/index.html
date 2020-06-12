@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://dadonggua.top/2020/06/12/pg_ha/index.html">
 <meta property="og:site_name" content="Drazen">
 <meta property="og:description" content="这篇文章时pg 主备的配置 以及 pgpool 的使用">
-<meta property="og:updated_time" content="2020-06-12T09:39:36.333Z">
+<meta property="og:updated_time" content="2020-06-12T09:46:16.967Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="postgresql 主备及pgpool">
 <meta name="twitter:description" content="这篇文章时pg 主备的配置 以及 pgpool 的使用">
@@ -245,8 +245,9 @@
         
             
             <blockquote>
-<p>这篇文章时pg 主备的配置 以及 pgpool 的使用<br><a id="more"></a></p>
+<p>这篇文章时pg 主备的配置 以及 pgpool 的使用</p>
 </blockquote>
+<a id="more"></a>
 <h2 id="1-pg11-安装"><a href="#1-pg11-安装" class="headerlink" title="1.pg11 安装"></a>1.pg11 安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">yum install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm</div><div class="line">yum install postgresql11</div><div class="line">yum install postgresql11-server</div><div class="line">/usr/pgsql-11/bin/postgresql-11-setup initdb</div><div class="line">systemctl enable postgresql-11</div><div class="line">systemctl start postgresql-11</div></pre></td></tr></table></figure>
 <h2 id="2-stand-by"><a href="#2-stand-by" class="headerlink" title="2.stand by"></a>2.stand by</h2><h3 id="2-1-primary-db"><a href="#2-1-primary-db" class="headerlink" title="2.1 primary db"></a>2.1 primary db</h3><ul>
 <li>创建复制账号</li>
@@ -342,7 +343,7 @@
 
 </div>
 
-    <a data-url="http://dadonggua.top/2020/06/12/pg_ha/" data-id="ckbc0s78m0000pkjh3tsxy9ed" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://dadonggua.top/2020/06/12/pg_ha/" data-id="ckbc10r35000iywjhjg3jl3oh" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
