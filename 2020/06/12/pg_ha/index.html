@@ -3,19 +3,19 @@
 <head>
     <meta charset="utf-8">
     
-    <title>prometheus 的remote write | Drazen</title>
+    <title>postgresql 主备及pgpool | Drazen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="论如何通过java adapter获取prometheus remote write数据">
-<meta name="keywords" content="prometheus">
+    <meta name="description" content="这篇文章时pg 主备的配置 以及 pgpool 的使用">
+<meta name="keywords" content="postgresql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="prometheus 的remote write">
-<meta property="og:url" content="http://dadonggua.top/2019/06/10/prometheus 的remote write/index.html">
+<meta property="og:title" content="postgresql 主备及pgpool">
+<meta property="og:url" content="http://dadonggua.top/2020/06/12/pg_ha/index.html">
 <meta property="og:site_name" content="Drazen">
-<meta property="og:description" content="论如何通过java adapter获取prometheus remote write数据">
-<meta property="og:updated_time" content="2019-06-10T06:13:44.193Z">
+<meta property="og:description" content="这篇文章时pg 主备的配置 以及 pgpool 的使用">
+<meta property="og:updated_time" content="2020-06-12T09:39:36.333Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="prometheus 的remote write">
-<meta name="twitter:description" content="论如何通过java adapter获取prometheus remote write数据">
+<meta name="twitter:title" content="postgresql 主备及pgpool">
+<meta name="twitter:description" content="这篇文章时pg 主备的配置 以及 pgpool 的使用">
     
 
     
@@ -206,7 +206,7 @@
 </aside>
 
             
-            <section id="main"><article id="post-prometheus 的remote write" class="article article-type-post" itemscope itemprop="blogPost">
+            <section id="main"><article id="post-pg_ha" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -214,7 +214,7 @@
                 
     
         <h1 class="article-title" itemprop="name">
-            prometheus 的remote write
+            postgresql 主备及pgpool
         </h1>
     
 
@@ -223,8 +223,8 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2019/06/10/prometheus 的remote write/">
-            <time datetime="2019-06-10T03:13:09.000Z" itemprop="datePublished">2019-06-10</time>
+        <a href="/2020/06/12/pg_ha/">
+            <time datetime="2020-06-12T09:39:09.000Z" itemprop="datePublished">2020-06-12</time>
         </a>
     </div>
 
@@ -233,7 +233,7 @@
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/prometheus/">prometheus</a>
+        <a class="tag-link" href="/tags/postgresql/">postgresql</a>
     </div>
 
                     </div>
@@ -245,49 +245,94 @@
         
             
             <blockquote>
-<p>论如何通过java adapter获取prometheus remote write数据<br><a id="more"></a></p>
+<p>这篇文章时pg 主备的配置 以及 pgpool 的使用<br><a id="more"></a></p>
 </blockquote>
-<h1 id="1-如何实现prometheus-remote-write-adapter-java版本"><a href="#1-如何实现prometheus-remote-write-adapter-java版本" class="headerlink" title="1.如何实现prometheus remote write adapter java版本"></a>1.如何实现prometheus remote write adapter java版本</h1><blockquote>
-<p>prometheus 的remote write 与remote read 功能很强大，根据这两个功能，可以完全脱离对本地文件存储的依赖，并把数据存储变为可自定义的，现在来调研一下这个功能。</p>
-</blockquote>
-<p>prometheus 官方提供各种remote write 的适配器，但唯独没有java语言的。<br><a href="https://prometheus.io/docs/operating/integrations/#remote-endpoints-and-storage" target="_blank" rel="external">prometheus 官方remote write 版本</a></p>
-<p>所以现在想解析prometheus 指标数据。</p>
-<h2 id="1-remote-write"><a href="#1-remote-write" class="headerlink" title="1.remote write"></a>1.remote write</h2><p>根据prometheus 的配置文件可以得知，remote_write 后面跟一个url路径，prometheus 会把每次刮取到的数据推到这个url上，于是我实现了一个简单的http接口：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@PostMapping(&quot;/xx&quot;)</div><div class="line">public void getmsg(@RequestBody String msg)&#123;</div><div class="line">  xxx</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>但是发现报了一堆提示无法解析的错误，百度了一下发现是prometheus 的remote write格式比较特殊。<br>于是：</p>
+<h2 id="1-pg11-安装"><a href="#1-pg11-安装" class="headerlink" title="1.pg11 安装"></a>1.pg11 安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">yum install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm</div><div class="line">yum install postgresql11</div><div class="line">yum install postgresql11-server</div><div class="line">/usr/pgsql-11/bin/postgresql-11-setup initdb</div><div class="line">systemctl enable postgresql-11</div><div class="line">systemctl start postgresql-11</div></pre></td></tr></table></figure>
+<h2 id="2-stand-by"><a href="#2-stand-by" class="headerlink" title="2.stand by"></a>2.stand by</h2><h3 id="2-1-primary-db"><a href="#2-1-primary-db" class="headerlink" title="2.1 primary db"></a>2.1 primary db</h3><ul>
+<li>创建复制账号</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE ROLE pgrepuser REPLICATION LOGIN ENCRYPTED PASSWORD &apos;pgreppass&apos;;</div></pre></td></tr></table></figure>
 <ul>
-<li>翻到prometheus github 源码，找到remote write 的文件格式：<code>https://github.com/prometheus/prometheus/blob/master/prompb/remote.proto</code>，并下载下来</li>
+<li>postgresql.conf</li>
 </ul>
-<p>同时需要下载同路径文件<code>type.proto</code>,这两个文件互为依赖，最后把其他的依赖删掉</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">listen_addresses = &apos;*&apos;</div><div class="line">max_connections = 1024</div><div class="line">password_encryption = on</div><div class="line">wal_level = hot_standby</div><div class="line">archive_mode = on</div><div class="line">max_wal_sender = 4</div><div class="line">wal_keep_segments = 10</div></pre></td></tr></table></figure>
 <ul>
-<li><p><code>remote.proto</code>的头部</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line">package prometheus;</div><div class="line">option go_package = &quot;prompb&quot;;</div><div class="line">import &quot;types.proto&quot;;</div><div class="line">import &quot;gogoproto/gogo.proto&quot;; // 删掉</div></pre></td></tr></table></figure>
-</li>
-<li><p><code>types.proto</code>的头部</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line">package prometheus;</div><div class="line">option go_package = &quot;prompb&quot;;</div><div class="line">import &quot;gogoproto/gogo.proto&quot;; // 删掉</div></pre></td></tr></table></figure>
-</li>
-<li><p>至于为什么删掉，因为该依赖对于java来说没什么用处： <a href="https://github.com/prometheus/prometheus/issues/3270" target="_blank" rel="external">相关issue</a></p>
-</li>
+<li>pg_hba.conf</li>
 </ul>
-<h3 id="1-1-引入依赖"><a href="#1-1-引入依赖" class="headerlink" title="1.1 引入依赖"></a>1.1 引入依赖</h3><ul>
-<li>a.引入protobuf</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">&lt;properties&gt;</div><div class="line">    &lt;grpc.version&gt;1.7.0&lt;/grpc.version&gt;</div><div class="line">    &lt;protobuf.version&gt;3.4.0&lt;/protobuf.version&gt;</div><div class="line">    &lt;snappy.version&gt;1.1.4&lt;/snappy.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line"></div><div class="line">&lt;!--protobuf  &amp; java --&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;io.grpc&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;grpc-netty&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;$&#123;grpc.version&#125;&lt;/version&gt;</div><div class="line">    &lt;scope&gt;provided&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;io.grpc&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;grpc-protobuf&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;$&#123;grpc.version&#125;&lt;/version&gt;</div><div class="line">    &lt;scope&gt;provided&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;io.grpc&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;grpc-stub&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;$&#123;grpc.version&#125;&lt;/version&gt;</div><div class="line">    &lt;scope&gt;provided&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;com.google.protobuf&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;protobuf-java&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;$&#123;protobuf.version&#125;&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.xerial.snappy&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;snappy-java&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;$&#123;snappy.version&#125;&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
-<h4 id="1-2-引入maven插件，用于把-proto-文件转化为-java-文件"><a href="#1-2-引入maven插件，用于把-proto-文件转化为-java-文件" class="headerlink" title="1.2 引入maven插件，用于把.proto 文件转化为.java 文件"></a>1.2 引入maven插件，用于把<code>.proto</code> 文件转化为<code>.java</code> 文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">&lt;build&gt;</div><div class="line">    &lt;extensions&gt;</div><div class="line">        &lt;extension&gt;</div><div class="line">            &lt;groupId&gt;kr.motd.maven&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;os-maven-plugin&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;1.5.0.Final&lt;/version&gt;</div><div class="line">        &lt;/extension&gt;</div><div class="line">    &lt;/extensions&gt;</div><div class="line">    &lt;plugins&gt;</div><div class="line">        &lt;plugin&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</div><div class="line">        &lt;/plugin&gt;</div><div class="line">        &lt;plugin&gt;</div><div class="line">            &lt;groupId&gt;org.xolstice.maven.plugins&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;protobuf-maven-plugin&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;0.5.0&lt;/version&gt;</div><div class="line">            &lt;configuration&gt;</div><div class="line">                &lt;protocArtifact&gt;com.google.protobuf:protoc:$&#123;protobuf.version&#125;:exe:$&#123;os.detected.classifier&#125;</div><div class="line">                &lt;/protocArtifact&gt;</div><div class="line">                &lt;pluginId&gt;grpc-java&lt;/pluginId&gt;</div><div class="line">                &lt;pluginArtifact&gt;io.grpc:protoc-gen-grpc-java:$&#123;grpc.version&#125;:exe:$&#123;os.detected.classifier&#125;</div><div class="line">                &lt;/pluginArtifact&gt;</div><div class="line">            &lt;/configuration&gt;</div><div class="line">            &lt;executions&gt;</div><div class="line">                &lt;execution&gt;</div><div class="line">                    &lt;goals&gt;</div><div class="line">                        &lt;goal&gt;compile&lt;/goal&gt;</div><div class="line">                        &lt;goal&gt;compile-custom&lt;/goal&gt;</div><div class="line">                    &lt;/goals&gt;</div><div class="line">                &lt;/execution&gt;</div><div class="line">            &lt;/executions&gt;</div><div class="line">        &lt;/plugin&gt;</div><div class="line">    &lt;/plugins&gt;</div><div class="line">&lt;/build&gt;</div></pre></td></tr></table></figure>
-<h4 id="1-3-重新编译项目，生成-java-文件"><a href="#1-3-重新编译项目，生成-java-文件" class="headerlink" title="1.3 重新编译项目，生成.java 文件"></a>1.3 重新编译项目，生成<code>.java</code> 文件</h4><p><strong> 注意：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">host    replication     pgrepuser       0.0.0.0/0               md5</div></pre></td></tr></table></figure>
 <ul>
-<li>新生成的文件路径参照<code>.proto</code>文件内<code>package</code>的具体值。</li>
-<li>文件不是源码形式，而是编译后的.class文件，在target目录下</li>
+<li>重启 pg11</li>
 </ul>
-<h4 id="1-4-重写rest-api"><a href="#1-4-重写rest-api" class="headerlink" title="1.4 重写rest api"></a>1.4 重写rest api</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">@PostMapping(value = &quot;write&quot;)</div><div class="line">public void metrics(@RequestBody byte[] data) throws Exception &#123;</div><div class="line">  byte[] compressed;</div><div class="line">    Remote.WriteRequest writeRequest=null;</div><div class="line">    try &#123;</div><div class="line">        compressed = Snappy.uncompress(data);</div><div class="line">        writeRequest = Remote.WriteRequest.parseFrom(compressed);</div><div class="line">        log.debug(&quot;info from Prometheus:&#123;&#125;&quot;, writeRequest);</div><div class="line">    &#125; catch (IOException e) &#123;</div><div class="line">        log.error(&quot;receive msg from Prometheus error&quot;, e);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="1-5-最后"><a href="#1-5-最后" class="headerlink" title="1.5 最后"></a>1.5 最后</h4><p>至此，得出的writerequest 就是prometheus remote write 经处理后的数据。</p>
-<h3 id="2-prometheus-向influxdb存储数据"><a href="#2-prometheus-向influxdb存储数据" class="headerlink" title="2. prometheus 向influxdb存储数据"></a>2. prometheus 向influxdb存储数据</h3><blockquote>
-<p>prometheus 大多与时序数据库一起结合使用，比较好的时序数据库有<code>influxdb</code>,<code>OpenTSDB</code>,<code>Druid</code>等等。<br>这里使用<code>influxdb</code>进行调研</p>
-</blockquote>
-<p><a href="https://docs.influxdata.com/influxdb/v1.7/supported_protocols/prometheus" target="_blank" rel="external">influxdb 关于prometheus的支持</a></p>
-<p>可以看到：influxdb 1.7+ 天然支持prometheus的remote read，以及remote write功能，也就是说，上文的java adapter是没有什么卵用的。。</p>
-<p>不过至少了解了prometheus api的通信格式，也可以在以后进行脱离influxdb 的定制自开发。</p>
-
+<h3 id="2-2-standby-db-异步"><a href="#2-2-standby-db-异步" class="headerlink" title="2.2 standby db 异步"></a>2.2 standby db 异步</h3><ul>
+<li>启动容器standby</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo docker run -d --name standby_pg11 -p 15432:5432 -e POSTGRES_PASSWORD=postgres -v /etc/localtime:/etc/localtime -v /home/pgdata/:/var/lib/postgresql/data -e TZ=Asia/Shanghai postgres:11.4</div></pre></td></tr></table></figure>
+<ul>
+<li>进入内部</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker exec -it standby_pg11 bash</div></pre></td></tr></table></figure>
+<ul>
+<li>获取 primary db 的文件内容<ul>
+<li>切换身份 postgres</li>
+<li>删掉原有数据</li>
+<li>执行 <code>pg_basebackup</code></li>
+<li>输入密码<code>pgreppass</code></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">su postgres  </div><div class="line"></div><div class="line">cd /var/lib/postgresql/data &amp;&amp; rm -rf * &amp;&amp; /usr/lib/postgresql/11/bin/pg_basebackup -D $PGDATA -Fp -Xstream -R -c fast -v -R -P -h $&#123;primary db host&#125; -U pgrepuser -W</div></pre></td></tr></table></figure>
+<ul>
+<li>成功后，<code>-R</code>会新生成 <code>recovery.conf</code></li>
+</ul>
+<h4 id="可能出现的问题"><a href="#可能出现的问题" class="headerlink" title="可能出现的问题"></a>可能出现的问题</h4><ul>
+<li>如果 primary db 使用中文 会报错:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">invalid value for parameter &quot;lc_messages&quot;: &quot;zh_CN.UTF-8&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>这是两者版本不一致导致的,删掉 <code>postgres.conf</code> 内的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">lc_messages = &apos;zh_CN.UTF-8&apos;			# locale for system error message</div><div class="line">					# strings</div><div class="line">lc_monetary = &apos;zh_CN.UTF-8&apos;			# locale for monetary formatting</div><div class="line">lc_numeric = &apos;zh_CN.UTF-8&apos;			# locale for number formatting</div><div class="line">lc_time = &apos;zh_CN.UTF-8&apos;				# locale for time formatting</div></pre></td></tr></table></figure>
+</li>
+<li><p>然后重启 容器，内部执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">localedef -f UTF-8 -i zh_CN zh_CN.UTF-8</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-2-standby-db-同步配置"><a href="#2-2-standby-db-同步配置" class="headerlink" title="2.2 standby db 同步配置"></a>2.2 standby db 同步配置</h3><ul>
+<li>a. <code>recovery.conf</code> 修改配置，并重启<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">standby_mode = &apos;on&apos;</div><div class="line">primary_conninfo = &apos;application_name=a ....</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>其中，<code>a,b,c</code> 代表从库的<code>application_name</code>，逗号分隔，在从库的<code>revovery.conf</code>内配置</p>
+<ul>
+<li><p>修改primarydb</p>
+<ul>
+<li><p>1 开启 postgres.conf 参数，指定具体的从库<code>application_name</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">synchronous_standby_names=&apos;a,b,c&apos;</div></pre></td></tr></table></figure>
+</li>
+<li><p>2 加载配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pg_ctl reload -D $&#123;pg 的data目录&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>当从库（standbydb）数量小于1，且配置同步更新时，主库的写操作会终止</strong></p>
+<h3 id="2-3-冲突解决"><a href="#2-3-冲突解决" class="headerlink" title="2.3 冲突解决"></a>2.3 冲突解决</h3><h4 id="从库"><a href="#从库" class="headerlink" title="从库"></a>从库</h4><ul>
+<li><p>max_standby_streaming_delay = 30s</p>
+<ul>
+<li>作为切换主备时，值尽可能小</li>
+</ul>
+<ul>
+<li>作为查询使用时，值尽可能大</li>
+</ul>
+</li>
+<li><p>hot_standby_feedback=on 多版本冲突解决</p>
+</li>
+</ul>
+<h4 id="2-4-流复制查询"><a href="#2-4-流复制查询" class="headerlink" title="2.4 流复制查询"></a>2.4 流复制查询</h4><ul>
+<li>主库执行<ul>
+<li>查询复制 <code>select * from pg_stat_replication</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-pgpool2"><a href="#3-pgpool2" class="headerlink" title="3 pgpool2"></a>3 pgpool2</h2>
         
         </div>
         <footer class="article-footer">
@@ -297,7 +342,7 @@
 
 </div>
 
-    <a data-url="http://dadonggua.top/2019/06/10/prometheus 的remote write/" data-id="ckbamk2a7000icwjhsmmn137h" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://dadonggua.top/2020/06/12/pg_ha/" data-id="ckbc0s78m0000pkjh3tsxy9ed" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -365,7 +410,7 @@
 
             
     
-        <a href="http://dadonggua.top/2019/06/10/prometheus 的remote write/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://dadonggua.top/2019/06/10/prometheus 的remote write/">Comments</a>
+        <a href="http://dadonggua.top/2020/06/12/pg_ha/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://dadonggua.top/2020/06/12/pg_ha/">Comments</a>
     
 
         </footer>
@@ -374,20 +419,15 @@
         
 <nav id="article-nav">
     
-        <a href="/2019/06/06/configmap的使用&prometheus/" id="article-nav-newer" class="article-nav-link-wrap">
+        <a href="/2020/06/01/timescale-compression/" id="article-nav-newer" class="article-nav-link-wrap">
             <strong class="article-nav-caption">Newer</strong>
             <div class="article-nav-title">
                 
-                    k8s configmap 的使用
+                    timescaledb 压缩调研
                 
             </div>
         </a>
     
-    
-        <a href="/2020/06/01/timescale-compression/" id="article-nav-older" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Older</strong>
-            <div class="article-nav-title">timescaledb 压缩调研</div>
-        </a>
     
 </nav>
 
@@ -579,9 +619,9 @@
     <script>
     var disqus_config = function () {
         
-            this.page.url = 'http://dadonggua.top/2019/06/10/prometheus 的remote write/';
+            this.page.url = 'http://dadonggua.top/2020/06/12/pg_ha/';
         
-        this.page.identifier = 'prometheus 的remote write';
+        this.page.identifier = 'pg_ha';
     };
     (function() { 
         var d = document, s = d.createElement('script');  
