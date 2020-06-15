@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>postgresql 主备以及pgpool下的ha方案 | Drazen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="这篇文章是pg 主备的配置 以及 pgpool 的使用">
+<meta name="keywords" content="timescale,postgresql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="postgresql 主备以及pgpool下的ha方案">
+<meta property="og:url" content="http://dadonggua.top/2020/06/15/pg_ha/index.html">
+<meta property="og:site_name" content="Drazen">
+<meta property="og:description" content="这篇文章是pg 主备的配置 以及 pgpool 的使用">
+<meta property="og:updated_time" content="2020-06-15T13:02:02.748Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="postgresql 主备以及pgpool下的ha方案">
+<meta name="twitter:description" content="这篇文章是pg 主备的配置 以及 pgpool 的使用">
+    
+
+    
+        <link rel="alternate" href="/" title="Drazen" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/images/123.jpeg" />
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Drazen</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/2.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/2.png" />
+            <h2 id="name">Drazen&#39;</h2>
+            <h3 id="title">Java Developer &amp; HandSome</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>JiNan, China</span>
+            <a id="follow" target="_blank" href="https://github.com/Drazen08">FOLLOW</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                17
+                <span>posts</span>
+            </div>
+            <div class="article-info-block">
+                20
+                <span>tags</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/Drazen08" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class=tooltip>
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class=tooltip>
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class=tooltip>
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-pg_ha" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            postgresql 主备以及pgpool下的ha方案
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2020/06/15/pg_ha/">
+            <time datetime="2020-06-15T12:52:09.000Z" itemprop="datePublished">2020-06-15</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/postgresql/">postgresql</a>, <a class="tag-link" href="/tags/timescale/">timescale</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <blockquote>
+<p>这篇文章是pg 主备的配置 以及 pgpool 的使用</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="1-pg11-安装"><a href="#1-pg11-安装" class="headerlink" title="1.pg11 安装"></a>1.pg11 安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">yum install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm</div><div class="line">yum install postgresql11</div><div class="line">yum install postgresql11-server</div><div class="line">/usr/pgsql-11/bin/postgresql-11-setup initdb</div><div class="line">systemctl enable postgresql-11</div><div class="line">systemctl start postgresql-11</div></pre></td></tr></table></figure>
+<h2 id="2-stand-by"><a href="#2-stand-by" class="headerlink" title="2.stand by"></a>2.stand by</h2><h3 id="2-1-primary-db"><a href="#2-1-primary-db" class="headerlink" title="2.1 primary db"></a>2.1 primary db</h3><ul>
+<li>创建复制账号</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE ROLE pgrepuser REPLICATION LOGIN ENCRYPTED PASSWORD &apos;pgreppass&apos;;</div></pre></td></tr></table></figure>
+<ul>
+<li>postgresql.conf</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">listen_addresses = &apos;*&apos;</div><div class="line">max_connections = 1024</div><div class="line">password_encryption = on</div><div class="line">wal_level = hot_standby</div><div class="line">archive_mode = on</div><div class="line">max_wal_sender = 4</div><div class="line">wal_keep_segments = 10</div></pre></td></tr></table></figure>
+<ul>
+<li>pg_hba.conf</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">host    replication     pgrepuser       0.0.0.0/0               md5</div></pre></td></tr></table></figure>
+<ul>
+<li>重启 pg11</li>
+</ul>
+<h3 id="2-2-standby-db-异步"><a href="#2-2-standby-db-异步" class="headerlink" title="2.2 standby db 异步"></a>2.2 standby db 异步</h3><ul>
+<li>启动容器standby</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo docker run -d --name standby_pg11 -p 15432:5432 -e POSTGRES_PASSWORD=postgres -v /etc/localtime:/etc/localtime -v /home/pgdata/:/var/lib/postgresql/data -e TZ=Asia/Shanghai postgres:11.4</div></pre></td></tr></table></figure>
+<ul>
+<li>进入内部</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker exec -it standby_pg11 bash</div></pre></td></tr></table></figure>
+<ul>
+<li>获取 primary db 的文件内容<ul>
+<li>切换身份 postgres</li>
+<li>删掉原有数据</li>
+<li>执行 <code>pg_basebackup</code></li>
+<li>输入密码<code>pgreppass</code></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">su postgres  </div><div class="line"></div><div class="line">cd /var/lib/postgresql/data &amp;&amp; rm -rf * &amp;&amp; /usr/lib/postgresql/11/bin/pg_basebackup -D $PGDATA -Fp -Xstream -R -c fast -v -R -P -h $&#123;primary db host&#125; -U pgrepuser -W</div></pre></td></tr></table></figure>
+<ul>
+<li>成功后，<code>-R</code>会新生成 <code>recovery.conf</code></li>
+</ul>
+<h4 id="可能出现的问题"><a href="#可能出现的问题" class="headerlink" title="可能出现的问题"></a>可能出现的问题</h4><ul>
+<li>如果 primary db 使用中文 会报错:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">invalid value for parameter &quot;lc_messages&quot;: &quot;zh_CN.UTF-8&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>这是两者版本不一致导致的,删掉 <code>postgres.conf</code> 内的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">lc_messages = &apos;zh_CN.UTF-8&apos;			# locale for system error message</div><div class="line">					# strings</div><div class="line">lc_monetary = &apos;zh_CN.UTF-8&apos;			# locale for monetary formatting</div><div class="line">lc_numeric = &apos;zh_CN.UTF-8&apos;			# locale for number formatting</div><div class="line">lc_time = &apos;zh_CN.UTF-8&apos;				# locale for time formatting</div></pre></td></tr></table></figure>
+</li>
+<li><p>然后重启 容器，内部执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">localedef -f UTF-8 -i zh_CN zh_CN.UTF-8</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-2-standby-db-同步配置"><a href="#2-2-standby-db-同步配置" class="headerlink" title="2.2 standby db 同步配置"></a>2.2 standby db 同步配置</h3><ul>
+<li>a. <code>recovery.conf</code> 修改配置，并重启<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">standby_mode = &apos;on&apos;</div><div class="line">primary_conninfo = &apos;application_name=a ....</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>其中，<code>a,b,c</code> 代表从库的<code>application_name</code>，逗号分隔，在从库的<code>revovery.conf</code>内配置</p>
+<ul>
+<li><p>修改primarydb</p>
+<ul>
+<li><p>1 开启 postgres.conf 参数，指定具体的从库<code>application_name</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">synchronous_standby_names=&apos;a,b,c&apos;</div></pre></td></tr></table></figure>
+</li>
+<li><p>2 加载配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pg_ctl reload -D $&#123;pg 的data目录&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>当从库（standbydb）数量小于1，且配置同步更新时，主库的写操作会终止</strong></p>
+<h3 id="2-3-冲突解决"><a href="#2-3-冲突解决" class="headerlink" title="2.3 冲突解决"></a>2.3 冲突解决</h3><h4 id="从库"><a href="#从库" class="headerlink" title="从库"></a>从库</h4><ul>
+<li><p>max_standby_streaming_delay = 30s</p>
+<ul>
+<li>作为切换主备时，值尽可能小</li>
+</ul>
+<ul>
+<li>作为查询使用时，值尽可能大</li>
+</ul>
+</li>
+<li><p>hot_standby_feedback=on 多版本冲突解决</p>
+</li>
+</ul>
+<h4 id="2-4-流复制查询"><a href="#2-4-流复制查询" class="headerlink" title="2.4 流复制查询"></a>2.4 流复制查询</h4><ul>
+<li>主库执行<ul>
+<li>查询复制 <code>select * from pg_stat_replication</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-pgpool2"><a href="#3-pgpool2" class="headerlink" title="3 pgpool2"></a>3 pgpool2</h2><blockquote>
+<p>官网 ： <a href="https://www.pgpool.net/" target="_blank" rel="external">https://www.pgpool.net/</a></p>
+<p>这里主要是利用pgpool实现主备切换，负载均衡</p>
+</blockquote>
+<ul>
+<li>设备概览</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>node</th>
+<th>name</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.10.212</td>
+<td>cent7</td>
+<td>pg 服务器A，以及pgpool</td>
+</tr>
+<tr>
+<td>192.168.10.233</td>
+<td>rh</td>
+<td>pg 服务器B，以及pgpool</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-1-pgpool2-安装"><a href="#3-1-pgpool2-安装" class="headerlink" title="3.1 pgpool2 安装"></a>3.1 pgpool2 安装</h3><p>可以选择源码编译，或者rpm安装，这里选择的是源码编译</p>
+<p><strong>注意关闭selinx</strong></p>
+<ul>
+<li>下载源码，解压</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mkdir -p /data/source &amp;&amp; /data/source</div><div class="line">wget http://www.pgpool.net/download.php?f=pgpool-II-4.1.0.tar.gz</div><div class="line">tar xsvf d*</div><div class="line">rm -f d*</div></pre></td></tr></table></figure>
+<ul>
+<li>安装编译所需依赖包</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">yum -y install libmemcached-devel</div><div class="line">yum install postgresql-devel</div><div class="line"></div><div class="line">// 这两个可以不安装</div><div class="line">yum -y install flex</div><div class="line">yum -y install bison</div></pre></td></tr></table></figure>
+<ul>
+<li>配置pg11 环境变量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">vim /etc/profile</div><div class="line">export PGHOME=/usr/pgsql-11</div><div class="line">export PGDATA=/var/lib/pgsql/11/data</div><div class="line">// 保存</div><div class="line">source /etc/profile</div></pre></td></tr></table></figure>
+<ul>
+<li>设置 A B 服务器为<code>postgres</code>账号免密登录</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">su - postgres</div><div class="line">ssh-keygen -t rsa</div><div class="line">scp id_rsa.pub postgres@192.168.10.233:/var/lib/pgsql/.ssh/demo</div><div class="line">cat demo &gt;&gt; ~/.ssh/authorized_keys</div><div class="line">chmod 700 ~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
+<ul>
+<li>进行编译,把pgpool 生成到 <code>/home/pgpool</code> 目录</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cd pgpool2-4_1_0</div><div class="line">./configure --prefix=/home/pgpool --with-pgsql=$PGDATA</div><div class="line">make &amp;&amp; make install</div><div class="line">chown -R postgres.postgres /home/pgpool</div><div class="line">su - postgres</div><div class="line">cd /data/source/pgpool2-4_1_0/src/sql/</div><div class="line">make &amp;&amp; make install</div><div class="line">cd pgpool-recovery</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<ul>
+<li>修改<code>postgresql.conf 文件</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pgpool.pg_ctl = &apos;/usr/pgsql-11/bin/pg_ctl&apos;</div></pre></td></tr></table></figure>
+<ul>
+<li>切换为root用户，赋权</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">chmod +s /bin/ping</div><div class="line">chmod +s /sbin/ifup</div><div class="line">chmod +s /sbin/ip</div><div class="line">chmod +s /sbin/ifconfig</div><div class="line">chmod +s /sbin/arping</div><div class="line">chmod u+s /usr/sbin</div><div class="line">chmod u+s /sbin/ifconfig</div></pre></td></tr></table></figure>
+<ul>
+<li>insert_lock，建议开启</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">su postgres</div><div class="line">cd pgpool-II-x.x.x/src/sql</div><div class="line">psql -f insert_lock.sql template1</div></pre></td></tr></table></figure>
+<ul>
+<li>然后把template1 写入 pgpool.conf 配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">insert_lock = on</div><div class="line">lobj_lock_table = &apos;template1&apos;</div></pre></td></tr></table></figure>
+<h3 id="3-2-pgpool-配置"><a href="#3-2-pgpool-配置" class="headerlink" title="3.2 pgpool 配置"></a>3.2 pgpool 配置</h3><p>这一步的配置都是在 <code>postgres</code> 用户完成的</p>
+<blockquote>
+<p>#3.1 的步骤是AB服务器通用的<br>/home/pgpool 里面是pgpool的目录，./etc 内是配置文件</p>
+</blockquote>
+<ul>
+<li>复制模板为配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd /home/pgpool</div><div class="line">cp etc/pgpool.conf.sample-stream etc/pgpool.conf</div><div class="line">cp etc/pcp.conf.sample etc/pcp.conf</div><div class="line">cp etc/hba.conf.sample etc/hba.conf</div></pre></td></tr></table></figure>
+<ul>
+<li>其他配置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">bin/pg_md5 postgres 把生成的MD5写入pcp.conf:</div><div class="line">postgres:e8a48653851e28c69d0506508fb27f2d</div><div class="line"></div><div class="line">etc/hba.conf 与 pg_hba.conf 保持一致</div></pre></td></tr></table></figure>
+<ul>
+<li>主要配置 <code>pgpool.conf</code>,下面是需要改的，其他的不变</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line">listen_addresses = &apos;*&apos;</div><div class="line"># a机器pg的配置</div><div class="line">backend_hostname0 = &apos;192.168.10.212&apos;</div><div class="line">backend_port0 = 15432</div><div class="line">backend_weight0 = 1</div><div class="line">backend_data_directory0 = &apos;/var/lib/pgsql/11/data&apos;</div><div class="line">backend_flag0 = &apos;ALLOW_TO_FAILOVER&apos;</div><div class="line"></div><div class="line"># b 机器 pg的配置</div><div class="line">backend_hostname1 = &apos;192.168.10.233&apos;</div><div class="line">backend_port1 = 15432</div><div class="line">backend_weight1 = 1</div><div class="line">backend_data_directory1 = &apos;/var/lib/pgsql/11/data&apos;</div><div class="line">backend_flag1 = &apos;ALLOW_TO_FAILOVER&apos;</div><div class="line"></div><div class="line"># 这个目录需要root赋予完全的权限</div><div class="line">pid_file_name=&apos;/var/run/pgpool/pgpool.pid&apos;</div><div class="line"></div><div class="line">master_slave_sub_mode = &apos;stream&apos;</div><div class="line">sr_check_period=5</div><div class="line">sr_check_user = &apos;postgres&apos;</div><div class="line">sr_check_password = &apos;postgres&apos;</div><div class="line"></div><div class="line">health_check_user = &apos;postgres&apos;</div><div class="line">health_check_password = &apos;postgres&apos;</div><div class="line">health_check_database = &apos;postgres&apos;</div><div class="line"></div><div class="line"># 这个sh没有，需要自己加在指定路径，并赋权</div><div class="line">failover_command = &apos;/home/pgpool/failover_stream.sh %H &apos;</div><div class="line"></div><div class="line">recovery_user = &apos;postgres&apos;</div><div class="line">recovery_password = &apos;postgres&apos;</div><div class="line"></div><div class="line">use_watchdog = on</div><div class="line"># 写本机的配置</div><div class="line">wd_hostname = &apos;192.168.10.233&apos;     </div><div class="line"># 虚拟ip，需要为一个网段且未被占用</div><div class="line">delegate_IP = &apos;192.168.10.100&apos;</div><div class="line"></div><div class="line"># 这里的enp0s20f0u3 是本机的网卡名称</div><div class="line">if_cmd_path = &apos;/usr/sbin&apos;</div><div class="line">if_up_cmd = &apos;ip addr add $_IP_$/24 dev enp0s20f0u3 label enp0s20f0u3:0&apos;</div><div class="line">if_down_cmd = &apos;ip addr del $_IP_$/24 dev enp0s20f0u3&apos;</div><div class="line"></div><div class="line">arping_path = &apos;/usr/sbin&apos;</div><div class="line">arping_cmd = &apos;arping -U $_IP_$ -w 1 -I enp0s20f0u3&apos;</div><div class="line"></div><div class="line"># 失败配置，这套配置是不论pgpool节点数量，一旦主节点损坏，立即进行节点转移</div><div class="line"></div><div class="line">failover_when_quorum_exists = off</div><div class="line">failover_require_consensus = on</div><div class="line">allow_multiple_failover_requests_from_node = off</div><div class="line">enable_consensus_with_half_votes = on</div><div class="line"></div><div class="line"># 写对方的配置 device0 是对方的具体的网卡名称</div><div class="line">heartbeat_destination0 = &apos;192.168.10.212&apos;</div><div class="line">heartbeat_destination_port0 = 9694</div><div class="line">heartbeat_device0 = &apos;enp2s0&apos;</div><div class="line"></div><div class="line">wd_lifecheck_user = &apos;postgres&apos;</div><div class="line">wd_lifecheck_password = &apos;postgres&apos;</div><div class="line"></div><div class="line"># 写对方的配置</div><div class="line">other_pgpool_hostname0 = &apos;192.168.10.212&apos;</div><div class="line">other_pgpool_port0 = 9999</div><div class="line">other_wd_port0 = 9000</div></pre></td></tr></table></figure>
+<ul>
+<li>failover_stream.sh</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#! /bin/sh</div><div class="line"># Failover command for streaming replication.</div><div class="line"># Arguments: $1: new master hostname.</div><div class="line">new_master=$1</div><div class="line">trigger_command=&quot;$PGHOME/bin/pg_ctl promote -D $PGDATA&quot;</div><div class="line"></div><div class="line"># Prompte standby database.</div><div class="line">/usr/bin/ssh -T $new_master $trigger_command</div><div class="line"></div><div class="line">exit 0;</div></pre></td></tr></table></figure>
+<h3 id="3-3-pgpool的操作"><a href="#3-3-pgpool的操作" class="headerlink" title="3.3 pgpool的操作"></a>3.3 pgpool的操作</h3><ul>
+<li>启动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin/pgpool -n -d &gt; /home/pgpool/run.log 2&gt;&amp;1 &amp;</div></pre></td></tr></table></figure>
+<ul>
+<li>停止</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin/pgpool -m fast stop</div></pre></td></tr></table></figure>
+<ul>
+<li>当节点的pg宕机后，恢复命令</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin/pcp_attach_node -p 9898 -h 192.168.10.100 -U postgres -n 0</div></pre></td></tr></table></figure>
+<ul>
+<li>sql 命令 ： 连接pgopool 的服务（port=9999）执行，可以查看目前的节点状态</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">show pool_nodes;</div></pre></td></tr></table></figure>
+<p>这套配置可以实现主从的互相切换，当某一个节点出现宕机后，需要进行手动同步节点状态，pgpool才会重新进行负载</p>
+<h3 id="3-4-数据恢复"><a href="#3-4-数据恢复" class="headerlink" title="3.4 数据恢复"></a>3.4 数据恢复</h3><ul>
+<li><code>postgresql.conf</code> 需要开启几个配置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">full_page_writes = on</div><div class="line">wal_log_hints = on</div></pre></td></tr></table></figure>
+<ul>
+<li>如果宕机的节点为主节点时，需要首先进行数据同步</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">su postgresql</div><div class="line">$PGHOME/bin/pg_rewind  --target-pgdata=$PGDATA -P --source-server=&apos;host=192.168.10.100 port=9999 user=postgres dbname=postgres password=postgres&apos;</div><div class="line"></div><div class="line">mv recovery.done recovery.conf</div><div class="line">$PGHOME/bin/pg_ctl start -D $PGDATA</div><div class="line"></div><div class="line">bin/pcp_attach_node -p 9898 -h 192.168.10.100 -U postgres -n #&#123;具体的nodeid&#125;</div></pre></td></tr></table></figure>
+<p>这套配置仅是pg的主从stream模式的高可用配置</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://dadonggua.top/2020/06/15/pg_ha/" data-id="ckbgibzrk0000mojh9o2ghyx0" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://dadonggua.top/2020/06/15/pg_ha/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://dadonggua.top/2020/06/15/pg_ha/">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2020/06/01/timescale-compression/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    timescaledb 压缩调研
+                
+            </div>
+        </a>
+    
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">recent</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/06/15/pg_ha/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2020/06/15/pg_ha/" class="title">postgresql 主备以及pgpool下的ha方案</a></p>
+                            <p class="item-date"><time datetime="2020-06-15T12:52:09.000Z" itemprop="datePublished">2020-06-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/06/01/timescale-compression/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2020/06/01/timescale-compression/" class="title">timescaledb 压缩调研</a></p>
+                            <p class="item-date"><time datetime="2020-06-01T08:52:09.000Z" itemprop="datePublished">2020-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2019/06/10/prometheus 的remote write/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2019/06/10/prometheus 的remote write/" class="title">prometheus 的remote write</a></p>
+                            <p class="item-date"><time datetime="2019-06-10T03:13:09.000Z" itemprop="datePublished">2019-06-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2019/06/06/configmap的使用&prometheus/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2019/06/06/configmap的使用&prometheus/" class="title">k8s configmap 的使用</a></p>
+                            <p class="item-date"><time datetime="2019-06-06T02:34:09.000Z" itemprop="datePublished">2019-06-06</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2019/06/05/etcd-install/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2019/06/05/etcd-install/" class="title">etcd 集群的部署</a></p>
+                            <p class="item-date"><time datetime="2019-06-05T07:34:09.000Z" itemprop="datePublished">2019-06-05</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tags</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS单点登录/">CAS单点登录</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-Github/">Hexo_Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/">Quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringData/">SpringData</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Timer/">Timer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/etcd/">etcd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/">k8s</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty/">netty</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postgresql/">postgresql</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/prometheus/">prometheus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timescale/">timescale</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Annotation/" style="font-size: 10px;">Annotation</a> <a href="/tags/CAS单点登录/" style="font-size: 10px;">CAS单点登录</a> <a href="/tags/Hexo-Github/" style="font-size: 10px;">Hexo_Github</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Jquery/" style="font-size: 10px;">Jquery</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/Quartz/" style="font-size: 10px;">Quartz</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringData/" style="font-size: 10px;">SpringData</a> <a href="/tags/Timer/" style="font-size: 10px;">Timer</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/etcd/" style="font-size: 10px;">etcd</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/netty/" style="font-size: 10px;">netty</a> <a href="/tags/postgresql/" style="font-size: 15px;">postgresql</a> <a href="/tags/prometheus/" style="font-size: 15px;">prometheus</a> <a href="/tags/timescale/" style="font-size: 15px;">timescale</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2020 JFuncnovic<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_config = function () {
+        
+            this.page.url = 'http://dadonggua.top/2020/06/15/pg_ha/';
+        
+        this.page.identifier = 'pg_ha';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+        </script>
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
